@@ -1,4 +1,4 @@
-# quiz-generator
+# AI-based Quiz Generator
 Code for a SaaS application developed as a final project for the Fall'24 iteration of Colgate's COSC 415 Software Engineering Course
 
 ## Tech Stack
