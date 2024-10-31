@@ -7,3 +7,4 @@ Code for a SaaS application developed as a final project for the Fall'24 iterati
 ## Motivation
 To develop a web application that allows users to create personalized quizzes based on selected parameters such as difficulty level, study duration, detail level of questions, and the number of questions.
 
+Making sure I can push to repo from personal github
