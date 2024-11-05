@@ -33,5 +33,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_05_034911) do
   end
 
   add_foreign_key "questions", "quizzes"
-
 end
