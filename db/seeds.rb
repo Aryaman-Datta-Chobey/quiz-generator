@@ -7,15 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-user = User.create!(
-  username: "SampleUser",
-  email: "sampleuser@example.com",
-  password: "password"
-)
-
-# Create a quiz associated with the user
 quiz = Quiz.create!(
-  user: user,
   topic: "Ruby on Rails Basics",
   difficulty: "Intermediate",
   study_duration: 30,
@@ -23,7 +15,6 @@ quiz = Quiz.create!(
   number_of_questions: 2,
   score: 0
 )
-
 # Create questions associated with the quiz
 Question.create!(
   quiz: quiz,
@@ -31,7 +22,6 @@ Question.create!(
   options: ["A web application framework", "A programming language", "A database", "A front-end framework"],
   correct_answer: "A web application framework"
 )
-
 Question.create!(
   quiz: quiz,
   content: "Which command is used to generate a new Rails model?",
