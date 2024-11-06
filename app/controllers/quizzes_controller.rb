@@ -46,7 +46,24 @@ class QuizzesController < ApplicationController
       @quiz.destroy
       redirect_to quizzes_url, notice: "Quiz was successfully deleted."
     end
-
+    # action to compute score after user submits quiz (as a form)
+    def submit
+      @quiz = Quiz.find(params[:id])
+      user_answers = params[:answers]
+      score = 0
+    
+      @quiz.questions.each do |question| #simplified computation for iter 1 , may have to change for new question types in future
+        correct = question.correct_answer
+        if user_answers[question.id.to_s] == correct
+          score += 1
+        end
+      end
+    
+      @quiz.update(score: score) #update the score in the database
+    
+      flash[:notice] = "You scored #{score} out of #{quiz.questions.count}." 
+      redirect_to quiz_path(@quiz) # displaying in same view for iter 1 , may consider creating seperate results route in the future
+    end    
     private
 
     # Find quiz by ID for show, edit, update, destroy actions

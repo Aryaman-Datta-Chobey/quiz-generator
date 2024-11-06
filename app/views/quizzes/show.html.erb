@@ -7,15 +7,21 @@
 
 <!-- Rendering the quiz as a submittable Form-->
 <form action="/quizzes/<%= @quiz.id %>/submit" method="post">
-  <% @quiz.questions.each do |question| %>
+  <% @quiz.questions.each_with_index do |question,i| %>
     <div>
-      <p><%= question.content %></p> 
-      <% JSON.parse(question.options).each do |option| %> <%# note: handles serialization for n options of form: [ "option_1", "option_2",..., "option_n" ]%>
+      <p>Q <%=i+1%>) <%= question.content %></p><br>
+      <p>select ONE</p> 
+      <% JSON.parse(question.options).each_with_index do |option,j| %> <%# note: handles serialization for n options of form: [ "option_1", "option_2",..., "option_n" ]%>
          <label> <input type="radio" name="answers[<%= question.id %>]" value="<%= option %>" required>
-          <%= option %>
+          <%=('a'.ord + j).chr%>) <%= option %> <%# converts int index j to letter using ASCII conversion, may want to switch to roman numerals to avoid a ridiculous edge case%>
          </label><br>
         <% end %>
     </div>    
   <% end %>
   <button type="submit">Submit Quiz</button>
 </form>
+
+<!-- Display the score after submitting the quiz -->
+<% if flash[:notice] %>
+  <p><strong><%= flash[:notice] %></strong></p>
+<% end %>
