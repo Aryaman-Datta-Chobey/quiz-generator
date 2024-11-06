@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
     resources :quizzes do
       resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+      member do #custom POST route for submitting a specified quiz for scoring at /quizzes/:id/submit
+        post :submit
+      end
     end
   end
 
