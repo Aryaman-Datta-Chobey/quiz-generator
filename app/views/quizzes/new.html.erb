@@ -1,0 +1,45 @@
+<div class="container">
+  <% if @quiz.errors.any? %>
+    <div class="row text-bg-warning" id="error_explanation">
+      <h2><%= pluralize(@quiz.errors.count, "error") %> prevented this quiz from being saved:</h2>
+    </div>
+    <% @quiz.errors.each do |error| %>
+      <div class="row text-bg-warning">
+        <div class="col-2"></div><div class="col-8"><%= error.full_message %></div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="row">
+    <h1>Generate New Quiz</h1>
+  </div>
+
+  <%= form_with model: @quiz, method: :post do |f| %>
+    <div class="form-group">
+      <%= f.label :topic %>
+      <%= f.text_field :topic, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :difficulty %>
+      <%= f.select :difficulty, Quiz.difficulties.keys.map { |w| [w.humanize, w] }, {}, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :study_duration %>
+      <%= f.number_field :study_duration, min: 0, max: 120, step: 10 %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :detail_level %>
+      <%= f.select :detail_level, Quiz.detail_levels.keys.map { |w| [w.humanize, w] }, {}, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :number_of_questions %>
+      <%= f.number_field :number_of_questions, min: 0, max: 20, step: 1 %>
+    </div>
+
+    <%= f.submit class: 'btn btn-primary' %>
+  <% end %>
+</div>
