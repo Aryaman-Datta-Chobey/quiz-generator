@@ -9,9 +9,9 @@
 #   end
 quiz = Quiz.create!(
   topic: "Ruby on Rails Basics",
-  difficulty: "Intermediate",
+  difficulty: "Intermmediate",
   study_duration: 30,
-  detail_level: "Detailed",
+  detail_level: "High",
   number_of_questions: 2,
   score: 0
 )
@@ -34,9 +34,9 @@ Question.create!(
 
 quiz2 = Quiz.create!(
   topic: "RSpec Basics ",
-  difficulty: "Intermediate",
+  difficulty: "Intermmediate",
   study_duration: 45,
-  detail_level: "Detailed",
+  detail_level: "Low",
   number_of_questions: 3,
   score: 0
 )
