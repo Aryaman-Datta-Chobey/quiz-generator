@@ -12,7 +12,7 @@ class QuizzesController < ApplicationController
     # GET /quizzes/:id
     def show
       @quiz = Quiz.find(params[:id])
-      session[:quiz_start_time] = Time.current #for study_duration calculation
+      session[:quiz_start_time] = Time.now.to_f #for study_duration calculation
     end
 
     # GET /quizzes/new
@@ -63,11 +63,11 @@ class QuizzesController < ApplicationController
       end
     
       # Calculate duration
-      start_time = session.delete(:quiz_start_time)
-      duration = Time.current - start_time if start_time
+      start_time = session.delete(:quiz_start_time).to_f 
+      duration = (Time.now.to_f)-start_time if start_time 
       
-      @quiz.update(score: score, duration: duration) 
-      flash[:notice] = "You scored #{score} out of #{quiz.questions.count}. Time taken: #{duration.to_i} seconds."
+      @quiz.update(score: score, study_duration: duration) 
+      flash[:notice] = "You scored #{score} out of #{@quiz.questions.count}. Time taken: #{duration} seconds."
       redirect_to quiz_path(@quiz) # displaying in same view for iter 1 , may consider creating seperate results route in the future
 
     end    
