@@ -11,6 +11,8 @@ class QuizzesController < ApplicationController
 
     # GET /quizzes/:id
     def show
+      @quiz = Quiz.find(params[:id])
+      session[:quiz_start_time] = Time.current #for study_duration calculation
     end
 
     # GET /quizzes/new
@@ -46,7 +48,8 @@ class QuizzesController < ApplicationController
       @quiz.destroy
       redirect_to quizzes_url, notice: "Quiz was successfully deleted."
     end
-    # action to compute score after user submits quiz (as a form)
+    
+    # action to compute score and study_duration after user submits quiz (as a form)
     def submit
       @quiz = Quiz.find(params[:id])
       user_answers = params[:answers]
@@ -59,10 +62,14 @@ class QuizzesController < ApplicationController
         end
       end
     
-      @quiz.update(score: score) #update the score in the database
-    
-      flash[:notice] = "You scored #{score} out of #{quiz.questions.count}." 
+      # Calculate duration
+      start_time = session.delete(:quiz_start_time)
+      duration = Time.current - start_time if start_time
+      
+      @quiz.update(score: score, duration: duration) 
+      flash[:notice] = "You scored #{score} out of #{quiz.questions.count}. Time taken: #{duration.to_i} seconds."
       redirect_to quiz_path(@quiz) # displaying in same view for iter 1 , may consider creating seperate results route in the future
+
     end    
     private
 
