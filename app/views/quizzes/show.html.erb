@@ -1,0 +1,27 @@
+<!-- Basic quiz details -->.
+<h1><%= @quiz.topic %> Quiz</h1>
+<p>Difficulty: <%= @quiz.difficulty %></p>
+<p>Study Duration: <%= @quiz.study_duration %> seconds</p>
+<p>Detail Level: <%= @quiz.detail_level %></p>
+<p>Number of Questions: <%= @quiz.number_of_questions %></p>
+
+<!-- Rendering the quiz as a submittable Form-->
+<form action="/quizzes/<%= @quiz.id %>/submit" method="post">
+  <% @quiz.questions.each_with_index do |question,i| %>
+    <div>
+      <p>Q <%=i+1%>) <%= question.content %></p><br>
+      <p>select ONE</p> 
+      <% JSON.parse(question.options).each_with_index do |option,j| %> <%# note: handles serialization for n options of form: [ "option_1", "option_2",..., "option_n" ]%>
+         <label> <input type="radio" name="answers[<%= question.id %>]" value="<%= option %>" required>
+          <%=('a'.ord + j).chr%>) <%= option %> <%# converts int index j to letter using ASCII conversion, may want to switch to roman numerals to avoid a ridiculous edge case%>
+         </label><br>
+        <% end %>
+    </div>    
+  <% end %>
+  <button type="submit">Submit Quiz</button>
+</form>
+
+<!-- Display the score after submitting the quiz -->
+<% if flash[:notice] %>
+  <p><strong><%= flash[:notice] %></strong></p>
+<% end %>
