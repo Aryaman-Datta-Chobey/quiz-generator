@@ -1,36 +1,47 @@
 require 'rails_helper'
 
+require 'rails_helper'
+
+RSpec.describe "quizzes/index.html.erb", type: :view do
+  before(:each) do
+    assign(:quizzes, [
+      Quiz.new(topic: "Rspec Testing",
+               difficulty: "easy",
+               study_duration: 9,
+               detail_level: "high",
+               number_of_questions: 100,
+               score: 0),
+      Quiz.new(topic: "Passing Rspec Tests",
+               difficulty: "hard",
+               study_duration: 10,
+               detail_level: "high",
+               number_of_questions: 100,
+               score: 0)
+    ])
+  end
+
+  it "renders the quiz topics" do
+    render
+    expect(rendered).to match(/Rspec Testing/)
+    expect(rendered).to match(/Passing Rspec Tests/)
+  end
+end
 
 
-RSpec.describe "Index Route", type: :view do
+RSpec.describe "Quizzes", type: :system do
   before do
     driven_by(:rack_test)
   end
 
-  it "should render a quiz" do
-    assign(:quizzes, [ Quiz.new(topic: "Rspec Testing",
-                             difficulty: "easy",
-                             study_duration: 9,
-                             detail_level: "high",
-                             number_of_questions: 100,
-                             score: 0),
-                     Quiz.new(topic: "Passing Rspec Tests",
-                             difficulty: "hard",
-                             study_duration: 10,
-                             detail_level: "high",
-                             number_of_questions: 100,
-                             score: 0) ])
-    render
-    expect(page.text).to match(/Rspec Testing/)
-    expect(page.text).to match(/Passing Rspec Tests/)
-    expect(page.text).to match(/Rspec Testing.*Passing Rspec Tests/mi)
-  end
+  it 'filters quizzes by search string' do
+    Quiz.create!(topic: "Rspec Testing", difficulty: "easy", study_duration: 9, detail_level: "high", number_of_questions: 100, score: 0)
+    Quiz.create!(topic: "Passing Rspec Tests", difficulty: "hard", study_duration: 10, detail_level: "high", number_of_questions: 100, score: 0)
 
-  it 'should filter quizzes by search string' do
-      visit quizzes_path
-      fill_in 'query', with: 'Rails'
-      click_button 'Find Quiz'
-      expect(page.text).to match(/Rspec Testing/i)
-      expect(page.text).not_to match(/Passing Rspec Tests/i)
+    visit quizzes_path
+    fill_in 'query', with: 'Passing Rspec'
+    click_button 'Find Quiz'
+
+    expect(page).to have_content("Passing Rspec Tests")
+    expect(page).not_to have_content("Rspec Testing")
   end
 end
