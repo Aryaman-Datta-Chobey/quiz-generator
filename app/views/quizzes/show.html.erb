@@ -1,27 +1,52 @@
-<!-- Basic quiz details -->.
-<h1><%= @quiz.topic %> Quiz</h1>
-<p>Difficulty: <%= @quiz.difficulty %></p>
-<p>Study Duration: <%= @quiz.study_duration %> seconds</p>
-<p>Detail Level: <%= @quiz.detail_level %></p>
-<p>Number of Questions: <%= @quiz.number_of_questions %></p>
+<div class="container my-5">
 
-<!-- Rendering the quiz as a submittable Form-->
-<form action="/quizzes/<%= @quiz.id %>/submit" method="post">
-  <% @quiz.questions.each_with_index do |question,i| %>
-    <div>
-      <p>Q <%=i+1%>) <%= question.content %></p><br>
-      <p>select ONE</p> 
-      <% JSON.parse(question.options).each_with_index do |option,j| %> <%# note: handles serialization for n options of form: [ "option_1", "option_2",..., "option_n" ]%>
-         <label> <input type="radio" name="answers[<%= question.id %>]" value="<%= option %>" required>
-          <%=('a'.ord + j).chr%>) <%= option %> <%# converts int index j to letter using ASCII conversion, may want to switch to roman numerals to avoid a ridiculous edge case%>
-         </label><br>
+  <div class="row mb-4">
+    <div class="col text-center">
+      <h1 class="display-4 text-primary"><%= @quiz.topic %> Quiz</h1>
+      <p class="lead text-muted">Difficulty: <%= @quiz.difficulty %></p>
+      <p class="lead text-muted">Study Duration: <%= @quiz.study_duration %> seconds</p>
+      <p class="lead text-muted">Detail Level: <%= @quiz.detail_level %></p>
+      <p class="lead text-muted">Number of Questions: <%= @quiz.number_of_questions %></p>
+    </div>
+  </div>
+
+  <%= form_with url: "/quizzes/#{@quiz.id}/submit", method: :post, class: 'needs-validation' do |f| %>
+    <% @quiz.questions.each_with_index do |question, i| %>
+      <% question_class = '' %>
+      
+      <div class="mb-3">
+        <p class="font-weight-bold <%= question_class %>">Q <%= i + 1 %>) <%= question.content %></p>
+        <p class="text-muted">select ONE</p>
+        <% JSON.parse(question.options).each_with_index do |option, j| %>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="radio" name="answers[<%= question.id %>]" value="<%= option %>" class="form-check-input" required>
+              <%= ('a'.ord + j).chr %>) <%= option %>
+            </label>
+          </div>
         <% end %>
-    </div>    
-  <% end %>
-  <button type="submit">Submit Quiz</button>
-</form>
+      </div>
+    <% end %>
 
-<!-- Display the score after submitting the quiz -->
-<% if flash[:notice] %>
-  <p><strong><%= flash[:notice] %></strong></p>
-<% end %>
+    <div class="text-center">
+      <%= f.submit 'Submit Quiz', class: 'btn btn-lg btn-primary' %>
+    </div>
+  <% end %>
+
+</div>
+
+<%# TODO: LINK STYLE SHEET %>
+<style>
+  .form-check-label {
+    font-size: 1.1rem;
+  }
+
+  .form-check-input {
+    margin-top: 0.3rem;
+  }
+
+  .btn-primary {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
+</style>
