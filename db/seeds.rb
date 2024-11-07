@@ -7,15 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-quiz = Quiz.create!(
+quiz = Quiz.new(
   topic: "Ruby on Rails Basics",
   difficulty: :easy,
   study_duration: 30,
-  detail_level: "high",
+  detail_level: :high,
   number_of_questions: 2,
   score: 0
 )
-
+quiz.save!
 
 # Create questions associated with the quiz
 Question.create!(
@@ -32,15 +32,15 @@ Question.create!(
 )
 
 
-quiz2 = Quiz.create!(
-  topic: "RSpec Basics ",
+quiz2 = Quiz.new(
+  topic: "RSpec Basics",
   difficulty: :easy,
   study_duration: 45,
-  detail_level: "low",
+  detail_level: :low,
   number_of_questions: 3,
   score: 0
 )
-
+quiz2.save!
 # Create questions associated with the quiz
 Question.create!(
   quiz: quiz2,
