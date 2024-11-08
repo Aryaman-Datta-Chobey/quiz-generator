@@ -9,7 +9,7 @@
 #   end
 
 User.create!(email: 'aryaman@colgate.edu', password: 'colgate13')
-User.create!(email: 'thanhn@colgate.edu', password: 'colgate13')
+User.create!(email: 'thanh@colgate.edu', password: 'colgate13')
 User.create!(email: 'stefano@colgate.edu', password: 'colgate13')
 
 quiz = Quiz.new(
