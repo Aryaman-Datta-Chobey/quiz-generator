@@ -13,6 +13,21 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/spec/"  # Exclude test files from coverage
+  add_filter "/config/" # Exclude config files if needed
+  add_filter "/vendor/" # Exclude vendor files if needed
+
+  # You can add custom groups
+  add_group "Controllers", "app/controllers"
+  add_group "Models", "app/models"
+  add_group "Helpers", "app/helpers"
+  add_group "Services", "app/services"
+  add_group "Libraries", "lib"
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
