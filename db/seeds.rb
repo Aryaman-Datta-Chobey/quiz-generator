@@ -7,11 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-
-User.create!(email: 'aryaman@colgate.edu', password: 'colgate13')
-User.create!(email: 'thanh@colgate.edu', password: 'colgate13')
-User.create!(email: 'stefano@colgate.edu', password: 'colgate13')
-
 quiz = Quiz.new(
   topic: "Ruby on Rails Basics",
   difficulty: :easy,
