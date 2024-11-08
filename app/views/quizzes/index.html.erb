@@ -32,7 +32,9 @@
 
   <div class="row mt-5">
     <div class="col text-center">
-      <%= link_to "Generate New Quiz", new_quiz_path, class: "btn btn-lg btn-outline-info" %>
+      <% if user_signed_in? %>
+        <%= link_to "Generate New Quiz", new_quiz_path, class: "btn btn-lg btn-outline-info" %>
+      <% end %>
     </div>
   </div>
 
