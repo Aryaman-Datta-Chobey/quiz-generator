@@ -2,39 +2,39 @@ require 'rails_helper'
 
 RSpec.feature "Attempt a Quiz", type: :feature do
   Capybara.reset_sessions!  # Clear cookies and session data before each test
-  let!(:quiz) { 
+  let!(:quiz) {
     Quiz.create!(
-      topic: "Ruby on Rails Basics", 
-      difficulty: "easy", 
-      study_duration: 30, 
-      detail_level: "low", 
+      topic: "Ruby on Rails Basics",
+      difficulty: "easy",
+      study_duration: 30,
+      detail_level: "low",
       number_of_questions: 2
-    ) 
+    )
   }
-  
-  let!(:question1) { 
+
+  let!(:question1) {
     quiz.questions.create!(
-      content: "What is Rails?", 
-      options: ["A web application framework", "A programming language", "A database", "A front-end framework"], 
+      content: "What is Rails?",
+      options: [ "A web application framework", "A programming language", "A database", "A front-end framework" ],
       correct_answer: "A web application framework"
-    ) 
+    )
   }
-  
-  let!(:question2) { 
+
+  let!(:question2) {
     quiz.questions.create!(
-      content: "Which command is used to generate a new Rails model?", 
-      options: ["rails create model", "rails generate model", "rails new model", "rails model generate"], 
+      content: "Which command is used to generate a new Rails model?",
+      options: [ "rails create model", "rails generate model", "rails new model", "rails model generate" ],
       correct_answer: "rails generate model"
-    ) 
+    )
   }
 
   scenario "User views quiz details" do
     visit quiz_path(quiz)
-    
+
     expect(page).to have_content("Ruby on Rails Basics Quiz")
-    expect(page).to have_content("Difficulty: easy")
+    expect(page).to have_content("Difficulty: Easy")
     expect(page).to have_content("Study Duration: 30 minutes")
-    expect(page).to have_content("Detail Level: low")
+    expect(page).to have_content("Detail Level: Low")
     expect(page).to have_content("Number of Questions: 2")
   end
 
@@ -56,7 +56,7 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     find("input[name='answers[#{question1.id}]'][value='A web application framework']").choose
     click_button "Submit Quiz"
 
-    #expect(page).to have_content("Please select one of these options.")
+    # expect(page).to have_content("Please select one of these options.")
     expect(current_path).to eq(quiz_path(quiz))
   end
 
@@ -66,7 +66,7 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     # Answer all questions
     find("input[name='answers[#{question1.id}]'][value='A web application framework']").choose
     find("input[name='answers[#{question2.id}]'][value='rails generate model']").choose
-    
+
     # Submit the quiz
     click_button "Submit Quiz"
 
