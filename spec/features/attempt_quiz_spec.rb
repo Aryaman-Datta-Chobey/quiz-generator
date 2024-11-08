@@ -49,15 +49,15 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     expect(find("input[name='answers[#{question1.id}]'][value='A web application framework']")).not_to be_checked
   end
 
-  scenario "User tries to submit without answering all questions and sees error" do
+  scenario "User tries to submit without answering all questions and sees error", js: true do
     visit quiz_path(quiz)
 
     # Answer only the first question
     find("input[name='answers[#{question1.id}]'][value='A web application framework']").choose
     click_button "Submit Quiz"
 
-    # Expect to see a message prompting to answer all questions
-    #expect(page).to not_have_content("Please answer all questions before submitting.") # I DON'T KNOW HOW TO TEST METAPROGRAMMED JS YET 
+    expect(page).to have_content("Please select one of these options.")
+    expect(current_path).to eq(quiz_path(quiz))
   end
 
   scenario "User submits the quiz with all questions answered and sees score and time" do
@@ -73,5 +73,8 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     # Expect flash message with the score and time taken
     expect(page).to have_content("You scored 2 out of 2.")
     expect(page).to have_content("Time taken:")
+    # verify that the study_duration atribute was modified by the controller
+    quiz.reload
+    expect(quiz.study_duration).not_to eq(30)
   end
 end

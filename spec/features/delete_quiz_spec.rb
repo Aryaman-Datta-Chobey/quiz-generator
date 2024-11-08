@@ -27,7 +27,7 @@ RSpec.feature "Delete a Quiz", type: :feature do
       correct_answer: "rails generate model"
     ) 
   }
-  scenario "User can delete a quiz and sees the confirmation message" do
+  scenario "User can delete a quiz and sees the confirmation message", js: true do
     visit quiz_path(quiz)  # Visit the quiz show page
 
     # Check if the delete button exists on the page
@@ -35,14 +35,30 @@ RSpec.feature "Delete a Quiz", type: :feature do
 
     # Stub the confirmation to automatically click 'OK'
     page.accept_confirm('Are you sure you want to delete this quiz?') do
-      click_button 'Delete Quiz'  # Click the delete button
+      click_button 'Delete Quiz' 
     end
 
     # Expect the user to be redirected to the index page
-    expect(current_path).to eq(quizzes_path)  # or your quizzes index path
+    expect(current_path).to eq(quizzes_path) 
 
     # Expect to see the flash message confirming the deletion
     expect(page).to have_content('Quiz was successfully deleted')
   end
-  ##TODO: Add scenario where user clicks no on confirmation message 
+  scenario "User clicks on delete button declines confirmation message, sucessfully NOT deleting the quiz", js: true do
+    visit quiz_path(quiz)  # Visit the quiz show page
+
+    # Check if the delete button exists on the page
+    expect(page).to have_button('Delete Quiz')
+
+    page.dismiss_confirm('Are you sure you want to delete this quiz?') do
+      click_button 'Delete Quiz' 
+    end
+
+   
+    expect(current_path).to eq(quiz_path(quiz))  # Expect the user to stay on the quiz show page (not redirected)
+
+    expect(Quiz.exists?(quiz.id)).to be true # Expect the quiz to still exist in the database
+
+    expect(page).not_to have_content('Quiz was successfully deleted')
+  end
 end
