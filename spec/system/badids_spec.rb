@@ -8,8 +8,9 @@ RSpec.describe "Bad IDs", type: :request do
   end
   describe "Bad id #index (sad_path)" do
     it 'should tell us that we are looking for an Invalid Quiz' do
-      visit quiz_path(1000)
-      expect(page.text).to match(/Invalid quiz ID/i)
+      get quiz_path(1000)
+      expect(response).to have_http_status(302)
+      expect(response).to redirect_to(quizzes_path)
     end
   end
 end

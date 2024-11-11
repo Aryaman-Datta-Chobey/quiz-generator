@@ -43,7 +43,7 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     expect(page).to have_content("Number of Questions: 2")
   end
 
-  scenario " For MCQs User can only select one option per question (radio buttons)" do
+  scenario "For MCQs User can only select one option per question (radio buttons)" do
     visit quiz_path(quiz)
     # Verify single-select for question 1
     find("input[name='answers[#{question1.id}]'][value='A web application framework']").choose

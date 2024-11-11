@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuizzesController, type: :controller do
-  include Devise::Test::IntegrationHelpers
+  include Devise::Test::ControllerHelpers
   render_views false # Suppress view rendering in this controller spec as we have not yet implemented a quiz editing view
   before(:each) do
     @user = User.create!(email: 'user@colgate.edu', password: 'colgate13')
