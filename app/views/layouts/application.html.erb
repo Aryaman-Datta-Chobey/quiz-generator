@@ -13,16 +13,6 @@
   </head>
 
   <body>
-    <div class="container  mx-5 mt-5">
-      <% unless controller_name == 'sessions' %>
-        <% if user_signed_in? %>
-        <p> Hello <%= current_user.email %> </p>
-        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-outline-primary" %>
-        <% else %>
-          <%= button_to "Log in", new_user_session_path, class: "btn btn-outline-primary" %>
-        <% end %>
-      <% end %>
-    </div>
     <div class="container">
       <div class="row">
         <% if flash[:notice] %>
@@ -37,6 +27,16 @@
           </div>
         <% end %>
       </div>
+      <div class="container">
+      <% unless controller_name == 'sessions' %>
+        <% if user_signed_in? %>
+        <p> Hello <%= current_user.email %> </p>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-outline-primary" %>
+        <% else %>
+          <%= button_to "Log in", new_user_session_path, class: "btn btn-outline-primary" %>
+        <% end %>
+      <% end %>
+    </div>
 
     <%= yield %>
     </div>
