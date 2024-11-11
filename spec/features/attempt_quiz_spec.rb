@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.feature "Attempt a Quiz", type: :feature do
+  include Devise::Test::IntegrationHelpers
   Capybara.reset_sessions!  # Clear cookies and session data before each test
+  before(:each) do
+    @user = User.create!(email: 'user@colgate.edu', password: 'colgate13')
+    sign_in @user
+  end
   let!(:quiz) {
     Quiz.create!(
       topic: "Ruby on Rails Basics",
