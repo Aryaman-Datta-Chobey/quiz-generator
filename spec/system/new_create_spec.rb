@@ -1,8 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "QuizCreation", type: :system do
+  include Devise::Test::IntegrationHelpers
   before do
     driven_by(:rack_test)
+  end
+  before(:each) do
+    @user = User.create!(email: 'user@colgate.edu', password: 'colgate13')
+    sign_in @user
   end
 
   describe 'create a new quiz' do

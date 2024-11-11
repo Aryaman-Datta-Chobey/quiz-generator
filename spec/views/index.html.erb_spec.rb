@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "quizzes/index.html.erb", type: :view do
+  include Devise::Test::ControllerHelpers
   before(:each) do
     assign(:quizzes, [
       Quiz.new(topic: "Rspec Testing",

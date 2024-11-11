@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.feature "Attempt a Quiz", type: :feature do
+  include Devise::Test::IntegrationHelpers
   Capybara.reset_sessions!  # Clear cookies and session data before each test
+  before(:each) do
+    @user = User.create!(email: 'user@colgate.edu', password: 'colgate13')
+    sign_in @user
+  end
   let!(:quiz) {
     Quiz.create!(
       topic: "Ruby on Rails Basics",
@@ -38,7 +43,7 @@ RSpec.feature "Attempt a Quiz", type: :feature do
     expect(page).to have_content("Number of Questions: 2")
   end
 
-  scenario " For MCQs User can only select one option per question (radio buttons)" do
+  scenario "For MCQs User can only select one option per question (radio buttons)" do
     visit quiz_path(quiz)
     # Verify single-select for question 1
     find("input[name='answers[#{question1.id}]'][value='A web application framework']").choose
