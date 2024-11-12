@@ -4,9 +4,14 @@ class QuizzesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id
   # GET /quizzes
   def index
-    @quizzes = Quiz.all
-    if params[:query].present? && params[:query].length > 2
-      @quizzes = @quizzes.by_search_string(params[:query])
+    if user_signed_in?
+      @quizzes = if params[:query].present? && params[:query].length > 2 #What is the rationale behind the length check?
+                   Quiz.by_search_string(params[:query], current_user)
+                 else
+                   current_user.quizzes
+                 end
+    else
+      @quizzes = [] #REPLACE WITH OTHER LOGIC WHEN USER IS NOT LOGGED IN
     end
   end
 

@@ -22,7 +22,7 @@ class Quiz < ApplicationRecord
          detail_level.humanize
       end
     end
-   def self.by_search_string(search)
-      Quiz.where("topic LIKE ?", "%#{search}%")
-   end
+    def self.by_search_string(search, user) #UPDATED to only find quizzes by topic that are owned by the user
+      user.quizzes.where("topic LIKE ?", "%#{search}%")
+    end
 end
