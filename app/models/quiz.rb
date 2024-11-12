@@ -1,4 +1,6 @@
 class Quiz < ApplicationRecord
+   #associations
+   belongs_to :user
    has_many :questions, dependent: :destroy
 
    enum :difficulty, %i[easy intermmediate hard]
