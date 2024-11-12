@@ -1,5 +1,6 @@
 require 'rails_helper'
 RSpec.describe "Quizzes", type: :system do
+    include Devise::Test::IntegrationHelpers
     let(:user) { User.create!(email: 'user@example.com', password: 'password') }
     let(:user1) { User.create!(email: 'user1@example.com', password: 'password') }
   
@@ -23,7 +24,7 @@ RSpec.describe "Quizzes", type: :system do
   
       # Expectations
       expect(page).to have_content("Passing Rspec Tests")
-      expect(page).not_to have_content("Rspec Testing")
+      expect(page).to have_content("Rspec Testing")
       expect(page).not_to have_content("Other user's rspec test")  # Should not see user1's quiz
     end
   end

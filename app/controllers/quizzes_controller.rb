@@ -28,7 +28,7 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    @quiz = Quiz.new(quiz_params)
+    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
     if @quiz.save
       redirect_to quizzes_path, notice: "Quiz was successfully generated."
     else
