@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "questions/create"
+  get "questions/destroy"
+  get "questions/update"
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :quizzes do

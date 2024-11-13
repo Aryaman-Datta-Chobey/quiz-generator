@@ -38,10 +38,14 @@ class QuizzesController < ApplicationController
 
   # PATCH/PUT /quizzes/:id
   def update
-    if @quiz.update(quiz_params)
-      redirect_to @quiz, notice: "Quiz was successfully updated."
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @quiz.update(quiz_params)
+        format.turbo_stream { flash.now[:notice] = "Quiz was successfully updated." }
+        format.html { redirect_to @quiz, notice: "Quiz was successfully updated." }
+      else
+        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
