@@ -1,7 +1,9 @@
 class Quiz < ApplicationRecord
+   #associations
+   belongs_to :user
    has_many :questions, dependent: :destroy
 
-   enum :difficulty, %i[easy intermmediate hard]
+   enum :difficulty, %i[easy intermediate hard]
    enum :detail_level, %i[low medium high]
 
    validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
@@ -20,7 +22,7 @@ class Quiz < ApplicationRecord
          detail_level.humanize
       end
     end
-   def self.by_search_string(search)
-      Quiz.where("topic LIKE ?", "%#{search}%")
-   end
+    def self.by_search_string(search, user) #UPDATED to only find quizzes by topic that are owned by the user
+      user.quizzes.where("topic LIKE ?", "%#{search}%")
+    end
 end

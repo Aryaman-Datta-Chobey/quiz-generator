@@ -8,7 +8,7 @@ RSpec.feature "Delete a Quiz", type: :feature do
     sign_in @user
   end
   let!(:quiz) { 
-    Quiz.create!(
+    @user.quizzes.create!(
       topic: "Ruby on Rails Basics", 
       difficulty: "easy", 
       study_duration: 30, 
