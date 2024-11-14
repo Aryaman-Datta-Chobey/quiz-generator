@@ -73,7 +73,11 @@
   <!-- List and manage questions associated with this quiz -->
   <div>
     <h3>Questions</h3>
+
+    <!-- Render each question with edit and delete functionality -->
     <%= render @quiz.questions %>
+
+    <!-- Form to add a new question -->
     <%= render 'questions/new', quiz: @quiz %>
   </div>
 </div>

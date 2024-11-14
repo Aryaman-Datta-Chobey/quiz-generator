@@ -1,6 +1,7 @@
 <%= turbo_frame_tag dom_id(question) do %>
-    <p><%= question.content %></p>
-    <%= link_to "Edit", edit_quiz_question_path(@quiz, question), data: { turbo_frame: dom_id(question) } %>
-    <%= link_to "Delete", quiz_question_path(@quiz, question), method: :delete, data: { turbo_frame: "questions" } %>
-  <% end %>
+  <p><%= question.content %></p>
+  <%= link_to "Edit", edit_quiz_question_path(@quiz, question), data: { turbo_frame: "question_#{question.id}" }, class: "btn btn-sm btn-warning" %>
+  <%= link_to "Delete", quiz_question_path(@quiz, question), method: :delete, data: { turbo_frame: "questions" }, class: "btn btn-sm btn-danger" %>
+
+<% end %>
   

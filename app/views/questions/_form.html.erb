@@ -1,0 +1,21 @@
+<%= turbo_frame_tag dom_id(question) do %>
+    <%= form_with model: [@quiz, question], local: false do |f| %>
+      <div class="form-group">
+        <%= f.label :content %>
+        <%= f.text_field :content, class: "form-control" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :options %>
+        <%= f.text_area :options, class: "form-control" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :correct_answer %>
+        <%= f.text_field :correct_answer, class: "form-control" %>
+      </div>
+      
+      <%= f.submit question.persisted? ? "Update Question" : "Save Question", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+  

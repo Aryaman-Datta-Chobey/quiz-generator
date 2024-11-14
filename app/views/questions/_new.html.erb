@@ -1,7 +1,3 @@
 <%= turbo_frame_tag "new_question" do %>
-    <%= form_with(model: [@quiz, Question.new], url: quiz_questions_path(@quiz), local: false) do |f| %>
-      <%= f.label :content %>
-      <%= f.text_field :content %>
-      <%= f.submit "Add Question" %>
-    <% end %>
-  <% end %>
+  <%= render 'questions/form', quiz: @quiz, question: @quiz.questions.build %>
+<% end %>
