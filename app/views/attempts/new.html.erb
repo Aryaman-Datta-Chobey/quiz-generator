@@ -7,22 +7,24 @@
       <p class="font-weight-bold">Q <%= i + 1 %>) <%= question.content %></p>
       <p class="text-muted">select ONE</p>
 
-      <% JSON.parse(question.options).each_with_index do |option, j| %>
-        <div class="form-check">
-          <label class="form-check-label">
-            <%= f.fields_for :attempted_questions, @attempt.attempted_questions.build(question: question) do |attempted_question_fields| %>
+      <!-- Build only once for each question -->
+      <%= f.fields_for :attempted_questions, @attempt.attempted_questions.build(question: question) do |attempted_question_fields| %>
+        <% JSON.parse(question.options).each_with_index do |option, j| %>
+          <div class="form-check">
+            <label class="form-check-label">
               <input type="radio" 
-                     name="attempt[attempted_questions_attributes][<%= i %>][user_answer]" 
-                     value="<%= option %>" 
-                     class="form-check-input" required>
+                    name="attempt[attempted_questions_attributes][<%= i %>][user_answer]" 
+                    value="<%= option %>" 
+                    class="form-check-input" required>
               <%= ('a'.ord + j).chr %>) <%= option %>
-              <%= attempted_question_fields.hidden_field :question_id, value: question.id %>
-            <% end %>
-          </label>
-        </div>
+            </label>
+          </div>
+        <% end %>
+        <%= attempted_question_fields.hidden_field :question_id, value: question.id %>
       <% end %>
     </div>
   <% end %>
+
 
   <div class="text-center">
     <%= f.submit 'Submit Quiz Attempt', class: 'btn btn-lg btn-primary' %>

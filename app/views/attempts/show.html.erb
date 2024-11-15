@@ -4,7 +4,7 @@
 <p><strong>Score:</strong> <%= @attempt.score %> out of <%= @quiz.questions.count %></p>
 
 <hr>
-
+<% puts @attempt.attempted_questions.inspect %> <!-- Debugging line -->
 <% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
   <div class="mb-3">
     <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
@@ -30,6 +30,7 @@
   <hr>
 <% end %>
 
+<%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
 <style>
   /* Styling to distinguish selected answer */
   .selected-option {
