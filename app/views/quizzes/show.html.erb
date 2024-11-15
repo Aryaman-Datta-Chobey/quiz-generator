@@ -9,6 +9,7 @@
       <p class="lead text-muted">Number of Questions: <%= @quiz.number_of_questions %></p>
     </div>
   </div>
+  <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-primary" %>
 
   <%= form_with url: "/quizzes/#{@quiz.id}/submit", method: :post, class: 'needs-validation' do |f| %>
     <% @quiz.questions.each_with_index do |question, i| %>
