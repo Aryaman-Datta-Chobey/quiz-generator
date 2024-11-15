@@ -1,5 +1,6 @@
 <div class="container my-5">
 
+  <!-- Quiz Details -->
   <div class="row mb-4">
     <div class="col text-center">
       <h1 class="display-4 text-primary"><%= @quiz.topic %> Quiz</h1>
@@ -10,52 +11,54 @@
     </div>
   </div>
 
-  <%= form_with url: "/quizzes/#{@quiz.id}/submit", method: :post, class: 'needs-validation' do |f| %>
-    <% @quiz.questions.each_with_index do |question, i| %>
-      <% question_class = '' %>
-      
-      <div class="mb-3">
-        <p class="font-weight-bold <%= question_class %>">Q <%= i + 1 %>) <%= question.content %></p>
-        <p class="text-muted">select ONE</p>
-        <% JSON.parse(question.options).each_with_index do |option, j| %>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="radio" name="answers[<%= question.id %>]" value="<%= option %>" class="form-check-input" required>
-              <%= ('a'.ord + j).chr %>) <%= option %>
-            </label>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+  <!-- Button Row -->
+  <div class="row mb-4 justify-content-center">
+    <div class="col-auto">
+      <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-primary" %>
+    </div>
+    <div class="col-auto">
+      <%= form_with model: @quiz, method: :delete, local: true do %>
+        <button type="submit" class="btn btn-lg btn-danger" onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
+      <% end %>
+    </div>
+  </div>
 
-    <div class="text-center">
-      <%= f.submit 'Submit Quiz', class: 'btn btn-lg btn-primary' %>
+  <!-- Attempts List -->
+  <% if @quiz.attempts.any? %>
+    <div class="row">
+      <div class="col">
+        <h3 class="text-secondary">Previous Attempts</h3>
+        <ul class="list-group">
+          <% @quiz.attempts.each do |attempt| %>
+            <li class="list-group-item">
+              <strong>Attempt on:</strong> <%= attempt.attempt_date %> 
+              <strong>Score:</strong> <%= attempt.score %> / <%= @quiz.number_of_questions %> 
+              <strong>Time Taken:</strong> <%= attempt.time_taken %> seconds
+              <%= link_to "View Attempt", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-link" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col">
+        <p class="text-muted">No attempts have been made for this quiz yet.</p>
+      </div>
     </div>
   <% end %>
+
+  <!-- Additional Styling -->
+  <style>
+    .btn-primary, .btn-danger {
+      padding: 0.8rem 2rem;
+      font-size: 1.2rem;
+    }
+    .list-group-item {
+      font-size: 1rem;
+    }
+    .btn-link {
+      font-size: 0.9rem;
+    }
+  </style>
 </div>
-
-<!-- Delete button form -->
-<%= form_with model: @quiz, method: :delete, local: true do %>
-  <button type="submit" onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
-<% end %>
-
-<!-- Display the score after submitting the quiz -->
-<% if flash[:notice] %>
-  <p><strong><%= flash[:notice] %></strong></p>
-<% end %>
-
-<%# TODO: LINK STYLE SHEET %>
-<style>
-  .form-check-label {
-    font-size: 1.1rem;
-  }
-
-  .form-check-input {
-    margin-top: 0.3rem;
-  }
-
-  .btn-primary {
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-  }
-</style>

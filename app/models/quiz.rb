@@ -2,7 +2,8 @@ class Quiz < ApplicationRecord
    #associations
    belongs_to :user
    has_many :questions, dependent: :destroy
-
+   has_many :attempts , dependent: :destroy
+   # has_many :attempted_questions, through: :attempts
    enum :difficulty, %i[easy intermediate hard]
    enum :detail_level, %i[low medium high]
 

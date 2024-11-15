@@ -1,0 +1,40 @@
+<h2>Attempt Details</h2>
+<p><strong>Date:</strong> <%= @attempt.attempt_date %></p>
+<p><strong>Time Taken:</strong> <%= @attempt.time_taken %> seconds</p>
+<p><strong>Score:</strong> <%= @attempt.score %> out of <%= @quiz.questions.count %></p>
+
+<hr>
+<% puts @attempt.attempted_questions.inspect %> <!-- Debugging line -->
+<% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
+  <div class="mb-3">
+    <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
+    <p class="text-muted">Your answer:</p>
+    
+    <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
+      <div class="form-check">
+        <label class="form-check-label">
+          <span class="<%= attempted_question.user_answer == option ? 'selected-option' : '' %>">
+            <%= ('a'.ord + j).chr %>) <%= option %>
+            <% if attempted_question.user_answer == option %>
+              <% if attempted_question.correct %>
+                <span class="text-success">&#10003;</span> <!-- Green check for correct -->
+              <% else %>
+                <span class="text-danger">&#10007;</span> <!-- Red cross for incorrect -->
+              <% end %>
+            <% end %>
+          </span>
+        </label>
+      </div>
+    <% end %>
+  </div>
+  <hr>
+<% end %>
+
+<%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
+<style>
+  /* Styling to distinguish selected answer */
+  .selected-option {
+    font-weight: bold;
+  }
+</style>
+
