@@ -5,13 +5,13 @@ class QuizzesController < ApplicationController
   # GET /quizzes
   def index
     if user_signed_in?
-      @quizzes = if params[:query].present? && params[:query].length > 2 #What is the rationale behind the length check?
+      @quizzes = if params[:query].present? && params[:query].length > 2 # What is the rationale behind the length check?
                    Quiz.by_search_string(params[:query], current_user)
-                 else
+      else
                    current_user.quizzes
-                 end
+      end
     else
-      @quizzes = [] #REPLACE WITH OTHER LOGIC WHEN USER IS NOT LOGGED IN
+      @quizzes = [] # REPLACE WITH OTHER LOGIC WHEN USER IS NOT LOGGED IN
     end
   end
 
@@ -31,20 +31,23 @@ class QuizzesController < ApplicationController
     if @quiz.save
       redirect_to quizzes_path, notice: "Quiz was successfully generated."
     else
-      flash[:alert] = 'Quiz could not be created'
+      flash[:alert] = "Quiz could not be created"
       render :new, status: :unprocessable_entity
     end
   end
 
   # GET /quizzes/:id/edit
   def edit
+    @quiz = Quiz.find(params[:id])
   end
 
   # PATCH/PUT /quizzes/:id
   def update
+    @quiz = Quiz.find params[:id]
     if @quiz.update(quiz_params)
-      redirect_to @quiz, notice: "Quiz was successfully updated."
+      redirect_to quiz_path(@quiz), notice: "Quiz was successfully updated."
     else
+      flash[:alert] = "Quiz update failed."
       render :edit, status: :unprocessable_entity
     end
   end
@@ -53,7 +56,7 @@ class QuizzesController < ApplicationController
   def destroy
     @quiz.destroy
     redirect_to quizzes_url, notice: "Quiz was successfully deleted."
-  end   
+  end
 
   private
 
@@ -61,15 +64,19 @@ class QuizzesController < ApplicationController
   def set_quiz
     @quiz = Quiz.find(params[:id])
   end
-  
+
   private
     # Only allow a list of trusted parameters through
+    # In QuizzesController
     def quiz_params
-      params.require(:quiz).permit(:topic, :difficulty, :study_duration, :detail_level, :number_of_questions)
+      params.require(:quiz).permit(
+        :topic, :difficulty, :study_duration, :detail_level,
+        :number_of_questions, questions_attributes: [ :id, :content, :options, :correct_answer ]
+      )
     end
 
     def handle_bad_id
-      flash[:alert] = 'Invalid quiz ID'
+      flash[:alert] = "Invalid quiz ID"
       redirect_to quizzes_path
     end
 end

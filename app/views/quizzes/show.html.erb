@@ -21,6 +21,10 @@
         <button type="submit" class="btn btn-lg btn-danger" onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
       <% end %>
     </div>
+    <div class="col-auto">
+      <%= link_to "Edit Quiz", edit_quiz_path(@quiz), class: "btn btn-lg btn-success" %>
+    </div>
+  
   </div>
 
   <!-- Attempts List -->
