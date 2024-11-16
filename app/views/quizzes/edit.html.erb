@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="row">
+    <h1>Edit <%= @quiz.topic %> Quiz</h1>
+  </div>
+
+  <%= form_with model: @quiz, local: true do |f| %>
+    
+    <!-- Quiz Topic -->
+    <div class="form-group">
+      <%= f.label :topic %>
+      <%= f.text_field :topic, class: 'form-control' %>
+    </div>
+
+    <!-- Quiz Difficulty -->
+    <div class="form-group">
+      <%= f.label :difficulty %>
+      <%= f.select :difficulty, Quiz.difficulties.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+    </div>
+
+    <!-- Study Duration -->
+    <div class="form-group">
+      <%= f.label :study_duration, "Study Duration (in minutes)" %>
+      <%= f.number_field :study_duration, class: 'form-control', min: 1 %>
+    </div>
+
+    <!-- Detail Level -->
+    <div class="form-group">
+      <%= f.label :detail_level %>
+      <%= f.select :detail_level, Quiz.detail_levels.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+    </div>
+
+    <!-- Remove the Number of Questions Field -->
+    <!-- This field is no longer included, as the number of questions will be managed dynamically -->
+    
+    <!-- Questions Section -->
+    <h3>Questions</h3>
+    
+    <%= f.fields_for :questions do |qf| %>
+      <div class="question-fields mb-4">
+        <!-- Question Content -->
+        <div class="form-group">
+          <%= qf.label :content, "Question Content" %>
+          <%= qf.text_area :content, class: 'form-control' %>
+        </div>
+
+        <!-- Correct Answer -->
+        <div class="form-group">
+          <%= qf.label :correct_answer, "Correct Answer" %>
+          <%= qf.text_field :correct_answer, class: 'form-control' %>
+        </div>
+
+        <!-- Options -->
+        <div class="form-group">
+          <%= qf.label :options, "Options (Comma-separated)" %>
+          <%= qf.text_area :options, class: 'form-control', placeholder: "Enter options as comma-separated values" %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= f.submit "Update Quiz", class: 'btn btn-primary' %>
+  <% end %>
+
+  <div class="mt-3">
+    <%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .form-control {
+    font-size: 1rem;
+  }
+  .btn-primary {
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+  }
+  .btn-secondary {
+    font-size: 1rem;
+    padding: 0.6rem 1.8rem;
+  }
+  h3 {
+    margin-top: 1.5rem;
+  }
+  .question-fields {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+</style>
+
