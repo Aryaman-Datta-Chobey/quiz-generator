@@ -46,7 +46,7 @@
         <!-- Correct Answer -->
         <div class="form-group mb-3">
           <%= qf.label :correct_answer, "Correct Answer (Click an option to select)", class: "form-label fw-bold" %>
-          <%= qf.text_field :correct_answer, value: qf.object.correct_answer, class: 'form-control correct-answer', disabled: true %>
+          <%= qf.text_field :correct_answer, value: qf.object.correct_answer, class: 'form-control correct-answer'%>
         </div>
 
         <!-- Hidden Options Field -->
@@ -124,6 +124,9 @@
     transition: all 0.1s ease-in-out;
   }
   .d-none {
+    display: none !important;
+  }
+  .correct-answer{
     display: none !important;
   }
 </style>
