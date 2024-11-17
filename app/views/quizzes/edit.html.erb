@@ -96,44 +96,52 @@
   }
 </style>
 
+<!-- jQuery Script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const quizForm = document.getElementById("quiz-form");
+  $(document).ready(function() {
+    // Check if the page has been visited before in the current session
+    if (!sessionStorage.getItem("hasVisited")) {
+        // Set a flag in sessionStorage indicating the page has been visited
+        sessionStorage.setItem("hasVisited", "true");
 
-    if (quizForm) {
-      quizForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const questionFields = document.querySelectorAll(".question-fields");
-        const optionsDictionary = {};
-
-        // Build the options dictionary
-        questionFields.forEach((questionField, index) => {
-          const newOptionsFields = questionField.querySelectorAll(".new-options");
-          const optionsArray = Array.from(newOptionsFields).map(field => field.value.trim());
-
-          optionsDictionary[index] = optionsArray;
-
-          // Replace the value of the :options text field with the JSON stringified array
-          const optionsTextField = questionField.querySelector("textarea.new-op");
-          if (optionsTextField) {
-            optionsTextField.value = JSON.stringify(optionsArray);
-          }
-        });
-
-        console.log("Options Dictionary:", optionsDictionary);
-
-        // Comment to check console to see if its working 
-        quizForm.submit();
-      });
+        // Force a page reload
+        console.log("Refreshing page...");
+        location.reload();
     } else {
-      console.error("Quiz form not found.");
+        console.log("Page was visited before. No reload needed.");
+    }
+
+    // Your form logic here
+    const $quizForm = $("#quiz-form");
+
+    if ($quizForm.length) {
+        $quizForm.on("submit", function(event) {
+            const $questionFields = $(".question-fields");
+            const optionsDictionary = {};
+
+            // Build the options dictionary
+            $questionFields.each(function(index) {
+                const $newOptionsFields = $(this).find(".new-options");
+                const optionsArray = $newOptionsFields.map(function() {
+                    return $(this).val().trim();
+                }).get();
+
+                optionsDictionary[index] = optionsArray;
+
+                // Replace the value of the :options text field with the JSON stringified array
+                const $optionsTextField = $(this).find("textarea.new-op");
+                if ($optionsTextField.length) {
+                    $optionsTextField.val(JSON.stringify(optionsArray));
+                }
+            });
+
+            console.log("Options Dictionary:", optionsDictionary);
+
+            // No preventDefault, let Rails handle the form submission
+        });
+    } else {
+        console.error("Quiz form not found.");
     }
   });
 </script>
-
-
-
-
-
-
