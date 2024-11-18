@@ -5,7 +5,7 @@ class QuizzesController < ApplicationController
   # GET /quizzes
   def index
     if user_signed_in?
-      @quizzes = if params[:query].present? && params[:query].length > 2 #What is the rationale behind the length check?
+      @quizzes = if params[:query].present? && params[:query].length > 1 #What is the rationale behind the length check?
                    Quiz.by_search_string(params[:query], current_user)
                  else
                    current_user.quizzes

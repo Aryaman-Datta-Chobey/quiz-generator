@@ -28,7 +28,7 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
   context "when user is logged in" do
     before do
       sign_in user
-      #assign(:quizzes, @user_quizzes)
+      assign(:quizzes, user.quizzes)
       render
     end
 ##NOTE: Devise provides the login button so redundant to test for it
@@ -52,7 +52,7 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
 
   context "when no user is logged in" do
     before do
-      #assign(:quizzes, [])
+      assign(:quizzes, [])
       render
     end
 ##NOTE: Devise provides the logout button so redundant to test for it
