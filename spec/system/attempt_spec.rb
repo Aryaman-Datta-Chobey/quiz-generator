@@ -62,3 +62,4 @@ RSpec.describe "Attempts", type: :system do
     expect(attempt.attempted_questions.find_by(question: question_3).correct).to eq(false)
   end
 end
+
