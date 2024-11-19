@@ -8,6 +8,7 @@ RSpec.describe "Quizzes", type: :system do
       driven_by(:rack_test)
       user.quizzes.create!(topic: "Rspec Testing", difficulty: "easy", study_duration: 9, detail_level: "high", number_of_questions: 100, score: 0)
       user.quizzes.create!(topic: "Passing Rspec Tests", difficulty: "hard", study_duration: 10, detail_level: "high", number_of_questions: 100, score: 0)
+      user.quizzes.create!(topic: "xql", difficulty: "hard", study_duration: 10, detail_level: "high", number_of_questions: 100, score: 0)
       user1.quizzes.create!(topic: "Other user's rspec test", difficulty: "hard", study_duration: 10, detail_level: "high", number_of_questions: 100, score: 0)
     end
   
@@ -24,8 +25,9 @@ RSpec.describe "Quizzes", type: :system do
   
       # Expectations
       expect(page).to have_content("Passing Rspec Tests")
-      expect(page).to have_content("Rspec Testing")
       expect(page).not_to have_content("Other user's rspec test")  # Should not see user1's quiz
+      expect(page).not_to have_content("xql") #should not see quiz not matching search string
+      expect(page).not_to have_content("Rspec Testing") #should not see quiz not matching search string
     end
   end
   
