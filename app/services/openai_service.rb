@@ -1,24 +1,25 @@
-require 'openai'
+require "openai"
 
 class OpenAIService
     def initialize
       @client = OpenAI::Client.new(
         access_token: ENV['GROQ_API_KEY'],
-        uri_base: "https://api.groq.com/openai"
+        uri_base: "https://api.groq.com/openai",
+        log_errors: true
       )
     end
   
-    def generate_response(prompt, model = 'text-davinci-003')
-      response = @client.completions(
+    def generate_response(prompt, max_tokens, model)
+      response = @client.chat(
         parameters: {
-          model: model,
-          prompt: prompt,
-          max_tokens: 150
+            model: model,
+            messages: [{ role: "user", content: prompt}],
+            temperature: 0.7,
+            max_tokens: max_tokens,
+            stream: proc do |chunk, _bytesize|
+                print chunk.dig("choices", 0, "delta", "content")
+            end
         }
       )
-      response['choices'].first['text'].strip
-    rescue StandardError => e
-      Rails.logger.error("OpenAI API Error: #{e.message}")
-      "Sorry, something went wrong."
     end
   end
