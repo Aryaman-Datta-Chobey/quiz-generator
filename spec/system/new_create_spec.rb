@@ -41,4 +41,15 @@ RSpec.describe "QuizCreation", type: :system do
       expect(page).to have_content('Quiz could not be created')
     end
   end
+  describe 'model methods for text representation' do
+    it 'returns "Not specified" when difficulty is nil' do
+      quiz = Quiz.new(detail_level: 'low') # Missing `difficulty`
+      expect(quiz.difficulty_text).to eq('Not specified')
+    end
+
+    it 'returns "Not specified" when detail_level is nil' do
+      quiz = Quiz.new(difficulty: 'easy') # Missing `detail_level`
+      expect(quiz.detail_level_text).to eq('Not specified')
+    end
+  end
 end
