@@ -1,0 +1,201 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col text-center">
+      <h1 class="text-primary">Edit <%= @quiz.topic %> Quiz</h1>
+    </div>
+  </div>
+
+  <%= form_with model: @quiz, id: "quiz-form", local: true do |f| %>
+    <div class="card p-4 shadow-sm">
+      <!-- Quiz Topic -->
+      <div class="form-group mb-3">
+        <%= f.label :topic, class: "form-label fw-bold" %>
+        <%= f.text_field :topic, class: 'form-control' %>
+      </div>
+
+      <!-- Quiz Difficulty -->
+      <div class="form-group mb-3">
+        <%= f.label :difficulty, class: "form-label fw-bold" %>
+        <%= f.select :difficulty, Quiz.difficulties.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+      </div>
+
+      <!-- Study Duration -->
+      <div class="form-group mb-3">
+        <%= f.label :study_duration, "Study Duration (in minutes)", class: "form-label fw-bold" %>
+        <%= f.number_field :study_duration, class: 'form-control', min: 1 %>
+      </div>
+
+      <!-- Detail Level -->
+      <div class="form-group mb-3">
+        <%= f.label :detail_level, class: "form-label fw-bold" %>
+        <%= f.select :detail_level, Quiz.detail_levels.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+      </div>
+    </div>
+
+    <!-- Questions Section -->
+    <h3 class="mt-4 mb-3 text-secondary">Questions</h3>
+
+    <%= f.fields_for :questions do |qf| %>
+      <div class="question-fields mb-4 card p-4 shadow-sm border-0">
+        <!-- Question Content -->
+        <div class="form-group mb-3">
+          <%= qf.label :content, "Question Content", class: "form-label fw-bold" %>
+          <%= qf.text_area :content, class: 'form-control' %>
+        </div>
+
+        <!-- Correct Answer -->
+        <div class="form-group mb-3">
+          <%= qf.label :correct_answer, "Correct Answer (Click an option to select)", class: "form-label fw-bold" %>
+          <%= qf.text_field :correct_answer, value: qf.object.correct_answer, class: 'form-control correct-answer'%>
+        </div>
+
+        <!-- Hidden Options Field -->
+        <div class="form-group d-none">
+          <%= qf.text_area :options, class: 'form-control new-op', placeholder: "Enter options as comma-separated values" %>
+        </div>
+
+        <!-- Answer Options as Cards -->
+        <% options = qf.object.options.scan(/"([^"]*)"/).flatten %>
+        <div class="row gx-3 gy-3">
+          <% options.each_with_index do |pans, index| %>
+          <div class="col-md-6">
+            <div class="card p-3 shadow-sm answer-card <%= 'selected' if pans.strip == qf.object.correct_answer %>" data-answer="<%= pans.strip %>">
+              <div class="form-group mb-0">
+                <%= qf.label :options, "Answer #{index + 1}", class: "form-label fw-bold" %>
+                <%= qf.text_field :new_options, value: pans.strip, class: 'form-control new-options', placeholder: "Enter answer option..." %>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="text-center">
+      <%= f.submit "Update Quiz", class: 'btn btn-primary btn-lg px-5 mt-3' %>
+    </div>
+  <% end %>
+
+  <div class="mt-4 text-center">
+    <%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary btn-lg px-4" %>
+  </div>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .form-control {
+    font-size: 1rem;
+    border-radius: 5px;
+  }
+  .btn-primary {
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+  }
+  .btn-secondary {
+    font-size: 1rem;
+    padding: 0.6rem 1.8rem;
+  }
+  .question-fields {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  h3 {
+    margin-top: 1.5rem;
+    font-weight: bold;
+  }
+  .card {
+    border: none;
+    border-radius: 10px;
+  }
+  .shadow-sm {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .answer-card {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .answer-card:hover {
+    background-color: #f1f1f1;
+  }
+  .answer-card.selected {
+    border: 2px solid #28a745;
+    background-color: #e6ffe6;
+    box-shadow: 0px 0px 12px #28a745;
+    transition: all 0.1s ease-in-out;
+  }
+  .d-none {
+    display: none !important;
+  }
+  .correct-answer{
+    display: none !important;
+  }
+</style>
+
+<!-- jQuery Script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    const $quizForm = $("#quiz-form");
+    if ($quizForm.length) {
+        $quizForm.on("submit", function(event) {
+            const $questionFields = $(".question-fields");
+            const optionsDictionary = {};
+
+            // Build the options dictionary
+            $questionFields.each(function(index) {
+                const $newOptionsFields = $(this).find(".new-options");
+                const optionsArray = $newOptionsFields.map(function() {
+                    return $(this).val().trim();
+                }).get();
+
+                optionsDictionary[index] = optionsArray;
+
+                // Replace the value of the :options text field with the JSON stringified array
+                const $optionsTextField = $(this).find("textarea.new-op");
+                if ($optionsTextField.length) {
+                    $optionsTextField.val(JSON.stringify(optionsArray));
+                }
+            });
+
+            console.log("Options Dictionary:", optionsDictionary);
+
+            // No preventDefault, let Rails handle the form submission
+        });
+    } else {
+        console.error("Quiz form not found.");
+    }
+
+    const $answerCards = $(".answer-card");
+    
+    // Handle click event on answer cards (excluding text field clicks)
+    $answerCards.on("click", function (event) {
+      const $currentQuestion = $(this).closest(".question-fields");
+
+      // Avoid selecting answer if clicked inside the text field
+      if ($(event.target).is("input[type=text]")) return;
+
+      // Clear previously selected card in the same question
+      $currentQuestion.find(".answer-card").removeClass("selected");
+
+      // Mark clicked card as selected
+      $(this).addClass("selected");
+
+      // Update the correct answer field for this question
+      const answerText = $(this).data("answer");
+      $currentQuestion.find(".correct-answer").val(answerText);
+    });
+
+    // Update correct answer dynamically when the text field changes
+    $(".new-options").on("change", function () {
+      const $currentQuestion = $(this).closest(".question-fields");
+      const updatedAnswer = $(this).val().trim();
+
+      // Find the selected answer card and update the correct answer
+      const $selectedCard = $currentQuestion.find(".answer-card.selected");
+      if ($selectedCard.length) {
+        $selectedCard.data("answer", updatedAnswer);
+        $currentQuestion.find(".correct-answer").val(updatedAnswer);
+      }
+    });
+  });
+</script>
