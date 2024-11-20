@@ -28,6 +28,9 @@ class QuizzesController < ApplicationController
   # POST /quizzes
   def create
     @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
+    service = OpenAIService.new
+    prompt = params[:prompt]
+    @response = service.generate_response(prompt)
     if @quiz.save
       redirect_to quizzes_path, notice: "Quiz was successfully generated."
     else
