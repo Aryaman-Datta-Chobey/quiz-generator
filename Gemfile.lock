@@ -105,6 +105,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     docile (1.4.1)
+    dockerfile-rails (1.6.24)
+      rails (>= 3.0.0)
     drb (2.2.1)
     erubi (1.13.0)
     event_stream_parser (1.0.0)
@@ -418,6 +420,7 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
+  dockerfile-rails (>= 1.6)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
