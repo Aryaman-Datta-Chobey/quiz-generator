@@ -1,6 +1,6 @@
 require "openai"
 
-class OpenAIService
+class OpenaiService
   def initialize
     @client = OpenAI::Client.new(
       access_token: ENV['GROQ_API_KEY'],
