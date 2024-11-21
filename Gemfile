@@ -57,3 +57,4 @@ gem "devise", "~> 4.9"
 gem "omniauth-google-oauth2", "~> 1.2"
 
 gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "ruby-openai"
