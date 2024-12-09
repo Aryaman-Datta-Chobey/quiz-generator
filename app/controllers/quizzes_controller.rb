@@ -60,21 +60,34 @@ class QuizzesController < ApplicationController
       }
       Ensure the JSON includes all questions.
     "
-    session[:prompt] = prompt
-    openai_service = OpenaiService.new
-    response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
+    begin
+      openai_service = OpenaiService.new
+      response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
 
-    # Parse the JSON string into a Ruby hash
-    parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
+      # Parse the JSON string into a Ruby hash
+      parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
+      @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
 
-    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
+      # Iterate through the JSON to populate the quiz questions
+      parsed_response["questions"].each do |question|
+        @quiz.questions.build(question)
+      end
 
-    # Iterate thru the JSON to populate the quiz questions
-    if @quiz.save
-      session[:response_content] = response
-      redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
-    else
-      render :new, status: :unprocessable_entity
+      # Iterate thru the JSON to populate the quiz questions
+      if @quiz.save
+        session[:response_content] = response
+        redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
+      else
+        render :new, status: :unprocessable_entity
+      end
+    rescue JSON::ParserError => e
+      flash.now[:alert] = "Invalid JSON response. Try again."
+      Rails.logger.error("JSON::ParserError: #{e.message}")
+      render :new
+    rescue StandardError => e
+      flash.now[:alert] = "An error occurred while generating the quiz. Please try again."
+      Rails.logger.error("StandardError: #{e.message}")
+      render :new
     end
   end
 
