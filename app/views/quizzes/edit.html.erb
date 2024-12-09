@@ -81,7 +81,7 @@
   </div>
 </div>
 
-<!-- Additional Styling -->
+
 <style>
   .form-control {
     font-size: 1rem;
@@ -131,7 +131,7 @@
   }
 </style>
 
-<!-- jQuery Script -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
@@ -159,7 +159,6 @@
 
             console.log("Options Dictionary:", optionsDictionary);
 
-            // No preventDefault, let Rails handle the form submission
         });
     } else {
         console.error("Quiz form not found.");
@@ -177,7 +176,6 @@
       // Clear previously selected card in the same question
       $currentQuestion.find(".answer-card").removeClass("selected");
 
-      // Mark clicked card as selected
       $(this).addClass("selected");
 
       // Update the correct answer field for this question
