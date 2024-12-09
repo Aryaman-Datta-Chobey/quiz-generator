@@ -22,7 +22,6 @@ class OpenaiService
     cleaned_content = content.gsub("\n", "")
     cleaned_content
     rescue StandardError => e
-      Rails.logger.error("OpenAI API Error: #{e.message}")
-      "Sorry, something went wrong."
+      "OpenAI API Error: #{e.message}"
     end
   end

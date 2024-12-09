@@ -12,14 +12,17 @@
   </div>
 
   <!-- Display the response content -->
-  <% if flash[:response_content] %>
+  <div>
+  <p> Placeholder for OpenAI output </p>
+  <% if session[:response_content] %>
     <div class="row mb-4">
       <div class="col">
         <h3 class="text-secondary">Generated Quiz Content</h3>
-        <pre><%= JSON.pretty_generate(JSON.parse(flash[:response_content])) %></pre>
+        <pre><%= session[:response_content] %></pre>
       </div>
     </div>
   <% end %>
+  </div>
 
   <!-- Button Row -->
   <div class="row mb-4 justify-content-center">

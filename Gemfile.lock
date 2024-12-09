@@ -107,6 +107,10 @@ GEM
     docile (1.4.1)
     dockerfile-rails (1.6.24)
       rails (>= 3.0.0)
+    dotenv (3.1.4)
+    dotenv-rails (3.1.4)
+      dotenv (= 3.1.4)
+      railties (>= 6.1)
     drb (2.2.1)
     erubi (1.13.0)
     event_stream_parser (1.0.0)
@@ -421,6 +425,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   dockerfile-rails (>= 1.6)
+  dotenv-rails
   image_processing (~> 1.2)
   importmap-rails
   jbuilder

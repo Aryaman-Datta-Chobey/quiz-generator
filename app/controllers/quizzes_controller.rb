@@ -26,47 +26,6 @@ class QuizzesController < ApplicationController
     @quiz = Quiz.new
   end
 
-  def ask
-    prompt = <<~PROMPT
-      Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
-      Topic (of the quiz): #{params[:topic]}.
-      Number of Questions (in the quiz): #{params[:number_of_questions]}.
-      Difficulty (of the quiz): #{params[:difficulty]}.
-      Detail Level (depth of the questions): #{params[:detail_level]}.
-      Instructions:
-      For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
-      2. Create three plausible but incorrect options (distractors) for each question.
-      3. Format the output as valid JSON with this structure:
-      {
-        "questions": [
-          {
-            "content": "Question text here",
-            "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-            "correct_answer": "Option 2"
-          },
-          ...
-        ]
-      }
-      Ensure the JSON includes all questions.
-    PROMPT
-    openai_service = OpenaiService.new(ENV['OPENAI_API_KEY'])
-    response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
-
-    # Parse the JSON string into a Ruby hash
-    parsed_response = JSON.parse(response)
-    render json: parsed_response
-
-  # GET /quizzes
-  def index
-    if user_signed_in?
-      @quizzes = params[:query].present? && params[:query].length > 1 ? 
-        Quiz.by_search_string(params[:query], current_user) : 
-        current_user.quizzes
-    else
-      @quizzes = Quiz.public_quizzes
-    end
-  end
-
   # GET /quizzes/:id
   def show
     @quiz = Quiz.find(params[:id])
@@ -79,53 +38,42 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    prompt = <<~PROMPT
+    prompt = "
       Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
-      Topic (of the quiz): #{params[:topic]}.
-      Number of Questions (in the quiz): #{params[:number_of_questions]}.
-      Difficulty (of the quiz): #{params[:difficulty]}.
-      Detail Level (depth of the questions): #{params[:detail_level]}.
+      Topic (of the quiz): #{params[:quiz][:topic]}.
+      Number of Questions (in the quiz): #{params[:quiz][:number_of_questions]}.
+      Difficulty (of the quiz): #{params[:quiz][:difficulty]}.
+      Detail Level (depth of the questions): #{params[:quiz][:detail_level]}.
       Instructions:
       For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
       2. Create three plausible but incorrect options (distractors) for each question.
       3. Format the output as valid JSON with this structure:
       {
-        "questions": [
+        \"questions\": [
           {
-            "content": "Question text here",
-            "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-            "correct_answer": "Option 2"
+            \"content\": \"Question text here\",
+            \"options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],
+            \"correct_answer\": \"Option 2\"
           },
           ...
         ]
       }
       Ensure the JSON includes all questions.
-    PROMPT
-
-    openai_service = OpenaiService.new(ENV['OPENAI_API_KEY'])
+    "
+    session[:prompt] = prompt
+    openai_service = OpenaiService.new
     response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
 
     # Parse the JSON string into a Ruby hash
-    parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response" }
+    parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
 
     @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-    if @quiz.save
-      flash[:response_content] = response
-      redirect_to quizzes_path, notice: "Quiz was successfully generated."
-    else
-      render :new, status: :unprocessable_entity
-  end
 
-  # POST /quizzes
-  def create
-    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-    # service = OpenAIService.new
-    # prompt = params[:prompt]
-    # @response = service.generate_response(prompt)
+    # Iterate thru the JSON to populate the quiz questions
     if @quiz.save
-      redirect_to quizzes_path, notice: "Quiz was successfully generated."
+      session[:response_content] = response
+      redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
     else
-      flash[:alert] = "Quiz could not be created"
       render :new, status: :unprocessable_entity
     end
   end
