@@ -18,8 +18,9 @@ class OpenaiService
           max_tokens: max_tokens,
       }
     )
-    response.dig.choices.first.delta.content
-    response
+    content = response.dig("choices", 0, "message", "content")
+    cleaned_content = content.gsub("\n", "")
+    cleaned_content
     rescue StandardError => e
       Rails.logger.error("OpenAI API Error: #{e.message}")
       "Sorry, something went wrong."

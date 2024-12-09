@@ -53,7 +53,8 @@ class QuizzesController < ApplicationController
     response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
 
     # Parse the JSON string into a Ruby hash
-    render json: response
+    parsed_response = JSON.parse(response)
+    render json: parsed_response
 
   # GET /quizzes
   def index
