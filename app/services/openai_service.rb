@@ -16,10 +16,12 @@ class OpenaiService
           messages: [{ role: "user", content: prompt}],
           temperature: 0.7,
           max_tokens: max_tokens,
-          stream: proc do |chunk, _bytesize|
-              print chunk.dig("choices", 0, "delta", "content")
-          end
       }
     )
+    response.dig.choices.first.delta.content
+    response
+    rescue StandardError => e
+      Rails.logger.error("OpenAI API Error: #{e.message}")
+      "Sorry, something went wrong."
+    end
   end
-end
