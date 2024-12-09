@@ -11,6 +11,16 @@
     </div>
   </div>
 
+  <!-- Display the response content -->
+  <% if flash[:response_content] %>
+    <div class="row mb-4">
+      <div class="col">
+        <h3 class="text-secondary">Generated Quiz Content</h3>
+        <pre><%= JSON.pretty_generate(JSON.parse(flash[:response_content])) %></pre>
+      </div>
+    </div>
+  <% end %>
+
   <!-- Button Row -->
   <div class="row mb-4 justify-content-center">
     <div class="col-auto">
