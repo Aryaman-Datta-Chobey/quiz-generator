@@ -38,7 +38,7 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    prompt = "
+    prompt = '''
       Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
       Topic (of the quiz): #{params[:quiz][:topic]}.
       Number of Questions (in the quiz): #{params[:quiz][:number_of_questions]}.
@@ -47,32 +47,37 @@ class QuizzesController < ApplicationController
       Instructions:
       For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
       2. Create three plausible but incorrect options (distractors) for each question.
-      3. Format the output as valid JSON with this structure:
+      3. Return only a valid JSON object. Do not include any text before or after the JSON. The JSON should strictly follow this structure:
+
       {
-        \"questions\": [
+        "questions": [
           {
-            \"content\": \"Question text here\",
-            \"options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],
-            \"correct_answer\": \"Option 2\"
+            "content": "Question text",
+            "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+            "correct_answer": "Option 1"
           },
           ...
         ]
       }
-      Ensure the JSON includes all questions.
-    "
+
+      Do not deviate from this format. Do not include extra characters or quotes outside the JSON structure.
+    '''
     begin
       openai_service = OpenaiService.new
-      response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
+      response = openai_service.generate_response(prompt, 32768, "mixtral-8x7b-32768")
 
       # Parse the JSON string into a Ruby hash
+      session[:response] = response
       parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
       @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
 
-      # Iterate through the JSON to populate the quiz questions
       parsed_response["questions"].each do |question|
-        @quiz.questions.build(question)
+        @quiz.questions.build(
+          content: question["content"],
+          options: question["options"],
+          correct_answer: question["correct_answer"]
+        )
       end
-
       # Iterate thru the JSON to populate the quiz questions
       if @quiz.save
         session[:response_content] = response
