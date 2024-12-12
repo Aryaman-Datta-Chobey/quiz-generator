@@ -1,0 +1,18 @@
+<%# in create.turbo_stream.erb %>
+
+<%= turbo_stream.replace 'questions_list' do %>
+  <%= form_with(model: @quiz, local: true, data: { turbo: false, quiz_id: @quiz.id }) do |quiz_form| %>
+    <%= quiz_form.fields_for :questions do |question_form| %>
+          <%= render 'quizzes/question_form', question_form: question_form %> <!-- Render partial for each question -->
+    <% end %>
+    <%= quiz_form.submit "Save Quiz", class: 'btn btn-primary' %>
+  <% end %>
+<% end %>
+  
+
+<%= turbo_stream.replace 'new_question_form' do %>
+  <%= form_with model: [@quiz, @quiz.questions.build], local: true do |question_form| %>
+    <%= render 'quizzes/question_form', question_form: question_form %> <!-- Render partial for new question -->
+    <%= question_form.submit "Add Question", class: 'btn btn-primary' %>
+  <% end %>
+<% end %>

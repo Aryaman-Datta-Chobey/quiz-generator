@@ -1,0 +1,18 @@
+<div class="col-md-6">
+  <div 
+    class="card p-3 shadow-sm answer-card <%= 'selected' if option == qf.object.correct_answer %>" 
+    data-answer="<%= option %>" 
+    data-action="click->quiz-editor#handleAnswerCardClick">
+    <%= text_field_tag "new_options[]", option, 
+      class: 'form-control new-options', 
+      placeholder: "Enter answer option...", 
+      data: { action: "change->quiz-editor#handleAnswerCardChange" } %>
+    <button class="btn btn-link text-danger mt-2" 
+      data-action="click->quiz-editor#removeOption" 
+      data-options="<%=@options_json_array - [option]%>"
+      style="visibility: <%= option == qf.object.correct_answer ? 'hidden' : 'visible' %>;">
+      Remove Option
+    </button>
+  </div>
+</div>
+

@@ -5,11 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :quizzes do
-    resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
-    member do #custom POST route for submitting a specified quiz for scoring at /quizzes/:id/submit
-      post :submit
-    end
-    # Nested routes for attempts under quizzes
+    resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] 
     resources :attempts, only: [:new, :create, :show]
   end
 

@@ -1,0 +1,130 @@
+<div class="container py-5" data-controller="quiz-editor">
+  <!-- Form -->
+  <%= form_with model: @quiz, id: "quiz-form", local: true, data: { turbo: false, quiz_id: @quiz.id } do |f| %>
+    <!-- Quiz Properties Section -->
+    <div>
+    <button 
+          data-action="click->quiz-editor#toggleQuizProperties" 
+          id="toggle-quiz-properties" 
+          class="btn btn-link p-0" 
+          type="button">
+          Edit Quiz Properties
+    </button>
+    <div id="quiz-properties-container" data-quiz-editor-target="quizProperties" class="collapsed">
+        <!-- Quiz Topic -->
+        <div class="form-group mb-3">
+          <%= f.label :topic, class: "form-label fw-bold" %>
+          <%= f.text_field :topic, class: 'form-control' %>
+        </div>
+
+        <!-- Quiz Difficulty -->
+        <div class="form-group mb-3">
+          <%= f.label :difficulty, class: "form-label fw-bold" %>
+          <%= f.select :difficulty, Quiz.difficulties.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+        </div>
+
+        <!-- Study Duration -->
+        <div class="form-group mb-3">
+          <%= f.label :study_duration, "Study Duration (in minutes)", class: "form-label fw-bold" %>
+          <%= f.number_field :study_duration, class: 'form-control', min: 1 %>
+        </div>
+
+        <!-- Detail Level -->
+        <div class="form-group mb-3">
+          <%= f.label :detail_level, class: "form-label fw-bold" %>
+          <%= f.select :detail_level, Quiz.detail_levels.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions Section -->
+    <div id="new-question-template" style="display: none;">
+      <% new_question = @quiz.questions.build(content: "Enter Question stem", correct_answer: "correct answer", options: ["correct answer", "distractor"]) %>
+            <% f.fields_for :questions, new_question do |qf| %>
+              <%= render partial: 'questions/question_fields', locals: { qf: qf } %>
+            <% end %>
+      </div>
+    <div data-quiz-editor-target="questions">
+      <turbo-frame id="questions-frame">
+        <%= f.fields_for :questions do |qf| %>
+          <%= render partial: 'questions/question_fields', locals: { qf: qf } %>
+        <% end %>
+      </turbo-frame>
+      <%= link_to "Add Question", "#", id: "add-question-btn", class: "btn btn-secondary mt-3", data: { action: "quiz-editor#addQuestion" } %>
+    </div>
+  <%= f.submit "Save Quiz", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .form-control {
+    font-size: 1rem;
+    border-radius: 5px;
+  }
+  .collapsed {
+    display: none;
+  }
+  .btn-primary {
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+  }
+  .btn-secondary {
+    font-size: 1rem;
+    padding: 0.6rem 1.8rem;
+  }
+  .question-fields {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  h3 {
+    margin-top: 1.5rem;
+    font-weight: bold;
+  }
+  .card {
+    border: none;
+    border-radius: 10px;
+  }
+  .shadow-sm {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .answer-card {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .answer-card:hover {
+    background-color: #f1f1f1;
+  }
+  .answer-card.selected {
+    border: 2px solid #28a745;
+    background-color: #e6ffe6;
+    box-shadow: 0px 0px 12px #28a745;
+    transition: all 0.1s ease-in-out;
+  }
+  .d-none {
+    display: none !important;
+  }
+  .correct-answer {
+    display: none !important;
+  }
+</style>
+
+<div>
+    <%= button_to "Add Question", '#', id: 'add-question', class: 'button' %>
+  </div>
+
+<script>
+    document.addEventListener("turbo:load", () => {
+      const addQuestionButton = document.getElementById("add-question");
+      const questionsDiv = document.getElementById("questions");
+    
+      if (addQuestionButton && questionsDiv) {
+        addQuestionButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          const newId = new Date().getTime(); // Unique identifier
+          const template = document.querySelector("#question-template").innerHTML.replace(/NEW_RECORD/g, newId);
+          questionsDiv.insertAdjacentHTML("beforeend", template);
+        });
+      }
+    });
+    </script>
