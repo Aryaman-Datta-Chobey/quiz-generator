@@ -38,7 +38,7 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    prompt = '''
+    prompt = <<~PROMPT
       Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
       Topic (of the quiz): #{params[:quiz][:topic]}.
       Number of Questions (in the quiz): #{params[:quiz][:number_of_questions]}.
@@ -60,14 +60,13 @@ class QuizzesController < ApplicationController
         ]
       }
 
-      Do not deviate from this format. Do not include extra characters or quotes outside the JSON structure.
-    '''
+    Do not deviate from this format. Do not include extra characters or quotes outside the JSON structure.
+    PROMPT
     begin
       openai_service = OpenaiService.new
-      response = openai_service.generate_response(prompt, 32768, "mixtral-8x7b-32768")
-
+      response = openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
+      session[:response] = nil
       # Parse the JSON string into a Ruby hash
-      session[:response] = response
       parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
       @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
 
@@ -80,9 +79,9 @@ class QuizzesController < ApplicationController
       end
       # Iterate thru the JSON to populate the quiz questions
       if @quiz.save
-        session[:response_content] = response
         redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
       else
+        flash[:alert] = "Quiz generation failed. Please try again."
         render :new, status: :unprocessable_entity
       end
     rescue JSON::ParserError => e
