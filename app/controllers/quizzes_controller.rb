@@ -15,17 +15,7 @@ class QuizzesController < ApplicationController
       @quizzes = [] # REPLACE WITH OTHER LOGIC WHEN USER IS NOT LOGGED IN
     end
   end
-
-  # GET /quizzes/:id
-  def show
-    @quiz = Quiz.find(params[:id])
-  end
-
-  # GET /quizzes/new
-  def new
-    @quiz = Quiz.new
-  end
-
+  
   # GET /quizzes/:id
   def show
     @quiz = Quiz.find(params[:id])
