@@ -43,25 +43,17 @@
     </div>
     <!-- Section 2: Quiz Questions Properties -->
     <h3>Questions</h3>
-    <div id="questions">
-      <turbo-frame id="questions_list">
-      <%= form_with(model: @quiz, local: true, data: { turbo: false, quiz_id: @quiz.id }) do |quiz_form| %>
-        <%= quiz_form.fields_for :questions do |question_form| %>
-          <%= render 'question_form', question_form: question_form %> <!-- Render partial for each question -->
-        <% end %>
-        <%= quiz_form.submit "Save Quiz Questions" %>
-        <% end %>
-      </turbo-frame>
-    </div>
-</div>
+    <div id="questions-list">
+    <% @quiz.questions.each do |question| %>
+      <%= turbo_frame_tag dom_id(question) do %>
+        <%= render "questions/question_card", question: question, mode: :view %>
+      <% end %>
+    <% end %>
+  </div>
 
-  <!-- Section 3: Adding a Question to the Quiz--> 
-  <turbo-frame id="new_question_form">
-  <%= form_with model: [@quiz, @quiz.questions.build], local: true do |question_form| %>
-    <%= render 'question_form', question_form: question_form %> <!-- Render partial for new question -->
-    <%= question_form.submit "Add Question", class: 'btn btn-primary' %>
-  <% end %>
-  </turbo-frame>
+  <%= turbo_frame_tag "new_question" do %>
+    <%= render "questions/question_card", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), mode: :edit, form_url: quiz_questions_path(@quiz), submit_label: "Add Question" %>
+  <% end %>  
 </div>
 <!-- Additional Styling -->
 <style>

@@ -1,0 +1,9 @@
+ <%= form_with model: [@quiz, @question], url: form_url, local: false do |question_form| %>
+    <%= form.text_area :content, placeholder: "Enter question stem..." %>
+    <div id="options-editor" data-controller="options-editor">
+      <!-- Options editing handled by Stimulus -->
+    </div>
+    <%= question_form.hidden_field :options %>
+    <%= question_form.hidden_field :correct_answer %>
+    <%= question_form.submit submit_label %>
+  <% end %>
