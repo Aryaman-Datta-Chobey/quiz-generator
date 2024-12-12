@@ -84,10 +84,6 @@ class QuizzesController < ApplicationController
         flash[:alert] = "Quiz generation failed. Please try again."
         render :new, status: :unprocessable_entity
       end
-    rescue JSON::ParserError => e
-      flash.now[:alert] = "Invalid JSON response. Try again."
-      Rails.logger.error("JSON::ParserError: #{e.message}")
-      render :new
     rescue StandardError => e
       flash.now[:alert] = "An error occurred while generating the quiz. Please try again."
       Rails.logger.error("StandardError: #{e.message}")
