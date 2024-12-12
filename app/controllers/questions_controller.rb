@@ -12,8 +12,10 @@ class QuestionsController < ApplicationController
       @quiz.update(number_of_questions: @quiz.questions.count) #increment question count to reflect new question
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.append('questions_list', partial:  "questions/question",
-            locals: {  question: @question, quiz: :@quiz })
+          render turbo_stream: [
+          turbo_stream.append('questions_list', partial: "questions/question", locals: { question: @question, quiz: @quiz }),
+          turbo_stream.replace('quiz-question-count', partial: "quizzes/question_count", locals: { quiz: @quiz })
+        ]
         end
         format.html{ redirect_to edit_quiz_path(@quiz), notice: "Question added successfully." }
       end   
@@ -60,7 +62,12 @@ class QuestionsController < ApplicationController
     @question.destroy
     @quiz.update(number_of_questions: @quiz.questions.count) #decrement question count to reflect new question
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@question)) }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove(dom_id(@question)),
+          turbo_stream.replace('quiz-question-count', partial: "quizzes/question_count", locals: { quiz: @quiz })
+        ]
+      end
       format.html{ redirect_to edit_quiz_path(@quiz), notice: "Question deleted successfully." }
     end
   end

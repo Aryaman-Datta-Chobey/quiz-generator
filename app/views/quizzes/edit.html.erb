@@ -43,6 +43,7 @@
     </div>
     <!-- Section 2: Quiz Questions Properties -->
     <h3>Questions</h3>
+    <%= render "question_count", quiz: @quiz %>
     <div id="questions-list">
     <%= turbo_frame_tag "questions_list" do %>
       <% @quiz.questions.each do |question| %>
