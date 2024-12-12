@@ -81,57 +81,28 @@ export default class extends Controller {
     console.log("hidden options field value after: ", hiddenOptionsField.value)
   }
 
-  addQuestion(event) {
-    event.preventDefault();
-  
-    // Get the template and container for questions
-    const template = document.querySelector("#new-question-template").innerHTML;
-    console.log("template: ", template)
-    const questionsContainer = this.questionsTarget;
-  
-    // Generate a unique index for the new question
-    const newIndex = new Date().getTime(); // Use a timestamp to avoid collisions
-    console.log("index:",newIndex)
-    const newQuestionHTML = template.replace(/_attributes\]\[\d+\]/g, `_attributes][${newIndex}]`);
-    console.log("NEW HTML:",newQuestionHTML)
-    // Append the new question fields to the container
-    questionsContainer.insertAdjacentHTML("beforeend", newQuestionHTML);
-  }
-  
-  removeQuestion(event) {
-    const question = event.target.closest(".question-fields");
-    const questionId = question.dataset.id;  // Assuming each question has a data-id attribute
-    const quizId = event.target.dataset.quizId;
-    console.log("Quiz ID:", quizId);
-    const url = `/quizzes/${quizId}/questions/remove_question/${questionId}`;
-  
-    fetch(url, { method: 'DELETE' })
-      .then(() => {
-        question.remove();  // Remove the question from the DOM after successful deletion
-      })
-      .catch((error) => {
-        console.error("Error removing question:", error);
-      });
-  }
-
   addOption(event) {
-    const questionFields = event.target.closest(".question-fields");
-  
-    // 1. Parse the data-options array and add a new option
-    const optionsParagraph = questionFields.querySelector(".curr_options_json_array");
-  
-    // 2. Update the options paragraph content
-    const newOptionsJSON = JSON.stringify(event.target.dataset.options); // Convert to JSON string
-    optionsParagraph.textContent = `<%= @options_json_array= JSON.parse(${newOptionsJSON} || '[]') %>`;
-  
-    // Call updateHiddenOptions to sync the hidden field with updated options
-    this.updateHiddenOptions(questionFields);
-  
-    // 3. Check and update the status field
-    const statusField = questionFields.querySelector(".status");
-    if (statusField.value === "unchanged") {
-      statusField.value = "modified";
-    }
+    console.log("Add option clicked", event.target)
+    const currentQuestion = event.target.closest(".question-fields");
+    console.log("current Question", currentQuestion)
+    const answerCardsContainer = currentQuestion.querySelector(".answer-cards");
+    console.log("answer Cards container",answerCardsContainer)
+
+    // Create a new answer card
+    const newCard = document.createElement("div");
+    newCard.classList.add("col-md-6");
+    newCard.innerHTML = `
+      <div class="card p-3 shadow-sm answer-card" data-answer="">
+        <input type="text" class="form-control new-options" placeholder="Enter answer option..." 
+          data-action="change->quiz-editor#handleAnswerCardChange">
+        <button type="button" class="btn btn-link text-danger mt-2" 
+          data-action="click->quiz-editor#removeOption">Remove Option</button>
+      </div>
+    `;
+    answerCardsContainer.appendChild(newCard);
+
+    // Update the hidden options field
+    this.updateHiddenOptions(currentQuestion);
   }
 
   removeOption(event) {

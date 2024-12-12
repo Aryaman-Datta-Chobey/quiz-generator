@@ -1,9 +1,18 @@
- <%= form_with model: [@quiz, @question], url: form_url, local: false do |question_form| %>
-    <%= form.text_area :content, placeholder: "Enter question stem..." %>
-    <div id="options-editor" data-controller="options-editor">
-      <!-- Options editing handled by Stimulus -->
-    </div>
-    <%= question_form.hidden_field :options %>
-    <%= question_form.hidden_field :correct_answer %>
-    <%= question_form.submit submit_label %>
-  <% end %>
+ <%= form_with model: [@quiz, question], local: false do |question_form| %>
+    <div class="question-fields mb-4">
+      <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
+        <!-- Hidden Options Field and Options as answer cards -->
+        <%= question_form.hidden_field :options, class: "new-op" %>
+        <p class="curr_options_json_array" hidden>
+          <%= @options_json_array = JSON.parse(question.options || '["option 1", "option 2"]') %>
+        </p>
+        <div class="row gx-3 gy-3 answer-cards">
+        <% @options_json_array.each_with_index do |option, index| %>
+          <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
+        <% end %>
+      </div>
+      <button type="button" class="btn btn-secondary mt-3" data-action="click->quiz-editor#addOption" data-options="<%= @options_json_array << 'new option' %>">>Add Option</button>
+      <%= question_form.hidden_field :correct_answer, class: "correct-answer" %>
+      <%= question_form.submit submit_label %>
+    </div> 
+<% end %>

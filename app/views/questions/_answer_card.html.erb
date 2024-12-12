@@ -9,7 +9,7 @@
       data: { action: "change->quiz-editor#handleAnswerCardChange" } %>
     <button class="btn btn-link text-danger mt-2" 
       data-action="click->quiz-editor#removeOption" 
-      data-options="<%=@options_json_array - [option]%>"
+      data-options="<%=@options_json_array - [option]%>
       style="visibility: <%= option == qf.object.correct_answer ? 'hidden' : 'visible' %>;">
       Remove Option
     </button>

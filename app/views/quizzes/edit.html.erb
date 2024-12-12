@@ -44,15 +44,15 @@
     <!-- Section 2: Quiz Questions Properties -->
     <h3>Questions</h3>
     <div id="questions-list">
-    <% @quiz.questions.each do |question| %>
-      <%= turbo_frame_tag dom_id(question) do %>
-        <%= render "questions/question_card", question: question, mode: :view %>
+    <%= turbo_frame_tag "questions_list" do %>
+      <% @quiz.questions.each do |question| %>
+          <%= render "questions/question", question: question, quiz: :@quiz %>  
       <% end %>
     <% end %>
   </div>
 
   <%= turbo_frame_tag "new_question" do %>
-    <%= render "questions/question_card", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), mode: :edit, form_url: quiz_questions_path(@quiz), submit_label: "Add Question" %>
+    <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question" %>
   <% end %>  
 </div>
 <!-- Additional Styling -->
