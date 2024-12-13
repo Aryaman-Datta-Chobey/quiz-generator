@@ -1,40 +1,198 @@
+<!-- Use app/views/attempts/show.html.erb to display attempt details -->
 <h2>Attempt Details</h2>
 <p><strong>Date:</strong> <%= @attempt.attempt_date %></p>
 <p><strong>Time Taken:</strong> <%= @attempt.time_taken %> seconds</p>
-<p><strong>Score:</strong> <%= @attempt.score %> out of <%= @quiz.questions.count %></p>
-
-<hr>
-<% puts @attempt.attempted_questions.inspect %> <!-- Debugging line -->
-<% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
-  <div class="mb-3">
-    <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
-    <p class="text-muted">Your answer:</p>
-    
-    <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
-      <div class="form-check">
-        <label class="form-check-label">
-          <span class="<%= attempted_question.user_answer == option ? 'selected-option' : '' %>">
-            <%= ('a'.ord + j).chr %>) <%= option %>
-            <% if attempted_question.user_answer == option %>
-              <% if attempted_question.correct %>
-                <span class="text-success">&#10003;</span> <!-- Green check for correct -->
-              <% else %>
-                <span class="text-danger">&#10007;</span> <!-- Red cross for incorrect -->
-              <% end %>
-            <% end %>
-          </span>
-        </label>
-      </div>
+<p><strong>Score:</strong> <%= @attempt.score %> out of <%= @attempt.original_questions.count %></p>
+<% if @quiz.questions.count != @attempt.original_questions.count %>
+  <p>Note: Questions in this attempt differ from the latest version of the quiz (updated at <%= @quiz.updated_at %>).</p>
+  <p>Compared to your attempt, the quiz has <%= pluralize(@quiz.questions.count, "question") %> with:</p>
+  <ul>
+    <% if @attempt.original_questions.any? %>
+      <li><%= pluralize(@attempt.original_questions.count, "question") %> unchanged</li>
     <% end %>
-  </div>
-  <hr>
+    <% if @attempt.modified_questions.any? %>
+      <li class="text-warning"><%= pluralize(@attempt.modified_questions.count, "question") %> edited</li>
+    <% end %>
+    <% if @attempt.new_questions.any? %>
+      <li class="text-success"><%= pluralize(@attempt.new_questions.count, "question") %> added</li>
+    <% end %>
+    <% if @attempt.removed_questions.any? %>
+      <li class="text-danger"><%= pluralize(@attempt.removed_questions.count, "question") %> removed</li>
+    <% end %>
+  </ul>
 <% end %>
 
+<% if @quiz.questions.count != @attempt.original_questions.count %>
+    <!-- Section 1: Original Questions -->
+    <% if @attempt.original_questions.any? %>
+      <div class="card my-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#original-questions" aria-expanded="false">
+              Original Questions (<%= @attempt.original_questions.count %>)
+            </button>
+          </h5>
+        </div>
+        <div id="original-questions" class="collapse">
+          <div class="card-body">
+            <% @attempt.original_questions.each_with_index do |attempted_question, i| %>
+              <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
+              <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <span class="<%= attempted_question.user_answer == option ? 'selected-option' : '' %>">
+                      <%= ('a'.ord + j).chr %>) <%= option %>
+                      <% if attempted_question.user_answer == option %>
+                        <% if attempted_question.correct %>
+                          <span class="text-success">&#10003;</span>
+                        <% else %>
+                          <span class="text-danger">&#10007;</span>
+                        <% end %>
+                      <% end %>
+                    </span>
+                  </label>
+                </div>
+              <% end %>
+              <hr>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <!-- Section 2: Modified Questions -->
+    <% if @attempt.modified_questions.any? %>
+      <div class="card my-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#modified-questions" aria-expanded="false">
+              Modified Questions (<%= @attempt.modified_questions.count %>)
+            </button>
+          </h5>
+        </div>
+        <div id="modified-questions" class="collapse">
+          <div class="card-body">
+            <% @attempt.modified_questions.each do |attempted_question| %>
+              <div class="card mb-3">
+                <div class="card-header">
+                  Q: <%= attempted_question.question.content %>
+                </div>
+                <div class="card-body">
+                  <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
+                    <p><%= ('a'.ord + j).chr %>) <%= option %></p>
+                  <% end %>
+                  <button class="btn btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#modified-question-<%= attempted_question.id %>">
+                    View Your Answer
+                  </button>
+                  <div id="modified-question-<%= attempted_question.id %>" class="collapse mt-2">
+                    <p><strong>Your Answer:</strong> <%= attempted_question.user_answer %></p>
+                    <% if attempted_question.correct %>
+                      <span class="text-success">Correct &#10003;</span>
+                    <% else %>
+                      <span class="text-danger">Incorrect &#10007;</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <!-- Section 3: Deleted Questions -->
+    <% if @attempt.removed_questions.any? %>
+      <div class="card my-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#deleted-questions" aria-expanded="false">
+              Deleted Questions (<%= @attempt.removed_questions.count %>)
+            </button>
+          </h5>
+        </div>
+        <div id="deleted-questions" class="collapse">
+          <div class="card-body">
+            <% @attempt.removed_questions.each do |attempted_question| %>
+              <p><strong>Q:</strong> <%= attempted_question.index %>.<p><strong>Your Answer:</strong> <%= attempted_question.user_answer %></p> <%= attempted_question.user_answer %></p>
+              <% if attempted_question.correct %>
+                <span class="text-success">Correct &#10003;</span>
+              <% else %>
+                <span class="text-danger">Incorrect &#10007;</span>
+              <% end %>
+              <hr>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Section 4: New Questions -->
+    <% if @attempt.new_questions.any? %>
+      <div class="card my-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#new-questions" aria-expanded="false">
+              New Questions (<%= @attempt.new_questions.count %>)
+            </button>
+          </h5>
+        </div>
+        <div id="new-questions" class="collapse">
+          <div class="card-body">
+            <% @attempt.new_questions.each do |question| %>
+              <p class="font-weight-bold">Q: <%= question.content %></p>
+              <% JSON.parse(question.options).each_with_index do |option, j| %>
+                <p><%= ('a'.ord + j).chr %>) <%= option %></p>
+              <% end %>
+              <hr>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <hr>
+    <% puts @attempt.attempted_questions.inspect %> <!-- Debugging line -->
+    <% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
+      <div class="mb-3">
+        <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
+        <p class="text-muted">Your answer:</p>
+        
+        <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
+          <div class="form-check">
+            <label class="form-check-label">
+              <span class="<%= attempted_question.user_answer == option ? 'selected-option' : '' %>">
+                <%= ('a'.ord + j).chr %>) <%= option %>
+                <% if attempted_question.user_answer == option %>
+                  <% if attempted_question.correct %>
+                    <span class="text-success">&#10003;</span> <!-- Green check for correct -->
+                  <% else %>
+                    <span class="text-danger">&#10007;</span> <!-- Red cross for incorrect -->
+                  <% end %>
+                <% end %>
+              </span>
+            </label>
+          </div>
+        <% end %>
+      </div>
+      <hr>
+    <% end %>
+<% end %>
 <%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
+
 <style>
-  /* Styling to distinguish selected answer */
   .selected-option {
     font-weight: bold;
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const collapseElements = document.querySelectorAll('[data-bs-toggle="collapse"]');
+    collapseElements.forEach(function(el) {
+      el.addEventListener('click', function() {
+        const target = document.querySelector(el.getAttribute('data-bs-target'));
+        if (target) {
+          target.classList.toggle('show');
+        }
+      });
+    });
+  });
+</script>
 

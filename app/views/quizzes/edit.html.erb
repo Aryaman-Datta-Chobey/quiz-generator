@@ -9,7 +9,7 @@
     <button 
           data-action="click->quiz-editor#toggleQuizProperties" 
           id="toggle-quiz-properties" 
-          class="btn btn-link p-0" 
+          class="btn btn-lg btn-info p-0" 
           type="button">
           Edit Quiz Properties
     </button>
@@ -56,6 +56,8 @@
     <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question" %>
   <% end %>  
 </div>
+
+<%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
 <!-- Additional Styling -->
 <style>
   .form-control {

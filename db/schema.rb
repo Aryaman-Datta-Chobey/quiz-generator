@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_15_022728) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_12_230934) do
   create_table "attempted_questions", force: :cascade do |t|
     t.integer "attempt_id", null: false
-    t.integer "question_id", null: false
+    t.integer "question_id"
     t.integer "index"
     t.string "user_answer"
     t.boolean "correct"
@@ -69,7 +69,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_022728) do
   end
 
   add_foreign_key "attempted_questions", "attempts"
-  add_foreign_key "attempted_questions", "questions"
+  add_foreign_key "attempted_questions", "questions", on_delete: :nullify
   add_foreign_key "attempts", "quizzes"
   add_foreign_key "questions", "quizzes"
   add_foreign_key "quizzes", "users"
