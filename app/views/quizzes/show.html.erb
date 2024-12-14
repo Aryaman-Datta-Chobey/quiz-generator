@@ -38,7 +38,7 @@
               <strong>Attempt on:</strong> <%= attempt.attempt_date %> 
               <strong>Score:</strong> <%= attempt.score %> / <%= @quiz.number_of_questions %> 
               <strong>Time Taken:</strong> <%= attempt.time_taken %> seconds
-              <%= link_to "View Attempt", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-link" %>
+              <%= link_to "View Attempt", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-link", "data-turbo": "false" %>
             </li>
           <% end %>
         </ul>
