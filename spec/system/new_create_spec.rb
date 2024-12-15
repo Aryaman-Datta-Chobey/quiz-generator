@@ -48,14 +48,11 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Study duration', with: 60
       select 'Low', from: 'Detail level'
       fill_in 'Number of questions', with: 10
-
-      s = Quiz.new
-      expect(Quiz).to receive(:new).and_return(s)
-      expect(s).to receive(:save).and_return(false)
-      
+      allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(mock_response)
+      allow_any_instance_of(Quiz).to receive(:save).and_return(false)
       click_on 'Create Quiz'
+      expect(page).to have_content('Quiz cannot be saved. Please try again.')
       expect(page.current_path).to eq(quizzes_path)
-      expect(page).to have_content('Quiz generation failed. Please try again')
     end
 
     it 'should flash error on JSON parse failure' do
@@ -69,7 +66,7 @@ RSpec.describe "QuizCreation", type: :system do
 
       click_on 'Create Quiz'
       expect(page.current_path).to eq(quizzes_path)
-      expect(page).to have_content('An error occurred while generating the quiz. Please try again')
+      expect(page).to have_content('Quiz generation failed. Please reduce the number of questions and try again.')
     end
   end
   describe 'model methods for text representation' do

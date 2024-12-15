@@ -28,34 +28,13 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    prompt = <<~PROMPT
-      Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
-      Topic (of the quiz): #{params[:quiz][:topic]}.
-      Number of Questions (in the quiz): #{params[:quiz][:number_of_questions]}.
-      Difficulty (of the quiz): #{params[:quiz][:difficulty]}.
-      Detail Level (depth of the questions): #{params[:quiz][:detail_level]}.
-      Instructions:
-      For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
-      2. Create three plausible but incorrect options (distractors) for each question.
-      3. Return only a valid JSON object. Do not include any text before or after the JSON. The JSON should strictly follow this structure:
+    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
+    prompt = @quiz.build_prompt
 
-      {
-        "questions": [
-          {
-            "content": "Question text",
-            "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-            "correct_answer": "Option 1"
-          },
-          ...
-        ]
-      }
-
-    Do not deviate from this format. Do not include extra characters or quotes outside the JSON structure.
-    PROMPT
     begin
       openai_service = OpenaiService.new
       response = openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
-      session[:response] = nil
+
       # Parse the JSON string into a Ruby hash
       parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
       @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
@@ -71,13 +50,13 @@ class QuizzesController < ApplicationController
       if @quiz.save
         redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
       else
-        flash[:alert] = "Quiz generation failed. Please try again."
+        flash.now[:alert] = "Quiz cannot be saved. Please try again."
         render :new, status: :unprocessable_entity
       end
     rescue StandardError => e
-      flash.now[:alert] = "An error occurred while generating the quiz. Please try again."
+      flash.now[:alert] = "Quiz generation failed. Please reduce the number of questions and try again."
       Rails.logger.error("StandardError: #{e.message}")
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -104,24 +83,23 @@ class QuizzesController < ApplicationController
   end
 
   private
-
+  
   # Find quiz by ID for show, edit, update, destroy actions
   def set_quiz
     @quiz = Quiz.find(params[:id])
   end
 
-  private
-    # Only allow a list of trusted parameters through
-    # In QuizzesController
-    def quiz_params
-      params.require(:quiz).permit(
-        :topic, :difficulty, :study_duration, :detail_level,
-        :number_of_questions, questions_attributes: [ :id, :content, :options, :correct_answer ]
-      )
-    end
+  # Only allow a list of trusted parameters through
+  # In QuizzesController
+  def quiz_params
+    params.require(:quiz).permit(
+      :topic, :difficulty, :study_duration, :detail_level,
+      :number_of_questions, questions_attributes: [ :id, :content, :options, :correct_answer ]
+    )
+  end
 
-    def handle_bad_id
-      flash[:alert] = "Invalid quiz ID"
-      redirect_to quizzes_path
-    end
+  def handle_bad_id
+    flash[:alert] = "Invalid quiz ID"
+    redirect_to quizzes_path
+  end
 end
