@@ -1,14 +1,14 @@
 <!-- Use app/views/attempts/show.html.erb to display attempt details -->
-<h2>Attempt Details</h2>
+<h2>Attempt Details</h2> <!--Section 0: displaying basic attempt attributes-->
 <p><strong>Date:</strong> <%= @attempt.attempt_date %></p>
 <p><strong>Time Taken:</strong> <%= @attempt.time_taken %> seconds</p>
-<p><strong>Score:</strong> <%= @attempt.score %> out of <%= @attempt.original_questions.count %></p>
-<% if @quiz.questions.count != @attempt.original_questions.count %>
+<p><strong>Score:</strong> <%= @attempt.score %> out of <%=@original_questions_count %></p>
+<% if @quiz.questions.count != @attempt.unchanged_questions.count %>
   <p>Note: Questions in this attempt differ from the latest version of the quiz (updated at <%= @quiz.updated_at %>).</p>
   <p>Compared to your attempt, the quiz has <%= pluralize(@quiz.questions.count, "question") %> with:</p>
   <ul>
-    <% if @attempt.original_questions.any? %>
-      <li><%= pluralize(@attempt.original_questions.count, "question") %> unchanged</li>
+    <% if @attempt.unchanged_questions.any? %>
+      <li><%= pluralize(@attempt.unchanged_questions.count, "question") %> unchanged</li>
     <% end %>
     <% if @attempt.modified_questions.any? %>
       <li class="text-warning"><%= pluralize(@attempt.modified_questions.count, "question") %> edited</li>
@@ -22,20 +22,20 @@
   </ul>
 <% end %>
 
-<% if @quiz.questions.count != @attempt.original_questions.count %>
+<% if @quiz.questions.count != @attempt.unchanged_questions.count %>
     <!-- Section 1: Original Questions -->
-    <% if @attempt.original_questions.any? %>
+    <% if @attempt.unchanged_questions.any? %>
       <div class="card my-4">
         <div class="card-header">
           <h5 class="mb-0">
             <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#original-questions" aria-expanded="false">
-              Original Questions (<%= @attempt.original_questions.count %>)
+              Original Questions (<%= @attempt.unchanged_questions.count %>)
             </button>
           </h5>
         </div>
         <div id="original-questions" class="collapse">
           <div class="card-body">
-            <% @attempt.original_questions.each_with_index do |attempted_question, i| %>
+            <% @attempt.unchanged_questions.each_with_index do |attempted_question, i| %>
               <p class="font-weight-bold">Q <%= i + 1 %>) <%= attempted_question.question.content %></p>
               <% JSON.parse(attempted_question.question.options).each_with_index do |option, j| %>
                 <div class="form-check">
@@ -148,7 +148,7 @@
       </div>
     <% end %>
   <% else %>
-    <hr>
+    <!--section 5 -->
     <% puts @attempt.attempted_questions.inspect %> <!-- Debugging line -->
     <% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
       <div class="mb-3">

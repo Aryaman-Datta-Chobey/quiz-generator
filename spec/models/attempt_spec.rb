@@ -15,7 +15,7 @@ RSpec.describe Attempt, type: :model do
     question1.update!(updated_at: Time.now)
   end
 
-  describe "#original_questions" do
+  describe "#unchanged_questions" do
     it "returns questions that have not been modified since the attempt was created" do
       # Debugging outputs
       #puts "Attempt Created At: #{attempt.created_at}"
@@ -24,7 +24,7 @@ RSpec.describe Attempt, type: :model do
       expect(question1.updated_at).to be > question2.updated_at
       expect(question1.updated_at).to be > attempt.created_at
       expect(question2.updated_at).to be <= attempt.created_at
-      expect(attempt.original_questions).to eq([attempted_question2])
+      expect(attempt.unchanged_questions).to eq([attempted_question2])
     end
   end
 
@@ -66,6 +66,41 @@ end
       #puts "new_question Updated At: #{new_question.created_at}"
       expect(new_question.created_at).to be > attempt.created_at
       expect(attempt.new_questions).to eq(new_questions)
+    end
+  end
+
+  describe "#archive_quiz_attributes" do
+    it "archives changes to relevant quiz attributes" do
+      # Modify some attributes of the quiz
+      quiz.update!(topic: "Updated Topic", difficulty: :intermediate , study_duration: 45, detail_level: :low)
+
+      # Archive the changes
+      attempt.archive_quiz_attributes(quiz)
+
+      # Verify that the changes were archived
+      expect(attempt.archived_topic).to eq("Sample Quiz")
+      expect(attempt.archived_difficulty).to eq(Quiz.difficulties[:easy])  # pluralizing enum attr name lets us access the mapping
+      expect(attempt.archived_study_duration).to eq(30)
+      expect(attempt.archived_detail_level).to eq(Quiz.detail_levels[:low])  
+    end
+
+    it "does not archive unchanged attributes" do
+      # Only modify a few attributes
+      quiz.update!(study_duration: 45)
+
+      # Archive the changes
+      attempt.archive_quiz_attributes(quiz)
+
+      # Verify only the changed attributes are archived
+      expect(attempt.archived_topic).to be_nil
+      expect(attempt.archived_difficulty).to be_nil
+      expect(attempt.archived_study_duration).to eq(30)  # This attribute should have been archived
+      expect(attempt.archived_detail_level).to be_nil
+    end
+
+    it "does not update when no attributes have changed" do
+      # No changes to quiz attributes
+      expect { attempt.archive_quiz_attributes(quiz) }.not_to change { attempt.reload.attributes }
     end
   end
 end

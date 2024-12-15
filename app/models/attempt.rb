@@ -4,8 +4,20 @@ class Attempt < ApplicationRecord
   has_many :questions, through: :attempted_questions
   accepts_nested_attributes_for :attempted_questions
 
+  def archive_quiz_attributes(updated_quiz)
+    # Check if any relevant attributes have changed
+    changes = {}
+    %w[topic difficulty study_duration detail_level].each do |attr|
+      if updated_quiz.saved_change_to_attribute?(attr)
+        changes["archived_#{attr}"] = updated_quiz.previous_changes[attr].first
+      end
+    end
+    # Update archived attributes if changes are detected
+    update(changes) unless changes.empty?
+  end
+
   # Get AttemptedQuestions whose question is unchanged  since this attempt was made 
-  def original_questions
+  def unchanged_questions
     attempted_questions.includes(:question).where.not(question: nil).select do |attempted_question|
       attempted_question.question.updated_at <= self.created_at
     end
