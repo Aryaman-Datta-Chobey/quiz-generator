@@ -2,15 +2,15 @@ Rails.application.routes.draw do
   get "attempts/new"
   get "attempts/create"
   get "attempts/show"
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :quizzes do
     resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
-    member do #custom POST route for submitting a specified quiz for scoring at /quizzes/:id/submit
+    member do # custom POST route for submitting a specified quiz for scoring at /quizzes/:id/submit
       post :submit
     end
     # Nested routes for attempts under quizzes
-    resources :attempts, only: [:new, :create, :show]
+    resources :attempts, only: [ :new, :create, :show, :destroy ]
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
