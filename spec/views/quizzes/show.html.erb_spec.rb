@@ -4,16 +4,16 @@ RSpec.describe "quizzes/show.html.erb", type: :view do
   include Devise::Test::ControllerHelpers
 
   let(:user) { User.create!(email: 'user@example.com', password: 'password') }
-  #let(:quiz) { user.quizzes.create!(
-                #topic: "Ruby on Rails Basics",
-                #difficulty: "easy",
-                #study_duration: 20,
-                #detail_level: "high",
-                #number_of_questions: 10,
-                #score: 0) }
-  
-  #let(:attempt_1) { quiz.attempts.create!(attempt_date: "2024-11-01", time_taken: 300, score: 8) }
-  #let(:attempt_2) { quiz.attempts.create!(attempt_date: "2024-11-05", time_taken: 250, score: 9) }
+  # let(:quiz) { user.quizzes.create!(
+  # topic: "Ruby on Rails Basics",
+  # difficulty: "easy",
+  # study_duration: 20,
+  # detail_level: "high",
+  # number_of_questions: 10,
+  # score: 0) }
+
+  # let(:attempt_1) { quiz.attempts.create!(attempt_date: "2024-11-01", time_taken: 300, score: 8) }
+  # let(:attempt_2) { quiz.attempts.create!(attempt_date: "2024-11-05", time_taken: 250, score: 9) }
 
   let(:quiz) do
     user.quizzes.create!(
@@ -95,23 +95,21 @@ RSpec.describe "quizzes/show.html.erb", type: :view do
       quiz.attempts << attempt_2
       render
       expect(rendered).to match(/Previous Attempts/)
-      expect(rendered).to match(/2024-11-01/) #Attempt date
-      expect(rendered).to match(/1/) #score
+      expect(rendered).to match(/2024-11-01/) # Attempt date
+      expect(rendered).to match(/1/) # score
       expect(rendered).to match(/300 seconds/)
       expect(rendered).to match(/View Attempt/)
-      expect(rendered).to match(/2024-11-05/) #Attempt date
-      expect(rendered).to match(/2/) #score
-      expect(rendered).to match(/250 seconds/) 
+      expect(rendered).to match(/2024-11-05/) # Attempt date
+      expect(rendered).to match(/2/) # score
+      expect(rendered).to match(/250 seconds/)
     end
 
     it "does not display previous attempts if none exist" do
-      #quiz.attempts.destroy_all
+      # quiz.attempts.destroy_all
       attempt_1.destroy!
       attempt_2.destroy!
       render
       expect(rendered).to match(/No attempts have been made for this quiz yet./)
     end
   end
-
-  
 end
