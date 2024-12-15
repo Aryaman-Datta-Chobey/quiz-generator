@@ -33,19 +33,9 @@ class QuizzesController < ApplicationController
 
     begin
       openai_service = OpenaiService.new
-      response = openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
-
       # Parse the JSON string into a Ruby hash
-      parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
-      @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-
-      parsed_response["questions"].each do |question|
-        @quiz.questions.build(
-          content: question["content"],
-          options: question["options"],
-          correct_answer: question["correct_answer"]
-        )
-      end
+      generate_and_parse_string_response(openai_service, prompt)
+      
       # Iterate thru the JSON to populate the quiz questions
       if @quiz.save
         redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
@@ -83,6 +73,21 @@ class QuizzesController < ApplicationController
   end
 
   private
+
+  def generate_and_parse_string_response(openai_service, prompt)
+    response = openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
+    # Parse the JSON string into a Ruby hash
+    parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
+    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
+
+    parsed_response["questions"].each do |question|
+      @quiz.questions.build(
+        content: question["content"],
+        options: question["options"],
+        correct_answer: question["correct_answer"]
+      )
+    end
+  end
   
   # Find quiz by ID for show, edit, update, destroy actions
   def set_quiz
