@@ -9,9 +9,20 @@ RSpec.describe "OpenaiService Integration Test" do
     let(:max_tokens) { 50 }
     let(:model) { "davinci" }
     let(:response) { "Paris." }
+    let(:response_hash) do
+      {
+        "choices" => [
+          {
+            "message" => {
+              "content" => "Paris.\n"
+            }
+          }
+        ]
+      }
+    end
 
     it "generates a response from OpenAI" do
-      allow(@service).to receive(:generate_response).and_return(response)
+      allow(@service.instance_variable_get(:@client)).to receive(:chat).and_return(response_hash)
       result = @service.generate_response(prompt, max_tokens, model)
       expect(result).to eq("Paris.")
     end
