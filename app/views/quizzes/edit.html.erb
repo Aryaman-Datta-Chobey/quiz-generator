@@ -58,6 +58,7 @@
 </div>
 
 <%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
+
 <!-- Additional Styling -->
 <style>
   .form-control {
@@ -109,4 +110,73 @@
   .correct-answer {
     display: none !important;
   }
+
 </style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    const $quizForm = $("#quiz-form");
+    if ($quizForm.length) {
+        $quizForm.on("submit", function(event) {
+            const $questionFields = $(".question-fields");
+            const optionsDictionary = {};
+
+            // Build the options dictionary
+            $questionFields.each(function(index) {
+                const $newOptionsFields = $(this).find(".new-options");
+                const optionsArray = $newOptionsFields.map(function() {
+                    return $(this).val().trim();
+                }).get();
+
+                optionsDictionary[index] = optionsArray;
+
+                // Replace the value of the :options text field with the JSON stringified array
+                const $optionsTextField = $(this).find("textarea.new-op");
+                if ($optionsTextField.length) {
+                    $optionsTextField.val(JSON.stringify(optionsArray));
+                }
+            });
+
+            console.log("Options Dictionary:", optionsDictionary);
+
+        });
+    } else {
+        console.error("Quiz form not found.");
+    }
+
+    const $answerCards = $(".answer-card");
+    
+    // Handle click event on answer cards (excluding text field clicks)
+    $answerCards.on("click", function (event) {
+      const $currentQuestion = $(this).closest(".question-fields");
+
+      // Avoid selecting answer if clicked inside the text field
+      if ($(event.target).is("input[type=text]")) return;
+
+      // Clear previously selected card in the same question
+      $currentQuestion.find(".answer-card").removeClass("selected");
+
+      $(this).addClass("selected");
+
+      // Update the correct answer field for this question
+      const answerText = $(this).data("answer");
+      $currentQuestion.find(".correct-answer").val(answerText);
+    });
+
+    // Update correct answer dynamically when the text field changes
+    $(".new-options").on("change", function () {
+      const $currentQuestion = $(this).closest(".question-fields");
+      const updatedAnswer = $(this).val().trim();
+
+      // Find the selected answer card and update the correct answer
+      const $selectedCard = $currentQuestion.find(".answer-card.selected");
+      if ($selectedCard.length) {
+        $selectedCard.data("answer", updatedAnswer);
+        $currentQuestion.find(".correct-answer").val(updatedAnswer);
+      }
+    });
+  });
+</script>
+

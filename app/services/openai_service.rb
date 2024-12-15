@@ -16,10 +16,12 @@ class OpenaiService
           messages: [{ role: "user", content: prompt}],
           temperature: 0.7,
           max_tokens: max_tokens,
-          stream: proc do |chunk, _bytesize|
-              print chunk.dig("choices", 0, "delta", "content")
-          end
       }
     )
+    content = response.dig("choices", 0, "message", "content")
+    cleaned_content = content.gsub("\n", "")
+    cleaned_content
+    rescue StandardError => e
+      "OpenAI API Error: #{e.message}"
+    end
   end
-end

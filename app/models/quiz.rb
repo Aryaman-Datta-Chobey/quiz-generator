@@ -12,6 +12,31 @@ class Quiz < ApplicationRecord
 
    validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
 
+   def build_prompt
+      <<~PROMPT
+        Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
+        Topic (of the quiz): #{topic}.
+        Number of Questions (in the quiz): #{number_of_questions}.
+        Difficulty (of the quiz): #{difficulty}.
+        Detail Level (depth of the questions): #{detail_level}.
+        Instructions:
+        For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
+        2. Create three plausible but incorrect options (distractors) for each question.
+        3. Format the output as valid JSON with this structure:
+        {
+          "questions": [
+            {
+              "content": "Question text here",
+              "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+              "correct_answer": "Option 2"
+            },
+            ...
+          ]
+        }
+        Ensure the JSON includes all questions.
+      PROMPT
+    end
+
    def difficulty_text
       if difficulty.nil?
          "Not specified"
