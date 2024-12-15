@@ -9,6 +9,22 @@ RSpec.describe "QuizCreation", type: :system do
     @user = User.create!(email: 'user@colgate.edu', password: 'colgate13')
     sign_in @user
   end
+  let(:mock_response) do
+    {
+      "questions" => [
+        {
+          "content" => "What is the output of the following Ruby code?\n\nputs 5 + 3",
+          "options" => ["8", "53", "3", "5"],
+          "correct_answer" => "8"
+        },
+        {
+          "content" => "Which of the following is NOT a Ruby data type?",
+          "options" => ["String", "Float", "Bignum", "Integer"],
+          "correct_answer" => "Bignum"
+        }
+      ]
+    }.to_json
+  end
 
   describe 'create a new quiz' do
     it 'successful create' do
@@ -18,9 +34,10 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Study duration', with: 60
       select 'High', from: 'Detail level'
       fill_in 'Number of questions', with: 10
+      allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(mock_response)
       click_on 'Create Quiz'
       expect(page).to have_content('Quiz was successfully generated')
-      expect(page.current_path).to eq(quizzes_path)
+      expect(page.current_path).to eq(quiz_path(Quiz.last))
       expect(page).to have_content('Science Quiz')
     end
 
@@ -31,14 +48,25 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Study duration', with: 60
       select 'Low', from: 'Detail level'
       fill_in 'Number of questions', with: 10
+      allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(mock_response)
+      allow_any_instance_of(Quiz).to receive(:save).and_return(false)
+      click_on 'Create Quiz'
+      expect(page).to have_content('Quiz cannot be saved. Please try again.')
+      expect(page.current_path).to eq(quizzes_path)
+    end
 
-      s = Quiz.new
-      expect(Quiz).to receive(:new).and_return(s)
-      expect(s).to receive(:save).and_return(false)
+    it 'should flash error on JSON parse failure' do
+      visit new_quiz_path
+      fill_in 'Topic', with: 'Science Quiz'
+      select 'Easy', from: 'Difficulty'
+      fill_in 'Study duration', with: 60
+      select 'High', from: 'Detail level'
+      fill_in 'Number of questions', with: 10
+      allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(JSON::ParserError)
 
       click_on 'Create Quiz'
       expect(page.current_path).to eq(quizzes_path)
-      expect(page).to have_content('Quiz could not be created')
+      expect(page).to have_content('Quiz generation failed. Please reduce the number of questions and try again.')
     end
   end
   describe 'model methods for text representation' do
