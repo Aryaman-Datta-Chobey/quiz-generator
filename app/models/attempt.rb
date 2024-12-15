@@ -9,7 +9,7 @@ class Attempt < ApplicationRecord
     changes = {}
     %w[topic difficulty study_duration detail_level].each do |attr|
       if updated_quiz.saved_change_to_attribute?(attr)
-        changes["archived_#{attr}"] = updated_quiz.previous_changes[attr].first
+        changes["#{attr}"] = updated_quiz.previous_changes[attr].first
       end
     end
     # Update archived attributes if changes are detected

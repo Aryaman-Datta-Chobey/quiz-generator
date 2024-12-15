@@ -20,9 +20,9 @@ RSpec.describe AttemptedQuestion, type: :model do
       attempted_question1.archive_question_attributes(question1,attempted_question1)
       #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
       # Verify that the changes were archived
-      expect(attempted_question1.archived_content).to eq("What is Ruby?")
-      expect(attempted_question1.archived_correct_answer).to eq("Programming Language")
-      expect(JSON.parse(attempted_question1.archived_options)).to eq(["Programming Language","Gemstone"])
+      expect(attempted_question1.content).to eq("What is Ruby?")
+      expect(attempted_question1.correct_answer).to eq("Programming Language")
+      expect(JSON.parse(attempted_question1.options)).to eq(["Programming Language","Gemstone"])
     end
 
     it " does not overide previous archive for consectuive updates to same changes to same question attributes" do
@@ -36,9 +36,9 @@ RSpec.describe AttemptedQuestion, type: :model do
       attempted_question1.archive_question_attributes(question1,attempted_question1)
       #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
       # Verify that the changes were archived
-      expect(attempted_question1.archived_content).to eq("What is Ruby?")
-      expect(attempted_question1.archived_correct_answer).to eq("Programming Language")
-      expect(JSON.parse(attempted_question1.archived_options)).to eq(["Programming Language","Gemstone"])
+      expect(attempted_question1.content).to eq("What is Ruby?")
+      expect(attempted_question1.correct_answer).to eq("Programming Language")
+      expect(JSON.parse(attempted_question1.options)).to eq(["Programming Language","Gemstone"])
     end
 
     it "does not archive unchanged attributes" do
@@ -49,9 +49,9 @@ RSpec.describe AttemptedQuestion, type: :model do
       attempted_question2.archive_question_attributes(question2,attempted_question2)
 
       # Verify only the changed attributes are archived
-      expect(attempted_question2.archived_content).to eq("What is Rails?")
-      expect(attempted_question2.archived_correct_answer).to eq("Framework")
-      expect(attempted_question2.archived_options).to eq(nil)
+      expect(attempted_question2.content).to eq("What is Rails?")
+      expect(attempted_question2.correct_answer).to eq("Framework")
+      expect(attempted_question2.options).to eq(nil)
     end
 
     it "does not update when no attributes have changed" do

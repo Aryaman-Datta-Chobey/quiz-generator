@@ -78,10 +78,10 @@ end
       attempt.archive_quiz_attributes(quiz)
 
       # Verify that the changes were archived
-      expect(attempt.archived_topic).to eq("Sample Quiz")
-      expect(attempt.archived_difficulty).to eq(Quiz.difficulties[:easy])  # pluralizing enum attr name lets us access the mapping
-      expect(attempt.archived_study_duration).to eq(30)
-      expect(attempt.archived_detail_level).to eq(Quiz.detail_levels[:low])  
+      expect(attempt.topic).to eq("Sample Quiz")
+      expect(attempt.difficulty).to eq(Quiz.difficulties[:easy])  # pluralizing enum attr name lets us access the mapping
+      expect(attempt.study_duration).to eq(30)
+      expect(attempt.detail_level).to eq(Quiz.detail_levels[:low])  
     end
 
     it "does not archive unchanged attributes" do
@@ -92,10 +92,10 @@ end
       attempt.archive_quiz_attributes(quiz)
 
       # Verify only the changed attributes are archived
-      expect(attempt.archived_topic).to be_nil
-      expect(attempt.archived_difficulty).to be_nil
-      expect(attempt.archived_study_duration).to eq(30)  # This attribute should have been archived
-      expect(attempt.archived_detail_level).to be_nil
+      expect(attempt.topic).to be_nil
+      expect(attempt.difficulty).to be_nil
+      expect(attempt.study_duration).to eq(30)  # This attribute should have been archived
+      expect(attempt.detail_level).to be_nil
     end
 
     it "does not update when no attributes have changed" do

@@ -19,9 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_15_044913) do
     t.boolean "correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "archived_content"
-    t.string "archived_correct_answer"
-    t.text "archived_options"
+    t.text "content"
+    t.string "correct_answer"
+    t.text "options"
     t.index ["attempt_id"], name: "index_attempted_questions_on_attempt_id"
     t.index ["question_id"], name: "index_attempted_questions_on_question_id"
   end
@@ -33,10 +33,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_15_044913) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "archived_topic"
-    t.integer "archived_difficulty"
-    t.integer "archived_study_duration"
-    t.integer "archived_detail_level"
+    t.string "topic"
+    t.integer "difficulty"
+    t.integer "study_duration"
+    t.integer "detail_level"
+    t.integer "number_of_questions"
     t.index ["quiz_id"], name: "index_attempts_on_quiz_id"
   end
 
