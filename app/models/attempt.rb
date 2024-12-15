@@ -4,11 +4,11 @@ class Attempt < ApplicationRecord
   has_many :questions, through: :attempted_questions
   accepts_nested_attributes_for :attempted_questions
 
-  def archive_quiz_attributes(updated_quiz)
+  def archive_quiz_attributes(updated_quiz,archived_quiz)
     # Check if any relevant attributes have changed
     changes = {}
     %w[topic difficulty study_duration detail_level].each do |attr|
-      if updated_quiz.saved_change_to_attribute?(attr)
+      if updated_quiz.saved_change_to_attribute?(attr) && archived_quiz.attributes["#{attr}"].nil?
         changes["#{attr}"] = updated_quiz.previous_changes[attr].first
       end
     end

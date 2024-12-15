@@ -75,7 +75,26 @@ end
       quiz.update!(topic: "Updated Topic", difficulty: :intermediate , study_duration: 45, detail_level: :low)
 
       # Archive the changes
-      attempt.archive_quiz_attributes(quiz)
+      attempt.archive_quiz_attributes(quiz,attempt)
+
+      # Verify that the changes were archived
+      expect(attempt.topic).to eq("Sample Quiz")
+      expect(attempt.difficulty).to eq(Quiz.difficulties[:easy])  # pluralizing enum attr name lets us access the mapping
+      expect(attempt.study_duration).to eq(30)
+      expect(attempt.detail_level).to eq(Quiz.detail_levels[:low])  
+    end
+
+    it "archives changes to relevant quiz attributes and does not overide previous archived data upon consecutive updates" do
+      # Modify some attributes of the quiz
+      quiz.update!(topic: "Updated Topic", difficulty: :intermediate , study_duration: 45, detail_level: :low)
+
+      # Archive the changes
+      attempt.archive_quiz_attributes(quiz,attempt)
+
+      quiz.update!(topic: "Updated Topic 2", difficulty: :hard , study_duration: 55, detail_level: :medium)
+
+      # Archive the changes
+      attempt.archive_quiz_attributes(quiz,attempt)
 
       # Verify that the changes were archived
       expect(attempt.topic).to eq("Sample Quiz")
@@ -89,7 +108,7 @@ end
       quiz.update!(study_duration: 45)
 
       # Archive the changes
-      attempt.archive_quiz_attributes(quiz)
+      attempt.archive_quiz_attributes(quiz,attempt)
 
       # Verify only the changed attributes are archived
       expect(attempt.topic).to be_nil
@@ -100,7 +119,7 @@ end
 
     it "does not update when no attributes have changed" do
       # No changes to quiz attributes
-      expect { attempt.archive_quiz_attributes(quiz) }.not_to change { attempt.reload.attributes }
+      expect { attempt.archive_quiz_attributes(quiz,attempt) }.not_to change { attempt.reload.attributes }
     end
   end
 end
