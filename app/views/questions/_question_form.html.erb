@@ -1,8 +1,9 @@
+<!-- Used in  Section 2 of  app/views/quizzes/edit.html.erb to allow editing of a question currently belong to Quiz -->
  <%= form_with model: [@quiz, question], local: false do |question_form| %>
     <div class="question-fields mb-4">
       <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
         <!-- Hidden Options Field and Options as answer cards -->
-        <%= question_form.hidden_field :options, class: "new-op" %>
+        <%= question_form.hidden_field :options, class: "options-field" %>
         <p class="curr_options_json_array" hidden>
           <%= @options_json_array = JSON.parse(question.options || '["option 1", "option 2"]') %>
         </p>

@@ -4,7 +4,7 @@ export default class extends Controller {
   connect() {
     console.log("Hello, Stimulus!", this.element)
    }
-  static targets = ["quizProperties", "questions","newq"]
+  static targets = ["quizProperties", "questions"]
   
   toggleQuizProperties(event) {  // connects to button for collapsing/expanding form in Section 1 of app/views/quizzes/edit.html.erb
     console.log("Toggled", event.target);
@@ -104,29 +104,31 @@ export default class extends Controller {
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion);
   }
-  removeOption(event) {// (BROKEN) connects to answer card rendered by  app/views/questions/_answer_card.html.erb ()
-    // Step 1: Get the clicked answer card element and the question's hidden `options` field
-    const answerCard = event.target.closest('.answer-card');
-    if (!answerCard) return; // If no card was clicked, exit
-    const questionContainer = answerCard.closest('.question-container');
-    const optionsField = questionContainer.querySelector('input[name="options"]');
-    if (!optionsField) return; // If no options field exists, exit
+  removeOption(event) { // (BROKEN) connects to answer card rendered by  app/views/questions/_answer_card.html.erb ()
+    //Bug: When clicked , option is removed from DOM but hidden options field is not updated to remove the option from question.options upon save
+    console.log("remove option clicked", event.target)
+    // Step 1: Prevent default behavior and stop event propagation
+    event.preventDefault(); // Stop it from triggering form submission
+    event.stopPropagation(); // Stop removing option from triggering answerCard click
+    
+    const option = event.target.closest(".col-md-6");
+    console.log("option found: ", option)
+    const optionText = option.querySelector('.new-options')?.value.trim(); // Get the card's option text
+    console.log("optionText found: ", optionText)
+    const currentQuestion = option.closest(".question-fields"); // Parent question block
+    console.log("currentQuestion found: ", currentQuestion)
+    const optionsField = currentQuestion.querySelector(".options-field");//option.closest('input[name="options"]'); // Hidden options field
+    console.log("optionsField found: ", optionsField)
 
-    // Step 2: Parse the current options from the hidden field
-    let options = JSON.parse(optionsField.value || '[]'); // Parse the JSON string
+    option.remove(); // remove option's answer card from client side UI
 
-    // Step 3: Identify the text of the clicked card to remove
-    const optionText = answerCard.querySelector('.answer-card-text')?.innerText.trim();
-    if (!optionText) return; // If no text found, exit
-
-    // Step 4: Remove the option from the options array
-    options = options.filter(option => option !== optionText);
-
-    // Step 5: Update the hidden options field with the modified JSON array
+    // Remove the selected option's text from the hidden options field at client side questions form
+    let options = JSON.parse(optionsField.value || '[]');
+    console.log("options parsed: ", options , " from value:", optionsField.value )
+    options = options.filter(option => option !== optionText); 
+    console.log("options after option removed: ", options , " new field value:", JSON.stringify(options) )
     optionsField.value = JSON.stringify(options);
-
-    // Step 6: Remove the answer card from the UI
-    answerCard.remove();
 }
+  
 
 }
