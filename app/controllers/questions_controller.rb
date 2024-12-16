@@ -14,7 +14,8 @@ class QuestionsController < ApplicationController
         format.turbo_stream do
           render turbo_stream: [
           turbo_stream.append('questions_list', partial: "questions/question", locals: { question: @question, quiz: @quiz }),
-          turbo_stream.replace('quiz-question-count', partial: "quizzes/question_count", locals: { quiz: @quiz })
+          turbo_stream.replace('quiz-question-count', partial: "quizzes/question_count", locals: { quiz: @quiz }),
+          turbo_stream.replace('new_question', partial: 'questions/question_form', locals: { quiz: @quiz, question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question to Quiz" })
         ]
         end
         format.html{ redirect_to edit_quiz_path(@quiz), notice: "Question added successfully." }
