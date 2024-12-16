@@ -1,0 +1,91 @@
+<!-- _modified_question_card.html.erb -->
+<div class="card mb-3">
+  <div id="modifiedAttributesAccordion<%= question_index %>" class="card-body accordion">
+    <p class="font-weight-bold">Modified Q <%= question_index %>) <%= latest_question.content %></p>
+    <%unless attempted_question_changes.content.nil? %>
+      <div class="accordion-item">
+          <h2 class="accordion-header" id="headingAttempted_question_changes<%= question_index %>">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttempted_question_changes<%= question_index %>" aria-expanded="false" aria-controls="collapseAttempted_question_changes<%= question_index %>">
+                  Attempted Question Stem
+                </button>
+              </h2>
+              <div id="collapseAttempted_question_changes<%=question_index %>" class="accordion-collapse collapse" aria-labelledby="headingAttempted_question_changes<%= question_index %>" data-bs-parent="#modifiedAttributesAccordion<%= question_index %>">
+                <div class="accordion-body">
+                  <p><%=attempted_question_changes.content%></p>
+                </div>
+      </div>
+    <%end%>
+
+    <!-- Display options of the modified question -->
+    <% JSON.parse(latest_question.options).each_with_index do |option, j| %>
+      <div class="form-check">
+        <label class="form-check-label">
+          <%= ('a'.ord + j).chr %>) <%= option %>
+        </label>
+      </div>
+    <% end %>
+    <%unless attempted_question_changes.options.nil? %>
+    <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOptions<%= question_index %>">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOptions<%= question_index %>" aria-expanded="false" aria-controls="collapseOptions<%= question_index %>">
+                  Attempted Options
+                </button>
+              </h2>
+              <div id="collapseOptions<%= question_index %>" class="accordion-collapse collapse" aria-labelledby="headingOptions<%= question_index %>" data-bs-parent="#modifiedAttributesAccordion<%= question_index %>">
+                <div class="accordion-body">
+                <% JSON.parse(attempted_question_changes.options).each_with_index do |option, j| %>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                    <%if attempted_question_changes.user_answer.nil?%>
+                        <%= ('a'.ord + j).chr %>) <%= option %>
+                    <%else%>
+                      <span class="<%= attempted_question_changes.user_answer == option ? 'selected-option' : '' %>">
+                      <%= ('a'.ord + j).chr %>) <%= option %>
+                      <% if attempted_question_changes.user_answer == option %>
+                        <% if attempted_question_changes.correct %>
+                          <span class="text-success">&#10003;</span> <!-- Green check for correct -->
+                        <% else %>
+                          <span class="text-danger">&#10007;</span> <!-- Red cross for incorrect -->
+                        <% end %>
+                      <% end %>
+                    </span>
+                    <%end%>
+                    </label>
+                  </div>
+                <% end %>
+              </div>
+                </div>
+              </div>
+            </div>
+    <% end %>
+
+    <!-- If any attributes were modified, show them as expandable sections -->
+   
+</div>
+
+<style>
+  .accordion-button {
+    font-size: 0.9rem;
+  }
+  .accordion-body {
+    font-size: 0.85rem;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const accordions = document.querySelectorAll(".accordion-button");
+    accordions.forEach(button => {
+      button.addEventListener("click", () => {
+        const target = document.getElementById(button.getAttribute("aria-controls"));
+        if (target.classList.contains("show")) {
+          button.classList.add("collapsed");
+          target.classList.remove("show");
+        } else {
+          button.classList.remove("collapsed");
+          target.classList.add("show");
+        }
+      });
+    });
+  });
+</script>

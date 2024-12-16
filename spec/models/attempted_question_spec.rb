@@ -17,7 +17,7 @@ RSpec.describe AttemptedQuestion, type: :model do
       question1.update!(content: "What is Ruby on Rails?", correct_answer: "Framework", options: JSON.generate(["Framework", "Gemstone"]))
       #puts "question1.options.inspect after: #{question1.options.inspect}"
       # Archive the changes
-      attempted_question1.archive_question_attributes(question1,attempted_question1)
+      attempted_question1.reload
       #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
       # Verify that the changes were archived
       expect(attempted_question1.content).to eq("What is Ruby?")
@@ -29,13 +29,14 @@ RSpec.describe AttemptedQuestion, type: :model do
       # Modify some attributes of the question
       question1.update!(content: "What is Ruby on Rails?", correct_answer: "Framework", options: JSON.generate(["Framework", "Gemstone"]))
       # Archive the changes
-      attempted_question1.archive_question_attributes(question1,attempted_question1)
+      attempted_question1.reload#attempted_question1.archive_question_attributes(question1,attempted_question1)
       question1.update!(content: "What is R?", correct_answer: "Frame", options: JSON.generate(["Frame", "Gem"]))
       # Archive the changes
       puts(attempted_question1.attributes)
       attempted_question1.archive_question_attributes(question1,attempted_question1)
       #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
       # Verify that the changes were archived
+      attempted_question1.reload
       expect(attempted_question1.content).to eq("What is Ruby?")
       expect(attempted_question1.correct_answer).to eq("Programming Language")
       expect(JSON.parse(attempted_question1.options)).to eq(["Programming Language","Gemstone"])

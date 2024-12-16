@@ -8,7 +8,7 @@ class Attempt < ApplicationRecord
     # Check if any relevant attributes have changed
     changes = {}
     %w[topic difficulty study_duration detail_level].each do |attr|
-      if updated_quiz.saved_change_to_attribute?(attr) && archived_quiz.attributes["#{attr}"].nil?
+      if updated_quiz.saved_change_to_attribute?(attr) && archived_quiz.attributes["#{attr}"].nil? #only archive an attr once, do not override previous archive for consecutive updates
         changes["#{attr}"] = updated_quiz.previous_changes[attr].first
       end
     end

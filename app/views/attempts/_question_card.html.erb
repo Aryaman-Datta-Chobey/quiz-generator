@@ -1,0 +1,37 @@
+<!-- _question_card.html.erb -->
+<div class="card mb-3">
+  <div class="card-body">
+  <%unless question_stem.nil?%>
+    <p class="font-weight-bold">Q <%= question_index %>) <%= question_stem %></p>
+  <%end%>
+  <%unless question_options.nil?%>
+    <%if user_answer%>
+        <p class="text-muted">Your answer:</p>
+    <%else%>
+      <p class="text-muted">Options:</p>
+    <%end%>
+        <% JSON.parse(question_options).each_with_index do |option, j| %>
+          <div class="form-check">
+            <label class="form-check-label">
+            <%if user_answer.nil?%>
+                <%= ('a'.ord + j).chr %>) <%= option %>
+            <%else%>
+              <span class="<%= user_answer == option ? 'selected-option' : '' %>">
+              <%= ('a'.ord + j).chr %>) <%= option %>
+              <% if user_answer == option %>
+                <% if correct %>
+                  <span class="text-success">&#10003;</span> <!-- Green check for correct -->
+                <% else %>
+                  <span class="text-danger">&#10007;</span> <!-- Red cross for incorrect -->
+                <% end %>
+              <% end %>
+            </span>
+            <%end%>
+            </label>
+          </div>
+        <% end %>
+      </div>
+  <%end%>
+</div>
+
+  

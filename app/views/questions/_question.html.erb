@@ -1,5 +1,4 @@
-<--!This partial is used to show questions (on app/views/quizzes/edit.html.erb and on app/views/attempts/show.html.erb) and attempted_questions (on app/views/attempts/show.html.erb)-->
-<--! Lambdas: question , content, options , 
+
 <%= turbo_frame_tag dom_id(question) do %>
 <div class="question-fields mb-4">
 <p><%= question.content%></p>

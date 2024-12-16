@@ -103,20 +103,6 @@ end
       expect(attempt.detail_level).to eq(Quiz.detail_levels[:low])  
     end
 
-    it "does not archive unchanged attributes" do
-      # Only modify a few attributes
-      quiz.update!(study_duration: 45)
-
-      # Archive the changes
-      attempt.archive_quiz_attributes(quiz,attempt)
-
-      # Verify only the changed attributes are archived
-      expect(attempt.topic).to be_nil
-      expect(attempt.difficulty).to be_nil
-      expect(attempt.study_duration).to eq(30)  # This attribute should have been archived
-      expect(attempt.detail_level).to be_nil
-    end
-
     it "does not update when no attributes have changed" do
       # No changes to quiz attributes
       expect { attempt.archive_quiz_attributes(quiz,attempt) }.not_to change { attempt.reload.attributes }

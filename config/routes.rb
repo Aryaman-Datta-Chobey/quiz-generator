@@ -8,11 +8,15 @@ Rails.application.routes.draw do
     resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] 
     resources :attempts, only: [:new, :create, :show]
     resources :questions, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
-    member do # custom POST route for submitting a specified quiz for scoring at /quizzes/:id/submit
-      post :submit
-    end
     # Nested routes for attempts under quizzes
-    resources :attempts, only: [ :new, :create, :show, :destroy ]
+    resources :attempts, only: [ :new, :create, :show, :destroy ] do 
+      member do
+        get :unchanged_questions
+        get :modified_questions
+        get :removed_questions
+        get :new_questions
+      end
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

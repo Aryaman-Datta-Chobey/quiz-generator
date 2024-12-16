@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Delete a Quiz", type: :feature do
+RSpec.feature "Delete a Quiz and its attempts", type: :feature do
   include Devise::Test::IntegrationHelpers
   Capybara.reset_sessions!  # Clear cookies and session data before each test
   before(:each) do
@@ -80,7 +80,7 @@ RSpec.feature "Delete a Quiz", type: :feature do
     expect(page).not_to have_content('Quiz was successfully deleted')
   end
 
-  scenario "User can delete a quiz and sees the confirmation message", js: true do
+  scenario "User can delete a quiz attempt and sees the confirmation message", js: true do
     visit quiz_path(quiz)  # Visit the quiz show page
 
     # Check if the delete attempt exists on the page
