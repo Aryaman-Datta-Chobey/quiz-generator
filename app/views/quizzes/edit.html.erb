@@ -41,7 +41,7 @@
       </div>
     <% end %>
     </div>
-    <!-- Section 2: Quiz Questions Properties -->
+    <!-- Section 2: View , Edit or  Delete questions currently belonging to Quiz -->
     <h3>Questions</h3>
     <%= render "question_count", quiz: @quiz %>
     <div id="questions-list">
@@ -52,9 +52,13 @@
     <% end %>
   </div>
 
+  <!-- Section 3: Form for adding new question to quiz -->
+  <div>
+  <h3>New Question</h3>
   <%= turbo_frame_tag "new_question" do %>
-    <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question" %>
+    <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question to Quiz" %>
   <% end %>  
+  </div>
 </div>
 
 <%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>

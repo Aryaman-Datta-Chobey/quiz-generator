@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus" //import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus" 
 
 export default class extends Controller {
   connect() {
@@ -6,7 +6,7 @@ export default class extends Controller {
    }
   static targets = ["quizProperties", "questions","newq"]
   
-  toggleQuizProperties(event) {
+  toggleQuizProperties(event) {  // connects to button for collapsing/expanding form in Section 1 of app/views/quizzes/edit.html.erb
     console.log("Toggled", event.target);
     this.quizPropertiesTarget.classList.toggle("collapsed");
   
@@ -19,7 +19,7 @@ export default class extends Controller {
   }
   
 
-  handleAnswerCardClick(event) {
+  handleAnswerCardClick(event) { // connects to answer card rendered by  app/views/questions/_answer_card.html.erb
     console.log("Card clicked", event.target);
     const card = event.target.closest(".answer-card"); // Ensure we get the .answer-card element
     if (!card) return;
@@ -50,7 +50,7 @@ export default class extends Controller {
 
   
 
-  handleAnswerCardChange(event) {
+  handleAnswerCardChange(event) { // connects to answer card rendered by  app/views/questions/_answer_card.html.erb
     console.log("Card changed", event.target)
     const answerCard = event.target.closest(".answer-card")
     const newAnswerText = event.target.value.trim()
@@ -62,13 +62,13 @@ export default class extends Controller {
     const currentQuestion = event.target.closest(".question-fields")
     const correctAnswerField = currentQuestion.querySelector(".correct-answer")
     if (answerCard.classList.contains("selected")) {
-      correctAnswerField.value = newAnswerText
+      correctAnswerField.value = newAnswerText // modifies contents of hidden correct_answer form field rendered by app/views/questions/_question_form.html.erb
     }
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion)
   }
 
-  updateHiddenOptions(currentQuestion){
+  updateHiddenOptions(currentQuestion){ // modifies contents of hidden options form field rendered by app/views/questions/_question_form.html.erb
     // Get all answer option values from the cards
     const options = Array.from(currentQuestion.querySelectorAll('.new-options'))
       .map(input => input.value.trim()) // Get the value of each option input field
@@ -81,7 +81,7 @@ export default class extends Controller {
     console.log("hidden options field value after: ", hiddenOptionsField.value)
   }
 
-  addOption(event) {
+  addOption(event) { // connects to answer card rendered by  app/views/questions/_answer_card.html.erb
     console.log("Add option clicked", event.target)
     const currentQuestion = event.target.closest(".question-fields");
     console.log("current Question", currentQuestion)
@@ -104,17 +104,29 @@ export default class extends Controller {
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion);
   }
+  removeOption(event) {// (BROKEN) connects to answer card rendered by  app/views/questions/_answer_card.html.erb ()
+    // Step 1: Get the clicked answer card element and the question's hidden `options` field
+    const answerCard = event.target.closest('.answer-card');
+    if (!answerCard) return; // If no card was clicked, exit
+    const questionContainer = answerCard.closest('.question-container');
+    const optionsField = questionContainer.querySelector('input[name="options"]');
+    if (!optionsField) return; // If no options field exists, exit
 
-  removeOption(event) {
-    const option = event.target.closest(".col-md-6");
-    option.remove();
-    const optionsParagraph = questionFields.querySelector(".curr_options_json_array");
-    const newOptionsJSON = JSON.stringify(event.target.dataset.options); // Convert to JSON string
-    optionsParagraph.textContent = `<%= @options_json_array= JSON.parse(${newOptionsJSON} || '[]') %>`;
-    this.updateHiddenOptions(questionFields);
-    const statusField = questionFields.querySelector(".status");
-    if (statusField.value === "unchanged") {
-      statusField.value = "modified";
-    }
-  }
+    // Step 2: Parse the current options from the hidden field
+    let options = JSON.parse(optionsField.value || '[]'); // Parse the JSON string
+
+    // Step 3: Identify the text of the clicked card to remove
+    const optionText = answerCard.querySelector('.answer-card-text')?.innerText.trim();
+    if (!optionText) return; // If no text found, exit
+
+    // Step 4: Remove the option from the options array
+    options = options.filter(option => option !== optionText);
+
+    // Step 5: Update the hidden options field with the modified JSON array
+    optionsField.value = JSON.stringify(options);
+
+    // Step 6: Remove the answer card from the UI
+    answerCard.remove();
+}
+
 }
