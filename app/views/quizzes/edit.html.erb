@@ -42,6 +42,8 @@
     <% end %>
     </div>
     <!-- Section 2: View , Edit or  Delete questions currently belonging to Quiz -->
+     <%'@missing_options=["This question has no options yet.Edit these or add your own to get started", "Correct Option", "An Incorrect Option"]'%>
+     <%'@missing_correct_answer="Correct Option"'%>
     <h3>Questions</h3>
     <%= render "question_count", quiz: @quiz %>
     <div id="questions-list">

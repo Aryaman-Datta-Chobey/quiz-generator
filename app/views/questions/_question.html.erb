@@ -4,9 +4,10 @@
 <p><%= question.content%></p>
 <!-- Render each option as an Answer card -->
     <div class="row gx-3 gy-3">
-        <% JSON.parse(question.options).each_with_index do |option, index| %>
+        <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
+          <%correct_answer= question.correct_answer.nil? ? @missing_correct_answer : question.correct_answer%>
         <div class="col-md-6">
-            <div class="card p-3 shadow-sm answer-card <%= 'selected' if option == question.correct_answer %>">
+            <div class="card p-3 shadow-sm answer-card <%= 'selected' if option == correct_answer %>">
                 <%=option%>
             </div>
         </div>

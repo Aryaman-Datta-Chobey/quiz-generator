@@ -35,13 +35,21 @@ export default class extends Controller {
     // Select the clicked card
     card.classList.add("selected");
 
-    // Toggle visibility of "Remove Option" buttons
+    // Toggle the display and disabled/enabled parameters of  the "Remove Option" buttons for each card based on selection status
     currentQuestion.querySelectorAll(".answer-card").forEach((c) => {
-        const removeButton = c.querySelector(".btn.text-danger");
-        if (removeButton) {
-            removeButton.style.visibility = c.classList.contains("selected") ? "hidden" : "visible";
-        }
-    });
+      const removeButton = c.querySelector(".btn.text-danger");
+      if (removeButton) {
+          if (c.classList.contains("selected")) {
+              // Hide and disable the button for the selected card
+              removeButton.style.display = "none";
+              removeButton.disabled = true;
+          } else {
+              // Show and enable the button for unselected cards
+              removeButton.style.display = "";
+              removeButton.disabled = false;
+          }
+      }
+  });
 
     // Update the hidden correct-answer field
     const correctAnswerField = currentQuestion.querySelector(".correct-answer");
@@ -81,7 +89,7 @@ export default class extends Controller {
     console.log("hidden options field value after: ", hiddenOptionsField.value)
   }
 
-  addOption(event) { // connects to answer card rendered by  app/views/questions/_answer_card.html.erb
+  addOption(event) { // connects to "Add Option" button on  question form rendered by  app/views/questions/_question_form.html.erb
     console.log("Add option clicked", event.target)
     const currentQuestion = event.target.closest(".question-fields");
     console.log("current Question", currentQuestion)
@@ -101,10 +109,13 @@ export default class extends Controller {
     `;
     answerCardsContainer.appendChild(newCard);
 
+    // Re-attach the "click->quiz-editor#handleAnswerCardClick" action to the new answer card
+    newCard.querySelector('.answer-card').setAttribute('data-action', 'click->quiz-editor#handleAnswerCardClick');
+
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion);
   }
-  removeOption(event) { // (BROKEN) connects to answer card rendered by  app/views/questions/_answer_card.html.erb ()
+  removeOption(event) { //connects to "Remove Option" button on answer card rendered by  app/views/questions/_answer_card.html.erb 
     //Bug: When clicked , option is removed from DOM but hidden options field is not updated to remove the option from question.options upon save
     console.log("remove option clicked", event.target)
     // Step 1: Prevent default behavior and stop event propagation

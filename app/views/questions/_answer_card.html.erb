@@ -1,7 +1,9 @@
 <!-- Used in of  app/views/questions/_question_form.html.erb to display fields for editing options of a question-->
 <div class="col-md-6">
+   <%correct_answer= qf.object.correct_answer.nil? ? @missing_correct_answer : qf.object.correct_answer%>
+   <%is_correct=  option == correct_answer%>
   <div 
-    class="card p-3 shadow-sm answer-card <%= 'selected' if option == qf.object.correct_answer %>" 
+    class="card p-3 shadow-sm answer-card <%= 'selected' if is_correct %>" 
     data-answer="<%= option %>" 
     data-action="click->quiz-editor#handleAnswerCardClick">
     <%= text_field_tag "new_options[]", option, 
@@ -10,8 +12,8 @@
       data: { action: "change->quiz-editor#handleAnswerCardChange" } %>
     <button class="btn btn-link text-danger mt-2" 
       data-action="click->quiz-editor#removeOption" 
-      data-options="<%=@options_json_array - [option]%>
-      style="visibility: <%= option == qf.object.correct_answer ? 'hidden' : 'visible' %>;">
+      <%= 'disabled' if is_correct %>
+      style="<%= 'display: none;' if is_correct %>">
       Remove Option
     </button>
   </div>

@@ -4,11 +4,8 @@
       <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
         <!-- Hidden Options Field and Options as answer cards -->
         <%= question_form.hidden_field :options, class: "options-field" %>
-        <p class="curr_options_json_array" hidden>
-          <%= @options_json_array = JSON.parse(question.options || '["option 1", "option 2"]') %>
-        </p>
         <div class="row gx-3 gy-3 answer-cards">
-        <% @options_json_array.each_with_index do |option, index| %>
+        <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
           <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
         <% end %>
       </div>
