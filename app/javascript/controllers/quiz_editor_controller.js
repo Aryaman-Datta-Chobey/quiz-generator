@@ -81,7 +81,7 @@ export default class extends Controller {
     const options = Array.from(currentQuestion.querySelectorAll('.new-options'))
       .map(input => input.value.trim()) // Get the value of each option input field
     // Find the hidden field for options in the same question section
-    const hiddenOptionsField = currentQuestion.querySelector('.new-op')
+    const hiddenOptionsField = currentQuestion.querySelector('.options-field')
     console.log("hidden options field value before: ", hiddenOptionsField.value)
 
     // Update the hidden options field with the new comma-separated values
