@@ -7,6 +7,7 @@ class Quiz < ApplicationRecord
    enum :difficulty, %i[easy intermediate hard]
    enum :detail_level, %i[low medium high]
 
+   after_update :notify_attempts
    accepts_nested_attributes_for :questions, allow_destroy: true
 
 
@@ -57,4 +58,8 @@ class Quiz < ApplicationRecord
       #user.quizzes.where("topic LIKE ?", "%#{search}%")
       Quiz.where("topic LIKE ? AND user_id = ?", "%#{search}%", user.id)
     end
+    private
+   def notify_attempts
+      attempts.each { |attempt| attempt.archive_quiz_attributes(self,attempt) }
+   end
 end

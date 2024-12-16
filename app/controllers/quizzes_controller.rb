@@ -1,6 +1,6 @@
 class QuizzesController < ApplicationController
   before_action :authenticate_user!, only: %i[new show create edit update destroy]
-  before_action :set_quiz, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_quiz, only: [ :show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id
   # GET /quizzes
   def index
@@ -53,11 +53,13 @@ class QuizzesController < ApplicationController
   # GET /quizzes/:id/edit
   def edit
     @quiz = Quiz.find(params[:id])
+    @quiz.questions.build if @quiz.questions.empty? # Build at least one question if none exist
   end
 
   # PATCH/PUT /quizzes/:id
   def update
     @quiz = Quiz.find params[:id]
+    @quiz.number_of_questions = @quiz.questions.count #auto update in response to removed question
     if @quiz.update(quiz_params)
       redirect_to quiz_path(@quiz), notice: "Quiz was successfully updated."
     else
@@ -99,7 +101,7 @@ class QuizzesController < ApplicationController
   def quiz_params
     params.require(:quiz).permit(
       :topic, :difficulty, :study_duration, :detail_level,
-      :number_of_questions, questions_attributes: [ :id, :content, :options, :correct_answer ]
+      :number_of_questions, questions_attributes: [ :id, :content, :options, :correct_answer, :status, :_destroy ]
     )
   end
 

@@ -10,15 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_15_022728) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_15_044913) do
   create_table "attempted_questions", force: :cascade do |t|
     t.integer "attempt_id", null: false
-    t.integer "question_id", null: false
+    t.integer "question_id"
     t.integer "index"
     t.string "user_answer"
     t.boolean "correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "content"
+    t.string "correct_answer"
+    t.text "options"
     t.index ["attempt_id"], name: "index_attempted_questions_on_attempt_id"
     t.index ["question_id"], name: "index_attempted_questions_on_question_id"
   end
@@ -30,6 +33,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_022728) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "topic"
+    t.integer "difficulty"
+    t.integer "study_duration"
+    t.integer "detail_level"
+    t.integer "number_of_questions"
     t.index ["quiz_id"], name: "index_attempts_on_quiz_id"
   end
 
@@ -69,7 +77,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_022728) do
   end
 
   add_foreign_key "attempted_questions", "attempts"
-  add_foreign_key "attempted_questions", "questions"
+  add_foreign_key "attempted_questions", "questions", on_delete: :nullify
   add_foreign_key "attempts", "quizzes"
   add_foreign_key "questions", "quizzes"
   add_foreign_key "quizzes", "users"

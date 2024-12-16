@@ -51,10 +51,19 @@ class AttemptsController < ApplicationController
 
 
   def show
-    @attempt = Attempt.find(params[:id])
-  @quiz = @attempt.quiz
-  end
+    @attempt = Attempt.find(params[:id]) 
+    @quiz = @attempt.quiz
 
+    #comparisons between update/create status of quiz.questions to attempt.attempted_questions
+    @unchanged_questions = @attempt.unchanged_questions
+    @modified_questions = @attempt.modified_questions
+    @removed_questions = @attempt.removed_questions
+    @new_questions = @attempt.new_questions
+    @original_questions_count =  @unchanged_questions.count + @modified_questions.count + @removed_questions.count
+    
+  end
+  
+  
   def destroy
     @attempt = Attempt.find(params[:id])
     @attempt.destroy
