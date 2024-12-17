@@ -14,11 +14,17 @@
         <% end %>
     </div>
     <!-- Buttons Row -->
+    <!-- Buttons Row -->
     <div class="d-flex justify-content-between mt-3">
-      <%= link_to "Edit Question", edit_quiz_question_path(@quiz, question), data: { turbo_frame: dom_id(question) }, class: "btn btn-lg btn-primary" %>
+      <!-- Edit Question Button -->
+      <%= form_with url: edit_quiz_question_path(@quiz, question), method: :get, local: true do %>
+        <button type="submit" class="btn btn-lg btn-primary" data-turbo-frame="<%= dom_id(question) %>">Edit Question</button>
+      <% end %>
+
+      <!-- Delete Question Button -->
       <%= form_with model: [@quiz, question], method: :delete, local: true do %>
         <button type="submit" class="btn btn-lg btn-danger">Delete Question</button>
-      <% end %>   
+      <% end %>
     </div>
 </div>
 <% end %>
