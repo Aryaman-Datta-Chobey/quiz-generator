@@ -10,25 +10,40 @@ class Quiz < ApplicationRecord
    after_update :notify_attempts
    accepts_nested_attributes_for :questions, allow_destroy: true
 
-
    validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
+   @@options_example={
+    low: {
+      easy: '["Option 1 (the distractor)", "Option 2"]',
+      intermediate: '["Option 1", "Option 2 (note if question has 2 distractors it would also have an Option 3)"]',
+      hard: '["Option 1", "Option 2", "Option 3"]'
+    },
+    medium: {
+      easy: '["Option 1", "Option 2", "Option 3"]',
+      intermediate: '["Option 1", "Option 2", "Option 3 (note if question has 3 distractors it would also have an Option 4)"]',
+      hard: '["Option 1", "Option 2", "Option 3", "Option 4"]'
+    },
+    high: {
+      easy: '["Option 1", "Option 2", "Option 3", "Option 4"]',
+      intermediate: '["Option 1", "Option 2", "Option 3", "Option 4 (note if question has 4 distractors it would also have an Option 5)"]',
+      hard: '["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]'
+    }
+  }
 
    def build_prompt
       <<~PROMPT
-        Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
+        Generate multiple-choice questions (MCQs) for a quiz using the following inputs:
         Topic (of the quiz): #{topic}.
         Number of Questions (in the quiz): #{number_of_questions}.
         Difficulty (of the quiz): #{difficulty}.
         Detail Level (depth of the questions): #{detail_level}.
         Instructions:
-        For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
-        2. Create three plausible but incorrect options (distractors) for each question.
+        #{Question.build_prompt(difficulty, detail_level)}
         3. Format the output as valid JSON with this structure:
         {
           "questions": [
             {
               "content": "Question text here",
-              "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+              "options": #{ @@options_example[detail_level.to_sym][difficulty.to_sym]},
               "correct_answer": "Option 2"
             },
             ...
