@@ -90,3 +90,22 @@ body {
 .text-primary {
     color: var(--color-primary);
 }
+
+.quiz-details-card {
+    border: 2px solid #007bff; /* Blue border matching primary color */
+    background-color: #f8f9fa; /* Light background for a subtle card effect */
+  }
+
+  .quiz-details-card h1 {
+    font-size: 2.5rem; /* Make the topic title prominent */
+    color: #007bff; /* Primary text color for the title */
+  }
+
+  .quiz-details-card p {
+    font-size: 1.2rem; /* Slightly larger font for readability */
+    color: #6c757d; /* Muted text color for details */
+  }
+
+  .quiz-details-card p:last-child {
+    margin-bottom: 0; /* Remove extra spacing below the last paragraph */
+  }

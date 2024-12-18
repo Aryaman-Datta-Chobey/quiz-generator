@@ -2,16 +2,18 @@
 
 <div class="container my-5">
 
-  <!-- Quiz Details -->
-  <div class="row mb-4">
-    <div class="col text-center">
-      <h1 class="display-4 text-primary"><%= @quiz.topic %> Quiz</h1>
-      <p class="lead text-muted">Difficulty: <%= @quiz.difficulty_text %></p>
-      <p class="lead text-muted">Study Duration: <%= @quiz.study_duration %> minutes</p>
-      <p class="lead text-muted">Detail Level: <%= @quiz.detail_level_text %></p>
-      <p class="lead text-muted">Number of Questions: <%= @quiz.number_of_questions %></p>
+<!-- Quiz Details -->
+<div class="row mb-4 justify-content-center">
+  <div class="col-md-8">
+    <div class="quiz-details-card border rounded p-4">
+      <h1 class="display-4 text-primary text-center mb-3"><%= @quiz.topic %> Quiz</h1>
+      <p class="lead text-muted text-center mb-2">Difficulty: <%= @quiz.difficulty_text %></p>
+      <p class="lead text-muted text-center mb-2">Study Duration: <%= @quiz.study_duration %> minutes</p>
+      <p class="lead text-muted text-center mb-2">Detail Level: <%= @quiz.detail_level_text %></p>
+      <p class="lead text-muted text-center mb-0">Number of Questions: <%= @quiz.number_of_questions %></p>
     </div>
   </div>
+</div>
 
   <!-- Button Row -->
   <div class="row mb-4 justify-content-center">
