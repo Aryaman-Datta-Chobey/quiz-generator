@@ -89,22 +89,29 @@ export default class extends Controller {
     console.log("hidden options field value after: ", hiddenOptionsField.value)
   }
 
-  addOption(event) { // connects to "Add Option" button on  question form rendered by  app/views/questions/_question_form.html.erb
-    console.log("Add option clicked", event.target)
+  addOption(event) { // connects to "Add Option" button on question form rendered by app/views/questions/_question_form.html.erb
+    console.log("Add option clicked", event.target);
     const currentQuestion = event.target.closest(".question-fields");
-    console.log("current Question", currentQuestion)
+    console.log("current Question", currentQuestion);
     const answerCardsContainer = currentQuestion.querySelector(".answer-cards");
-    console.log("answer Cards container",answerCardsContainer)
+    console.log("answer Cards container", answerCardsContainer);
 
     // Create a new answer card
     const newCard = document.createElement("div");
     newCard.classList.add("col-md-6");
     newCard.innerHTML = `
-      <div class="card p-3 shadow-sm answer-card" data-answer="">
-        <input type="text" class="form-control new-options" placeholder="Enter answer option..." 
-          data-action="change->quiz-editor#handleAnswerCardChange">
-        <button type="button" class="btn btn-link text-danger mt-2" 
-          data-action="click->quiz-editor#removeOption">Remove Option</button>
+      <div class="card p-3 shadow-sm answer-card" data-answer="" style="position: relative;">
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Text input field -->
+          <input type="text" class="form-control new-options" placeholder="Enter answer option..." 
+            data-action="change->quiz-editor#handleAnswerCardChange" style="flex-grow: 1; margin-right: 60px;">
+          
+          <!-- Remove Option Button with the same box styling -->
+          <button type="button" class="btn text-danger mt-2 rounded-circle" 
+            data-action="click->quiz-editor#removeOption">
+            <span class="btn-remove-x btn btn-danger">X</span>
+          </button>
+        </div>
       </div>
     `;
     answerCardsContainer.appendChild(newCard);
@@ -115,6 +122,9 @@ export default class extends Controller {
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion);
   }
+
+
+
   removeOption(event) { //connects to "Remove Option" button on answer card rendered by  app/views/questions/_answer_card.html.erb 
     //Bug: When clicked , option is removed from DOM but hidden options field is not updated to remove the option from question.options upon save
     console.log("remove option clicked", event.target)
