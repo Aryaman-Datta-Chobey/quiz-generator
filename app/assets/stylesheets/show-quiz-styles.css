@@ -1,0 +1,92 @@
+:root {
+    --color-primary: #5465FF;
+    --color-secondary: #788BFF;
+    --color-accent: #9BB1FF;
+    --color-light: #BFD7FF;
+    --color-dark: #3E4DFF;
+    --color-muted: #E2FDFF;
+    --color-gunmetal: #012A36;
+    --color-dark_cyan: #119DA4;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    color: #333;  /* Dark text for readability */
+}
+
+/* General Button Styles */
+.btn-gm {
+    background: var(--color-gunmetal);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-gm:hover {
+    background: linear-gradient(90deg, var(--color-light), var(--color-muted));
+    transform: scale(1.05);
+    color: black;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.3);
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-danger, .btn-success, .btn-secondary, .btn-primary {
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Quiz Details */
+.text-muted {
+    color: var(--color-muted);
+}
+
+/* Attempt List Item Styling */
+.list-group-item {
+    background-color: var(--color-light);
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    margin-bottom: 1rem;  
+}
+
+.list-group-item-light {
+    background-color: var(--color-muted);
+}
+
+.btn-link {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+}
+
+/* Button Hover Effects */
+.btn-danger:hover,
+.btn-success:hover,
+.btn-secondary:hover,
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
