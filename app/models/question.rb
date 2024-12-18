@@ -6,10 +6,10 @@ class Question < ApplicationRecord
   after_update :notify_attempted_questions
   before_destroy :archive_unarchived_attributes
 
-  @@question_answer_instruction={
+  @@question_answer_instruction={ #description of Question-Answer pair to be generated in step 1
     low: {
-      easy: "tests simple recall or identification of factual or conceptual information about the topic.",
-      intermediate: "tests the ability to recall, understand and connect 2 or more pieces of information about the topic.",
+      easy: "is a simple true or false , or a question that tests simple recall or identification of factual or conceptual information about the topic.",
+      intermediate: "is a true or false , or a question tests the ability to recall, understand and connect 2 or more pieces of information about the topic.",
       hard: "tests the ability to recall, understand, apply and analyze or evaluate information about the topic when given a briefly detailed example or scenario."
     },
     medium: {
@@ -24,7 +24,7 @@ class Question < ApplicationRecord
     }
   }
 
-  @@distractor_instruction = {
+  @@distractor_instruction = { #description of distractors to be generated in step 2
     low: {
       easy: "1 plausible but incorrect option (distractor).",
       intermediate: "1 or 2 plausible but incorrect options (distractors) that are similar to the correct answer.",
@@ -43,8 +43,8 @@ class Question < ApplicationRecord
   }
   def self.build_prompt(difficulty, detail_level)
     <<~INSTRUCTIONS
-      1. Generate markdown for a question (and its correct answer) #{@@question_answer_instruction[detail_level.to_sym][difficulty.to_sym]}
-      2. Create #{@@distractor_instruction[detail_level.to_sym][difficulty.to_sym]}, each formatted using markdown
+      1. Generate a question (and its correct answer) that #{@@question_answer_instruction[detail_level.to_sym][difficulty.to_sym]} Use github flavoured markdown for formatting any paragraphs lists, code chunks, tables etc.
+      2. Create #{@@distractor_instruction[detail_level.to_sym][difficulty.to_sym]}. As with the question and answer each distractor should be  formatted using markdown.
     INSTRUCTIONS
   end
   private

@@ -1,9 +1,10 @@
-<!-- Used in  Section 2 of  app/views/quizzes/edit.html.erb to allow editing of a question currently belong to Quiz -->
+<!-- Used in  Section 2 (for edit/update) and section 3 (for new/create) of  app/views/quizzes/edit.html.erb to allow adding or editing of a question currently belong to Quiz -->
  <%= form_with model: [@quiz, question], local: false do |question_form| %>
     <div class="question-fields mb-4">
-      <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
+      <%= question_form.text_area :content, value:  CGI.unescapeHTML(question.content.to_s), 
+         class: "form-control mb-3", placeholder: "Enter question..." %>
         <!-- Hidden Options Field and Options as answer cards -->
-        <%= question_form.hidden_field :options, class: "options-field" %>
+        <%= question_form.hidden_field :options,value: CGI.unescapeHTML(question.options), class: "options-field" %>
         <div class="row gx-3 gy-3 answer-cards">
         <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
           <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
@@ -12,7 +13,7 @@
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-info" data-action="click->quiz-editor#addOption">Add Option</button>
       </div>
-      <%= question_form.hidden_field :correct_answer, class: "correct-answer" %>
+      <%= question_form.hidden_field :correct_answer, value: CGI.unescapeHTML(question.correct_answer.to_s), class: "correct-answer" %>
       <%= question_form.submit submit_label, class: "btn btn-lg btn-success"%>
     </div> 
 <% end %>

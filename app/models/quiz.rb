@@ -14,7 +14,7 @@ class Quiz < ApplicationRecord
    @@options_example={
     low: {
       easy: '["Option 1 (the distractor)", "Option 2"]',
-      intermediate: '["Option 1", "Option 2 (note if question has 2 distractors it would also have an Option 3)"]',
+      intermediate: '["Option 1 (note if question has 2 distractors this array would also have an Option 3)", "Option 2"]',
       hard: '["Option 1", "Option 2", "Option 3"]'
     },
     medium: {
@@ -42,7 +42,7 @@ class Quiz < ApplicationRecord
         {
           "questions": [
             {
-              "content": "Question text here",
+              "content": "Question text here.",
               "options": #{ @@options_example[detail_level.to_sym][difficulty.to_sym]},
               "correct_answer": "Option 2"
             },
