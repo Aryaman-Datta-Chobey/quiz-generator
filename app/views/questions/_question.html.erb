@@ -14,7 +14,6 @@
         <% end %>
     </div>
     <!-- Buttons Row -->
-    <!-- Buttons Row -->
     <div class="d-flex justify-content-between mt-3">
       <!-- Edit Question Button -->
       <%= form_with url: edit_quiz_question_path(@quiz, question), method: :get, local: true do %>
@@ -26,5 +25,6 @@
         <button type="submit" class="btn btn-lg btn-danger">Delete Question</button>
       <% end %>
     </div>
+
 </div>
 <% end %>
