@@ -13,19 +13,19 @@ class Quiz < ApplicationRecord
    validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
    @@options_example={
     low: {
-      easy: '["Option 1 (the distractor)", "Option 2"]',
+      easy: '["Option 1 (the distractor, (each option is also formatted using github flavoured markdown))", "Option 2"]',
       intermediate: '["Option 1 (note if question has 2 distractors this array would also have an Option 3)", "Option 2"]',
-      hard: '["Option 1", "Option 2", "Option 3"]'
+      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3"]'
     },
     medium: {
-      easy: '["Option 1", "Option 2", "Option 3"]',
-      intermediate: '["Option 1", "Option 2", "Option 3 (note if question has 3 distractors it would also have an Option 4)"]',
-      hard: '["Option 1", "Option 2", "Option 3", "Option 4"]'
+      easy: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3"]',
+      intermediate: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3 (note if question has 3 distractors it would also have an Option 4)"]',
+      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4"]'
     },
     high: {
-      easy: '["Option 1", "Option 2", "Option 3", "Option 4"]',
-      intermediate: '["Option 1", "Option 2", "Option 3", "Option 4 (note if question has 4 distractors it would also have an Option 5)"]',
-      hard: '["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"]'
+      easy: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4"]',
+      intermediate: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4 (note if question has 4 distractors it would also have an Option 5)"]',
+      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4", "Option 5"]'
     }
   }
 
@@ -42,7 +42,7 @@ class Quiz < ApplicationRecord
         {
           "questions": [
             {
-              "content": "Question text here.",
+              "content": "Question text here (with any tables, lists, code chunks etc formatted using github flavoured markdown).",
               "options": #{ @@options_example[detail_level.to_sym][difficulty.to_sym]},
               "correct_answer": "Option 2"
             },
