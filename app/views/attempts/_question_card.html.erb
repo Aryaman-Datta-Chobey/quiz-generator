@@ -2,7 +2,7 @@
 <div class="card mb-3">
   <div class="card-body">
   <%unless question_stem.nil?%>
-    <p class="font-weight-bold">Q <%= question_index %>) <%= question_stem %></p>
+    <p class="font-weight-bold">Q <%= question_index %>) <%= render_markdown(question_stem) %></p>
   <%end%>
   <%unless question_options.nil?%>
     <%if user_answer%>
@@ -14,10 +14,10 @@
           <div class="form-check">
             <label class="form-check-label">
             <%if user_answer.nil?%>
-                <%= ('a'.ord + j).chr %>) <%= option %>
+                <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
             <%else%>
               <span class="<%= user_answer == option ? 'selected-option' : '' %>">
-              <%= ('a'.ord + j).chr %>) <%= option %>
+              <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
               <% if user_answer == option %>
                 <% if correct %>
                   <span class="text-success">&#10003;</span> <!-- Green check for correct -->
