@@ -62,3 +62,7 @@ gem "ruby-openai"
 gem "dockerfile-rails", ">= 1.6", :group => :development
 
 gem "langchainrb", "~> 0.19.2"
+
+#for rendering and santizing markdown
+gem 'redcarpet'
+gem 'sanitize'

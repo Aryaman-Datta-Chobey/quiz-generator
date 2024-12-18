@@ -4,7 +4,7 @@
 <%= form_with model: [@quiz, @attempt], url: quiz_attempts_path(@quiz), method: :post, class: 'needs-validation' do |f| %>
   <% @quiz.questions.each_with_index do |question, i| %>
     <div class="mb-3">
-      <p class="font-weight-bold">Q <%= i + 1 %>) <%= question.content %></p>
+      <p class="font-weight-bold">Q <%= i + 1 %>) <%= render_markdown(question.content) %></p>
       <p class="text-muted">select ONE</p>
 
       <!-- Build only once for each question -->
@@ -16,7 +16,7 @@
                     name="attempt[attempted_questions_attributes][<%= i %>][user_answer]" 
                     value="<%= option %>" 
                     class="form-check-input" required>
-              <%= ('a'.ord + j).chr %>) <%= option %>
+              <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
             </label>
           </div>
         <% end %>
