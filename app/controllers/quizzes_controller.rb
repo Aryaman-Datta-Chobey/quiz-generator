@@ -44,7 +44,7 @@ class QuizzesController < ApplicationController
         render :new, status: :unprocessable_entity
       end
     rescue StandardError => e
-      flash.now[:alert] = "Quiz generation failed. Please reduce the number of questions and try again."
+      flash.now[:alert] = "Quiz generation failed. Please reduce the number of questions and try again.  #{e.message}"
       Rails.logger.error("StandardError: #{e.message}")
       render :new, status: :unprocessable_entity
     end
@@ -77,12 +77,14 @@ class QuizzesController < ApplicationController
   private
 
   def generate_and_parse_string_response(openai_service, prompt)
-    response = openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
+    response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")#openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
+    Rails.logger.info("keys and values of response: #{response }")
+    Rails.logger.info("response LAST 3 CHAR: #{response[-3,3] }")
     # Parse the JSON string into a Ruby hash
     parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
+    #Rails.logger.info("keys and values of parsed response: #{parsed_response }")
     @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-
-    parsed_response["questions"].each do |question|
+    parsed_response["questions"].each do |question| "questions"
       @quiz.questions.build(
         content: question["content"],
         options: question["options"],

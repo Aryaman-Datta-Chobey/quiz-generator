@@ -31,14 +31,15 @@ class Quiz < ApplicationRecord
 
    def build_prompt
       <<~PROMPT
-        Generate multiple-choice questions (MCQs) for a quiz using the following inputs:
+        You are critical component of a quiz app that recieves Quiz attributes as input and outputs JSON containing a list of a list of multiple-choice questions (MCQs) based on some instructions:
+        Input (Quiz attributes):
         Topic (of the quiz): #{topic}.
         Number of Questions (in the quiz): #{number_of_questions}.
         Difficulty (of the quiz): #{difficulty}.
         Detail Level (depth of the questions): #{detail_level}.
         Instructions:
         #{Question.build_prompt(difficulty, detail_level)}
-        3. Format the output as valid JSON with this structure:
+        3. The Quiz app needs you to format your output as valid JSON with this structure (invalid JSON, along with excess text before and/or after valid JSON will cause the app to crash):
         {
           "questions": [
             {
@@ -49,7 +50,7 @@ class Quiz < ApplicationRecord
             ...
           ]
         }
-        Ensure the JSON includes all questions.
+        Ensure that your  JSON is valid and all questions are included.
       PROMPT
     end
 

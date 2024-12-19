@@ -11,7 +11,6 @@ RSpec.describe Question, type: :model do
   describe 'after_update callback' do
     it 'archives updated attributes in attempted_question' do
       question1.update!(content: "What is Ruby on Rails?", correct_answer: "Framework", options: JSON.generate(["Framework", "Gemstone"]))
-      #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
       # Verify that the changes were archived
       attempted_question1.reload
       expect(attempted_question1.content).to eq("What is Ruby?")
@@ -20,26 +19,21 @@ RSpec.describe Question, type: :model do
     end
 
     it " does not overide previous archive for consectuive updates to same question attributes" do
-      # Modify some attributes of the question
+      # Modify some attributes of the question twice
       question1.update!(content: "What is Ruby on Rails?", correct_answer: "Framework", options: JSON.generate(["Framework", "Gemstone"]))
       question1.update!(content: "What is R?", correct_answer: "Frame", options: JSON.generate(["Frame", "Gem"]))
       # Archive the changes
-      #puts(attempted_question1.attributes)
       attempted_question1.reload
-      #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
-      # Verify that the changes were archived
+      # Verify that the changes were archived only the first time and were not overidden
       expect(attempted_question1.content).to eq("What is Ruby?")
       expect(attempted_question1.correct_answer).to eq("Programming Language")
       expect(JSON.parse(attempted_question1.options)).to eq(["Programming Language","Gemstone"])
     end
 
     it "does not archive unchanged attributes" do
-      # Modify only a few attributes of the question
+      # Modify only a few attributes of the question and archive
       question2.update!(content: "What is Ruby?", correct_answer: "Programming Language")
-
-      # Archive the changes
       attempted_question2.reload
-
       # Verify only the changed attributes are archived
       expect(attempted_question2.content).to eq("What is Rails?")
       expect(attempted_question2.correct_answer).to eq("Framework")
@@ -56,7 +50,6 @@ RSpec.describe Question, type: :model do
     it 'archives all unarchived attributes before destruction' do
       # Destroy the question
       question1.destroy
-
       # Reload attempted_question and check archived attributes
       attempted_question1.reload
       expect(attempted_question1.content).to eq("What is Ruby?")
@@ -65,16 +58,53 @@ RSpec.describe Question, type: :model do
     end
 
     it 'does not overwrite already archived attributes during destruction' do
-      # Modify some attributes of the question
+      # Modify some attributes of the question prior to destruction 
       question1.update!(content: "What is Ruby on Rails?", correct_answer: "Framework")
       question1.destroy!
-      # Archive the changes
       attempted_question1.reload
-      #puts "attempted_question1.archived_options.inspect: #{attempted_question1.archived_options.inspect}"
-      # Verify that the changes were archived
+      # Verify that the intially  archived changes were not overidden
       expect(attempted_question1.content).to eq("What is Ruby?") # Already archived
       expect(attempted_question1.correct_answer).to eq("Programming Language") # Already archived
       expect(JSON.parse(attempted_question1.options)).to eq(["Programming Language","Gemstone"]) # Archived during destruction
+    end
+  end
+
+  describe 'validate_and_correct_attributes before_create' do
+    it 'assigns default values if attributes are missing' do
+      question = quiz.questions.new
+      question.save
+      expect(question.content).to eq("No question stem was generated. Edit or delete this question.")
+      expect(question.correct_answer).to eq("No correct answer was generated. Edit or delete this question.")
+      expect(JSON.parse(question.options)).to eq(["No options were generated. Edit or delete this question","No correct answer was generated. Edit or delete this question."])
+    end
+
+    it 'corrects invalid JSON in options' do
+      question = quiz.questions.new(content: "Invalid JSON Test", options: "invalid_json", correct_answer: "Answer")
+      question.save
+      parsed_options = JSON.parse(question.options)
+      expect(parsed_options.first).to eq("Options were generated but not parseable. You can add these options manually by editing this question , or delete this question")
+      expect(parsed_options.second).to eq("invalid_json")
+    end
+
+    it 'ensures the correct answer is included in options' do
+      question = quiz.questions.new(content: "Include Answer Test", options: JSON.generate(["Option 1", "Option 2"]), correct_answer: "Option 3")
+      question.save
+      parsed_options = JSON.parse(question.options)
+      expect(parsed_options).to include("Option 3")
+    end
+
+    it 'does not duplicate correct answer in options' do
+      question = quiz.questions.new(content: "Avoid Duplication Test", options: JSON.generate(["Option 1", "Option 2", "Correct Answer"]), correct_answer: "Correct Answer")
+      question.save
+      parsed_options = JSON.parse(question.options)
+      expect(parsed_options.count("Correct Answer")).to eq(1)
+    end
+
+    it 'handles empty options gracefully' do
+      question = quiz.questions.new(content: "Empty Options Test", correct_answer: "Answer")
+      question.save
+      parsed_options = JSON.parse(question.options)
+      expect(parsed_options).to include("Answer")
     end
   end
 end

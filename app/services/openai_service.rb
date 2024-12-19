@@ -9,9 +9,11 @@ class OpenaiService
   end
 
   def generate_response(prompt, max_tokens, model)
+    begin
     response = @client.chat(
       parameters: {
           model: model,
+          response_format: { type: "json_object" },
           messages: [{ role: "user", content: prompt}],
           temperature: 0.7,
           max_tokens: max_tokens,
@@ -24,3 +26,4 @@ class OpenaiService
       "OpenAI API Error: #{e.message}"
     end
   end
+  en
