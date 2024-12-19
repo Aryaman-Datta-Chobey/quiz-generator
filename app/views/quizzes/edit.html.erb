@@ -1,22 +1,23 @@
 <head>
-<meta name="turbo-refresh-method" content="morph">
-<meta name="turbo-refresh-scroll" content="preserve">
-
-<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
+  <meta name="turbo-refresh-method" content="morph">
+  <meta name="turbo-refresh-scroll" content="preserve">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 </head>
+
 <div class="container py-5" data-controller="quiz-editor">
   <!-- Section 1: Quiz Properties -->
   <%= form_with(model: @quiz, local: true, data: { turbo: false, quiz_id: @quiz.id }) do |quiz_form| %>
     <div>
-    <button 
-          data-action="click->quiz-editor#toggleQuizProperties" 
-          id="toggle-quiz-properties" 
-          class="btn btn-lg btn-info p-0" 
-          type="button">
-          Edit Quiz Properties
-    </button>
-    <div id="quiz-properties-container" data-quiz-editor-target="quizProperties" class="collapsed">
+      <button 
+        data-action="click->quiz-editor#toggleQuizProperties" 
+        id="toggle-quiz-properties" 
+        class="btn btn-lg btn-info p-0 d-flex align-items-center justify-content-between" 
+        type="button">
+        <span>Edit Quiz Properties</span>
+        <!-- Optional: Add an icon here if desired -->
+        <i class="fas fa-cogs ms-2"></i>
+      </button>
+      <div id="quiz-properties-container" data-quiz-editor-target="quizProperties" class="collapsed">
         <!-- Quiz Topic -->
         <div class="form-group mb-3">
           <%= quiz_form.label :topic, class: "form-label fw-bold" %>
@@ -40,84 +41,172 @@
           <%= quiz_form.label :detail_level, class: "form-label fw-bold" %>
           <%= quiz_form.select :detail_level, Quiz.detail_levels.keys.map { |w| [w.humanize, w] }, { include_blank: true }, class: 'form-control' %>
         </div>
-        <%= quiz_form.submit "Save Quiz details" %>
+
+        <%= quiz_form.submit "Save Quiz details", class: "btn btn-lg btn-primary mt-3" %>
       </div>
     <% end %>
-    </div>
-    <!-- Section 2: View , Edit or  Delete questions currently belonging to Quiz -->
-     <%'@missing_options=["This question has no options yet.Edit these or add your own to get started", "Correct Option", "An Incorrect Option"]'%>
-     <%'@missing_correct_answer="Correct Option"'%>
-    <h3>Questions</h3>
-    <%= render "question_count", quiz: @quiz %>
-    <div id="questions-list">
+  </div>
+
+  <!-- Section 2: View, Edit, or Delete questions currently belonging to Quiz -->
+  <h3 class="mt-5 text-primary">Questions</h3>
+  <%= render "question_count", quiz: @quiz %>
+
+  <div id="questions-list">
     <%= turbo_frame_tag "questions_list" do %>
       <% @quiz.questions.each do |question| %>
-          <%= render "questions/question", question: question, quiz: :@quiz %>  
+        <%= render "questions/question", question: question, quiz: @quiz %>  
       <% end %>
     <% end %>
   </div>
 
-  <!-- Section 3: Form for adding new question to quiz -->
+  <!-- Section 3: Form for adding a new question to the quiz -->
   <div>
-  <h3>New Question</h3>
-  <%= turbo_frame_tag "new_question" do %>
-    <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question to Quiz" %>
-  <% end %>  
+    <h3 class="mt-5 text-primary">New Question</h3>
+    <%= turbo_frame_tag "new_question" do %>
+      <%= render "questions/question_form", quiz: @quiz , question: @quiz.questions.build(content: "Enter Question Stem", correct_answer: "Correct Option", options: '["Correct Option", "An Incorrect Option"]'), submit_label: "Add Question to Quiz" %>
+    <% end %>  
   </div>
 </div>
 
-<%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-secondary" %>
+<%= link_to "Back to Quiz", quiz_path(@quiz), class: "btn btn-gm mt-4" %>
 
 <!-- Additional Styling -->
 <style>
+  /* General Form Controls */
   .form-control {
     font-size: 1rem;
     border-radius: 5px;
+    border: 1px solid var(--color-muted); 
   }
+
   .collapsed {
     display: none;
   }
-  .btn-primary {
-    padding: 0.8rem 2rem;
+
+  .btn-info {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 12px; 
+    padding: 1rem 2rem; 
     font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  .btn-secondary {
-    font-size: 1rem;
-    padding: 0.6rem 1.8rem;
+
+  .btn-info:hover {
+    transform: scale(1.05); 
+    box-shadow: 0px 6px 12px rgba(84, 101, 255, 0.3); 
   }
-  .question-fields {
-    background-color: #f9f9f9;
-    border-radius: 10px;
+
+  /* .btn-info i {
+    font-size: 1.4rem; 
+  } */
+
+  .btn-info:focus {
+    outline: none;
   }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .align-items-center {
+    align-items: center;
+  }
+
+  .justify-content-between {
+    justify-content: space-between;
+  }
+
+  .ms-2 {
+    margin-left: 0.5rem; 
+  }
+
+  /* Section Heading */
   h3 {
     margin-top: 1.5rem;
     font-weight: bold;
+    color: var(--color-primary);
   }
+
+  /* Styling for Answer Cards */
+  .answer-card {
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.1);
+  }
+
+  .answer-card:hover {
+    background-color: rgb(223, 222, 222);
+  }
+
+  .answer-card.selected {
+    border: 2px solid var(--color-dark_cyan);
+    background-color: #e6ffe6;
+    box-shadow: 0px 0px 12px var(--color-dark_cyan);
+    transition: all 0.1s ease-in-out;
+  }
+
+  .d-none {
+    display: none !important;
+  }
+
+  .correct-answer {
+    display: none !important;
+  }
+
+  /* Styling for Question Card */
+  .question-fields {
+    background-color: white; /
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.2);
+  }
+
+  /* Card & Shadow Effect */
   .card {
     border: none;
     border-radius: 10px;
   }
+
   .shadow-sm {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  .answer-card {
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-  }
-  .answer-card:hover {
-    background-color: #f1f1f1;
-  }
-  .answer-card.selected {
-    border: 2px solid #28a745;
-    background-color: #e6ffe6;
-    box-shadow: 0px 0px 12px #28a745;
-    transition: all 0.1s ease-in-out;
-  }
-  .d-none {
-    display: none !important;
-  }
-  .correct-answer {
-    display: none !important;
-  }
+
+
+  /* For partial  */
+  /* Styling for Answer Cards (Compact Version) */
+
+.answer-card {
+  cursor: pointer;
+  border: 2px solid rgb(203, 203, 203);
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  background-color:  rgb(253, 250, 250); 
+  box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.1);
+  padding: 0.5rem 1rem; 
+  margin-bottom: 1rem; 
+  font-size: 1rem; 
+}
+
+.answer-card.selected {
+  border: 2px solid rgb(255, 0, 0)
+  background-color: #e6ffe6;
+  box-shadow: 0px 0px 12px rgb(182, 209, 168);
+  transition: all 0.3s ease-in-out;
+}
+
+.answer-card i {
+  font-size: 1.4rem; /* Icon size adjustment */
+}
+
+/* Space above the Add Option button */
+.mt-3 {
+  margin-top: 1rem !important;
+}
 
 </style>

@@ -89,7 +89,7 @@ export default class extends Controller {
     console.log("hidden options field value after: ", hiddenOptionsField.value)
   }
 
-  addOption(event) { // connects to "Add Option" button on question form rendered by app/views/questions/_question_form.html.erb
+  addOption(event) {
     console.log("Add option clicked", event.target);
     const currentQuestion = event.target.closest(".question-fields");
     console.log("current Question", currentQuestion);
@@ -114,6 +114,8 @@ export default class extends Controller {
         </div>
       </div>
     `;
+    
+    // Append the new card to the container
     answerCardsContainer.appendChild(newCard);
 
     // Re-attach the "click->quiz-editor#handleAnswerCardClick" action to the new answer card
@@ -122,6 +124,7 @@ export default class extends Controller {
     // Update the hidden options field
     this.updateHiddenOptions(currentQuestion);
   }
+
 
 
 
