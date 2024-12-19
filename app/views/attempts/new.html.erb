@@ -1,33 +1,82 @@
 <!-- app/views/attempts/new.html.erb -->
-<h1>Attempt Quiz: <%= @quiz.topic %></h1>
+<h1 class="text-center my-4">Attempt Quiz: <%= @quiz.topic %></h1>
 
 <%= form_with model: [@quiz, @attempt], url: quiz_attempts_path(@quiz), method: :post, class: 'needs-validation' do |f| %>
-  <% @quiz.questions.each_with_index do |question, i| %>
-    <div class="mb-3">
-      <p class="font-weight-bold">Q <%= i + 1 %>) <%= question.content %></p>
-      <p class="text-muted">select ONE</p>
+  <div class="quiz-container mx-auto" style="max-width: 800px;">
+    <% @quiz.questions.each_with_index do |question, i| %>
+      <div class="question-card p-4 mb-4 border rounded shadow-sm bg-white">
+        <p class="font-weight-bold h5 mb-3">Q<%= i + 1 %>) <%= question.content %></p>
+        <p class="text-muted mb-3">Select ONE option:</p>
 
-      <!-- Build only once for each question -->
-      <%= f.fields_for :attempted_questions, @attempt.attempted_questions.build(question: question) do |attempted_question_fields| %>
-        <% JSON.parse(question.options).each_with_index do |option, j| %>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="radio" 
-                    name="attempt[attempted_questions_attributes][<%= i %>][user_answer]" 
-                    value="<%= option %>" 
-                    class="form-check-input" required>
-              <%= ('a'.ord + j).chr %>) <%= option %>
-            </label>
+        <!-- Build the fields for each question -->
+        <%= f.fields_for :attempted_questions, @attempt.attempted_questions.build(question: question) do |attempted_question_fields| %>
+          <div class="option-container">
+            <% JSON.parse(question.options).each_with_index do |option, j| %>
+              <div class="form-check card mb-3 shadow-sm">
+                <div class="card-body p-3">
+                  <input type="radio" 
+                         name="attempt[attempted_questions_attributes][<%= i %>][user_answer]" 
+                         value="<%= option %>" 
+                         class="form-check-input" 
+                         id="option-<%= i %>-<%= j %>" required>
+                  <label for="option-<%= i %>-<%= j %>" class="form-check-label d-block">
+                    <div class="d-flex align-items-center">
+                      <span class="minimal-choice me-3"><%= ('a'.ord + j).chr %></span>
+                      <span class="option-text"><%= option %></span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            <% end %>
           </div>
+          <%= attempted_question_fields.hidden_field :question_id, value: question.id %>
         <% end %>
-        <%= attempted_question_fields.hidden_field :question_id, value: question.id %>
-      <% end %>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-4">
+      <%= f.submit 'Submit Quiz Attempt', class: 'btn btn-lg btn-primary' %>
     </div>
-  <% end %>
-
-
-  <div class="text-center">
-    <%= f.submit 'Submit Quiz Attempt', class: 'btn btn-lg btn-primary' %>
   </div>
 <% end %>
 
+
+
+<style>
+  /* Minimalist letter style */
+  .minimal-choice {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #007bff; /* Primary color */
+    width: 24px; /* Ensures consistent alignment */
+    text-align: center;
+  }
+
+  .option-text {
+    font-size: 1rem;
+    color: #333; /* Neutral text color for readability */
+  }
+
+  /* Default card style */
+  .form-check.card {
+    border: 2px solid transparent; /* Transparent border by default */
+    border-radius: 8px; /* Rounded corners for sleek look */
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+
+  /* Highlight card when selected */
+  .form-check-input:checked ~ .card {
+    background-color: #f0f8ff; /* Subtle blue background for selected card */
+    border-color: #007bff; /* Highlight the border of selected card */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Subtle shadow for emphasis */
+  }
+
+  /* Hover effect for card */
+  .form-check.card:hover {
+    background-color: #f7f9fc; /* Slight hover effect */
+    border-color: #ddeeff; /* Lighter hover border */
+  }
+
+
+</style>

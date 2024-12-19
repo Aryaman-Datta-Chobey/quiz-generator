@@ -1,0 +1,136 @@
+
+:root {
+    --color-primary: #5465FF;
+    --color-secondary: #788BFF;
+    --color-accent: #9BB1FF;
+    --color-light: #BFD7FF;
+    --color-highlight: #29274c;
+    --color-heading-primary: #12664F; 
+    --color-heading-secondary: #307473; 
+    --color-heading-accent: #f3a5c0; 
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background: white;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Text Gradients */
+.text-gradient {
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-heading-gradient {
+    background: linear-gradient(to right, var(--color-heading-primary), var(--color-heading-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn-gradient {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-find-gradient {
+    background: #12664F;
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-gradient:hover {
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.3);
+}
+
+
+.btn-no-transform {
+  /* background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); */
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for background, transform, and box-shadow */
+}
+
+.btn-no-transform:hover {
+  transform: none;
+  box-shadow: 0px 4px 10px rgba(84, 255, 144, 0.3), 0px 0px 15px rgba(119, 223, 119, 0.5);
+}
+
+
+/* Card Styling */
+.quiz-card {
+    border: 1px solid var(--color-light);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.quiz-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(84, 101, 255, 0.1);
+    border-color: var(--color-primary);
+}
+
+.quiz-card h5 a {
+    color: var(--color-highlight);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.quiz-card h5 a:hover,
+.quiz-card h5 a:focus,
+.quiz-card h5 a:active {
+    color: var(--color-primary);
+}
+
+/* Search Bar
+.search-bar input {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border: 1px solid var(--color-light);
+    padding: 10px 15px;
+} */
+
+.search-bar button {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    padding: 10px 15px;
+}
+
+/* Spacing and Shadows */
+.container {
+    max-width: 1200px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* Typography Adjustments */
+.display-3 {
+    font-size: 2.5rem;
+}
+
+.text-muted {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2rem;
+    }
+
+    .text-muted {
+        font-size: 0.9rem;
+    }
+}

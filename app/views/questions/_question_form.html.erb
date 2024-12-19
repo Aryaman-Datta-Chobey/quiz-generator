@@ -1,18 +1,18 @@
-<!-- Used in  Section 2 of  app/views/quizzes/edit.html.erb to allow editing of a question currently belong to Quiz -->
- <%= form_with model: [@quiz, question], local: false do |question_form| %>
-    <div class="question-fields mb-4">
-      <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
-        <!-- Hidden Options Field and Options as answer cards -->
-        <%= question_form.hidden_field :options, class: "options-field" %>
-        <div class="row gx-3 gy-3 answer-cards">
-        <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
-          <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
-        <% end %>
-      </div>
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-info" data-action="click->quiz-editor#addOption">Add Option</button>
-      </div>
-      <%= question_form.hidden_field :correct_answer, class: "correct-answer" %>
-      <%= question_form.submit submit_label, class: "btn btn-lg btn-success"%>
-    </div> 
+<%= form_with model: [@quiz, question], local: false do |question_form| %>
+  <div class="question-fields mb-4">
+    <%= question_form.text_field :content, class: "form-control mb-3", placeholder: "Enter question..." %>
+    <!-- Hidden Options Field and Options as answer cards -->
+    <%= question_form.hidden_field :options, class: "options-field" %>
+    <div class="row gx-3 gy-3 answer-cards">
+      <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
+        <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
+      <% end %>
+    </div>
+    
+    <div class="d-flex justify-content-center mt-3">
+      <button type="button" class="btn btn-info" data-action="click->quiz-editor#addOption">Add Option</button>
+    </div>
+    <%= question_form.hidden_field :correct_answer, class: "correct-answer" %>
+    <%= question_form.submit submit_label, class: "btn btn-lg btn-success" %>
+  </div>
 <% end %>

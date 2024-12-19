@@ -1,30 +1,33 @@
+<%= stylesheet_link_tag "show-quiz-styles", "data-turbo-track": "reload" %>
+
 <div class="container my-5">
 
-  <!-- Quiz Details -->
-  <div class="row mb-4">
-    <div class="col text-center">
-      <h1 class="display-4 text-primary"><%= @quiz.topic %> Quiz</h1>
-      <p class="lead text-muted">Difficulty: <%= @quiz.difficulty_text %></p>
-      <p class="lead text-muted">Study Duration: <%= @quiz.study_duration %> minutes</p>
-      <p class="lead text-muted">Detail Level: <%= @quiz.detail_level_text %></p>
-      <p class="lead text-muted">Number of Questions: <%= @quiz.number_of_questions %></p>
+<!-- Quiz Details -->
+<div class="row mb-4 justify-content-center">
+  <div class="col-md-8">
+    <div class="quiz-details-card border rounded p-4">
+      <h1 class="display-4 text-primary text-center mb-3"><%= @quiz.topic %> Quiz</h1>
+      <p class="lead text-muted text-center mb-2">Difficulty: <%= @quiz.difficulty_text %></p>
+      <p class="lead text-muted text-center mb-2">Study Duration: <%= @quiz.study_duration %> minutes</p>
+      <p class="lead text-muted text-center mb-2">Detail Level: <%= @quiz.detail_level_text %></p>
+      <p class="lead text-muted text-center mb-0">Number of Questions: <%= @quiz.number_of_questions %></p>
     </div>
   </div>
+</div>
 
   <!-- Button Row -->
   <div class="row mb-4 justify-content-center">
     <div class="col-auto">
-      <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-primary" %>
+      <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-gradient" %>
     </div>
     <div class="col-auto">
       <%= form_with model: @quiz, method: :delete, local: true do %>
-        <button type="submit" class="btn btn-lg btn-danger" onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
+        <button type="submit" class="btn btn-lg custom-bd btn-danger" onclick="return confirm('Are you sure you want to delete this quiz?')">Delete Quiz</button>
       <% end %>
     </div>
     <div class="col-auto">
       <%= link_to "Edit Quiz", edit_quiz_path(@quiz), class: "btn btn-lg btn-success edit-quiz-link", "data-turbo": "false" %>
     </div>
-  
   </div>
 
   <!-- Attempts List -->
@@ -34,17 +37,19 @@
         <h3 class="text-secondary">Previous Attempts</h3>
         <ul class="list-group">
           <% @quiz.attempts.each do |attempt| %>
-            <li class="list-group-item">
-              <strong>Attempt on:</strong> <%= attempt.attempt_date %> 
-              <strong>Score:</strong> <%= attempt.score %> / <%= @quiz.number_of_questions %> 
-              <strong>Time Taken:</strong> <%= attempt.time_taken %> seconds
-              <%= link_to "View Attempt", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-link", "data-turbo": "false" %>
-
-              <%= form_with url: quiz_attempt_path(@quiz, attempt), method: :delete, class: "d-inline" do %>
-                <%= submit_tag "Delete Attempt", class: "btn btn-sm btn-danger",
-                                                onclick: "return confirm('Are you sure you want to delete this quiz attempt?');" %>
-              <% end %>
-
+            <li class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">
+              <div>
+                <strong>Attempt on:</strong> <%= attempt.attempt_date %> 
+                <strong>Score:</strong> <%= attempt.score %> / <%= @quiz.number_of_questions %> 
+                <strong>Time Taken:</strong> <%= attempt.time_taken %> seconds
+              </div>
+              <div class="text-end">
+                <%= link_to "View Attempt", quiz_attempt_path(@quiz, attempt), class: "btn btn-sm btn-primary mr-6", "data-turbo": "false" %> 
+                <%= form_with url: quiz_attempt_path(@quiz, attempt), method: :delete, class: "d-inline" do %>
+                  <%= submit_tag "Delete Attempt", class: "btn btn-sm custom-bd btn-danger",
+                                                      onclick: "return confirm('Are you sure you want to delete this quiz attempt?');" %>
+                <% end %>
+              </div>
             </li>
           <% end %>
         </ul>
@@ -58,26 +63,9 @@
     </div>
   <% end %>
 
-   <div class="row mt-5">
+  <div class="row mt-5">
     <div class="col text-start">
-      <%= link_to "Back", quizzes_path, class: "btn btn-secondary btn-lg" %>
+      <%= link_to "Back", quizzes_path, class: "btn btn-secondary btn-gm" %>
     </div>
   </div>
-
-  <!-- Additional Styling -->
-  <style>
-    .btn-primary, .btn-danger {
-      padding: 0.8rem 2rem;
-      font-size: 1.2rem;
-    }
-    .list-group-item {
-      font-size: 1rem;
-    }
-    .btn-link {
-      font-size: 0.9rem;
-    }
-  </style>
 </div>
-
-
-

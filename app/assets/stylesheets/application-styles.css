@@ -1,0 +1,63 @@
+
+:root {
+    --color-primary: #5465FF;
+    --color-secondary: #788BFF;
+    --color-accent: #9BB1FF;
+    --color-light: #BFD7FF;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background: white;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Navbar and User Info */
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(84, 101, 255, 0.2);
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.user-info .btn {
+    background-color: white;
+    color: var(--color-primary);
+    border: 1px solid var(--color-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-info .btn:hover {
+    background-color: var(--color-light);
+    color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+/* Flash Messages */
+.alert {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.alert-success {
+    background-color:rgb(191, 255, 212);
+    color: #333;
+}
+
+.alert-danger {
+    background-color: #FF6B6B;
+    color: white;
+}

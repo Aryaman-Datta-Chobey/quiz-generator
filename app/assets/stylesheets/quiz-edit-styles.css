@@ -1,0 +1,136 @@
+/* General Form Controls */
+.form-control {
+font-size: 1rem;
+border-radius: 5px;
+border: 1px solid var(--color-muted); 
+}
+
+
+
+.btn-info {
+background-color: var(--color-primary);
+color: white;
+border-radius: 12px; 
+padding: 1rem 2rem; 
+font-size: 1.2rem;
+transition: all 0.3s ease-in-out;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+}
+
+.btn-info:hover {
+transform: scale(1.05); 
+box-shadow: 0px 6px 12px rgba(84, 101, 255, 0.3); 
+}
+
+/* .btn-info i {
+font-size: 1.4rem; 
+} */
+
+.btn-info:focus {
+outline: none;
+}
+
+.d-flex {
+display: flex;
+}
+
+.align-items-center {
+align-items: center;
+}
+
+.justify-content-between {
+justify-content: space-between;
+}
+
+.ms-2 {
+margin-left: 0.5rem; 
+}
+
+/* Section Heading */
+h3 {
+margin-top: 1.5rem;
+font-weight: bold;
+color: var(--color-primary);
+}
+
+/* Styling for Answer Cards */
+.answer-card {
+cursor: pointer;
+transition: all 0.5s ease-in-out;
+border-radius: 10px;
+background-color: rgb(243, 0, 0);
+box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.1);
+}
+
+.answer-card:hover {
+background-color: rgb(223, 222, 222);
+}
+
+.answer-card.selected {
+border: 2px solid var(--color-dark_cyan);
+background-color: #e6ffe6;
+box-shadow: 0px 0px 12px var(--color-dark_cyan);
+transition: all 0.1s ease-in-out;
+}
+
+
+/* HERE */
+
+.d-none {
+display: none !important;
+}
+
+.correct-answer {
+display: none !important;
+}
+
+/* Styling for Question Card */
+.question-fields {
+background-color: white; 
+border-radius: 10px;
+padding: 15px;
+box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.2);
+}
+
+/* Card & Shadow Effect */
+.card {
+border: none;
+border-radius: 10px;
+}
+
+.shadow-sm {
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* For partial  */
+/* Styling for Answer Cards (Compact Version) */
+
+.answer-card {
+cursor: pointer;
+border: 2px solid rgb(203, 203, 203);
+transition: all 0.3s ease-in-out;
+border-radius: 10px;
+background-color:  rgb(253, 250, 250); 
+box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.1);
+padding: 0.5rem 1rem; 
+margin-bottom: 1rem; 
+font-size: 1rem; 
+}
+
+.answer-card.selected {
+    background-color: #e6ffe6;
+    box-shadow: 0px 0px 12px rgb(182, 209, 168);
+    transition: all 0.3s ease-in-out;
+}
+
+.answer-card i {
+font-size: 1.4rem; /* Icon size adjustment */
+}
+
+/* Space above the Add Option button */
+.mt-3 {
+margin-top: 1rem !important;
+}
