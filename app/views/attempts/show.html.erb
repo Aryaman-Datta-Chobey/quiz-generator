@@ -24,7 +24,7 @@
     <% end %>
   </ul>
 <%end%>
-<h1>Attempt Changes</h1>
+<h1>Attempt Details</h1>
 <% if @quiz.questions.count == @unchanged_questions.count %>
   <% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
       <%= render 'question_card', question_index: i + 1, question_stem: attempted_question.question.content,
