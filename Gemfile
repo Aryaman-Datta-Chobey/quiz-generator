@@ -66,3 +66,5 @@ gem "langchainrb", "~> 0.19.2"
 #for rendering and santizing markdown
 gem 'redcarpet'
 gem 'sanitize'
+gem 'kramdown'
+gem 'kramdown-parser-gfm'

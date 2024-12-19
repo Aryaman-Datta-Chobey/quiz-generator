@@ -157,6 +157,10 @@ GEM
       addressable (>= 2.8)
     jwt (2.9.3)
       base64
+    kramdown (2.5.1)
+      rexml (>= 3.3.9)
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
     langchainrb (0.19.2)
       baran (~> 0.1.9)
       json-schema (~> 4)
@@ -443,6 +447,8 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
+  kramdown
+  kramdown-parser-gfm
   langchainrb (~> 0.19.2)
   omniauth-google-oauth2 (~> 1.2)
   omniauth-rails_csrf_protection (~> 1.0)

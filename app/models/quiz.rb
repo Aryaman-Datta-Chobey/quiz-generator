@@ -31,7 +31,7 @@ class Quiz < ApplicationRecord
 
    def build_prompt
       <<~PROMPT
-        You are critical component of a quiz app that recieves Quiz attributes as input and outputs JSON containing a list of a list of multiple-choice questions (MCQs) based on some instructions:
+        You are a crucial component of a quiz app that  receives Quiz attributes as input and outputs JSON containing a list of a list of multiple-choice questions (MCQs) based on some instructions:
         Input (Quiz attributes):
         Topic (of the quiz): #{topic}.
         Number of Questions (in the quiz): #{number_of_questions}.

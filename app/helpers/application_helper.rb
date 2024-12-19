@@ -1,20 +1,18 @@
-require 'redcarpet'
+require 'kramdown'
+require 'kramdown-parser-gfm'
+
 module ApplicationHelper
-    def render_markdown(text)
-        renderer = Redcarpet::Render::HTML.new(
-        filter_html: true,  # Prevent raw HTML in Markdown from being rendered
-        hard_wrap: true     # Add <br> tags for line breaks
-        )
-        markdown = Redcarpet::Markdown.new(renderer, {
-            autolink: true,               # Automatically link URLs
-            tables: true,                 # Enable tables
-            fenced_code_blocks: true,     # Enable fenced code blocks
-            strikethrough: true,          # Enable strikethrough using ~~
-            lax_spacing: true,            # Allow spacing between paragraphs
-            space_after_headers: true,    # Allow space after header `# Header`
-            superscript: true             # Enable superscripts (e.g., 2^nd^)
-        })
-        markdown.render(text).html_safe
-        #Sanitize.fragment(raw_html, Sanitize::Config::BASIC)
-      end
+  def render_markdown(text)
+    # Configure Kramdown to use GFM and MathJax for LaTeX math rendering
+    options = {
+      input: 'GFM',                # Use GFM parser for GitHub Flavored Markdown
+      hard_wrap: true,             # Add <br> tags for line breaks in paragraphs
+      syntax_highlighter: nil,     # Disable syntax highlighting (use your choice if needed)
+      math_engine: 'mathjax',      # Use MathJax for LaTeX math rendering
+      gfm_quirks: 'paragraph_end'  # Handle GFM quirks (optional)
+    }
+    # Parse and convert the Markdown to HTML
+    html = Kramdown::Document.new(text, options).to_html
+    html.html_safe # Mark as safe for Rails views
+  end
 end

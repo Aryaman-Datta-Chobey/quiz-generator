@@ -26,4 +26,4 @@ class OpenaiService
       "OpenAI API Error: #{e.message}"
     end
   end
-  en
+end
