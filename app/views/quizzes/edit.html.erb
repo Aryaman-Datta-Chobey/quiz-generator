@@ -10,15 +10,7 @@
   <!-- Section 1: Quiz Properties -->
   <%= form_with(model: @quiz, local: true, data: { turbo: false, quiz_id: @quiz.id }) do |quiz_form| %>
     <div>
-      <button 
-        data-action="click->quiz-editor#toggleQuizProperties" 
-        id="toggle-quiz-properties" 
-        class="btn btn-lg btn-info p-0 d-flex align-items-center justify-content-between" 
-        type="button">
-        <span>Edit Quiz Properties</span>
-        <!-- Optional: Add an icon here if desired -->
-        <i class="fas fa-cogs ms-2"></i>
-      </button>
+      
       <div id="quiz-properties-container" data-quiz-editor-target="quizProperties" class="collapsed">
         <!-- Quiz Topic -->
         <div class="form-group mb-3">
