@@ -1,4 +1,7 @@
 <!-- Use app/views/attempts/show.html.erb to display attempt details -->
+
+<%= stylesheet_link_tag "temp", media: "all", "data-turbo-track": "reload" %>
+
 <h2>Attempt Details</h2> <!--Section 0: displaying basic attempt attributes-->
 <p><strong>Date:</strong> <%= @attempt.attempt_date %></p>
 <p><strong>Time Taken:</strong> <%= @attempt.time_taken %> seconds</p>
@@ -21,7 +24,7 @@
     <% end %>
   </ul>
 <%end%>
-<h1>Attempt Details</h1>
+<h1>Attempt Changes</h1>
 <% if @quiz.questions.count == @unchanged_questions.count %>
   <% @attempt.attempted_questions.each_with_index do |attempted_question, i| %>
       <%= render 'question_card', question_index: i + 1, question_stem: attempted_question.question.content,
