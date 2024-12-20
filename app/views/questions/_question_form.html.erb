@@ -1,6 +1,7 @@
 <%= form_with model: [@quiz, question], local: false do |question_form| %>
   <div class="question-fields mb-4">
-    <%= question_form.text_area :content,  class: "form-control mb-3", placeholder: "Enter question...", value:  CGI.unescapeHTML(question.content.to_s), 
+    <%= question_form.text_area :content, value:  CGI.unescapeHTML(question.content.to_s), 
+         class: "form-control mb-3", placeholder: "Enter question..." %>
     <!-- Hidden Options Field and Options as answer cards -->
     <%= question_form.text_area :options, value: CGI.unescapeHTML(question.options), 
                                     class: "form-control options-field d-none", 

@@ -31,6 +31,7 @@ class QuizzesController < ApplicationController
   def create
     @quiz = current_user.quizzes.build(quiz_params) # Associate the quiz with the current_user
     result = generate_questions_with_openai(@quiz, current_user)
+    debugger
     if result[:success]
       result[:generated_questions].each do |question_data| #empty if no quizzes were generated
         @quiz.questions.build(question_data)

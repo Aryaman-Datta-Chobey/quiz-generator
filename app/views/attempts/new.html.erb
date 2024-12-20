@@ -1,4 +1,5 @@
 <!-- app/views/attempts/new.html.erb -->
+<% content_for :mathjax %>
 <h1 class="text-center my-4">Attempt Quiz: <%= @quiz.topic %></h1>
 
 <%= form_with model: [@quiz, @attempt], url: quiz_attempts_path(@quiz), method: :post, class: 'needs-validation' do |f| %>
