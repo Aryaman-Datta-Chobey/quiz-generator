@@ -10,7 +10,6 @@
       <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
         <%= render partial: 'questions/answer_card', locals: { qf: question_form, option: option, index: index } %>
       <%end %>
-@@ -16,9 +12,7 @@
     <div class="d-flex justify-content-center mt-3">
       <button type="button" class="btn btn-info" data-action="click->quiz-editor#addOption">Add Option</button>
     </div>
