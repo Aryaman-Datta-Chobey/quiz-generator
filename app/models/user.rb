@@ -19,4 +19,4 @@ class User < ApplicationRecord
     user
   end
 end
-
+#Dummy comment

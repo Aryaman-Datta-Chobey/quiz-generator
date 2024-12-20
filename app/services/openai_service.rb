@@ -1,5 +1,5 @@
 require "openai"
-
+#Dummy comment
 class OpenaiService
   def initialize
     @client = OpenAI::Client.new(

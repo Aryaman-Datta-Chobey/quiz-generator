@@ -3,7 +3,7 @@ class Attempt < ApplicationRecord
   has_many :attempted_questions, dependent: :destroy
   has_many :questions, through: :attempted_questions
   accepts_nested_attributes_for :attempted_questions
-
+#Dummy Comment
   def archive_quiz_attributes(updated_quiz,archived_quiz)
     # Check if any relevant attributes have changed
     changes = {}

@@ -2,7 +2,7 @@ class AttemptedQuestion < ApplicationRecord
   belongs_to :attempt
   belongs_to :question
   validates :question_id, uniqueness: { scope: :attempt_id, allow_nil: true}
-
+#Dummy comment
   def archive_question_attributes(updated_question,archived_question)
     # Check for changes in relevant attributes
     changes = {}

@@ -6,7 +6,7 @@ class Quiz < ApplicationRecord
    # has_many :attempted_questions, through: :attempts
    enum :difficulty, %i[easy intermediate hard]
    enum :detail_level, %i[low medium high]
-
+#Dummy comment
    after_update :notify_attempts
    accepts_nested_attributes_for :questions, allow_destroy: true
 

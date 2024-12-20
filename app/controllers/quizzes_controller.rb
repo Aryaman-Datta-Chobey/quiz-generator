@@ -2,6 +2,7 @@ class QuizzesController < ApplicationController
   before_action :authenticate_user!, only: %i[new show create edit update destroy]
   before_action :set_quiz, only: [ :show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id
+  #Dummy comment
   # GET /quizzes
   def index
     if user_signed_in?

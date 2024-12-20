@@ -1,4 +1,4 @@
-# spec/models/attempted_question_spec.rb
+# spec/models/attempted_question_spec.rb (dummy comment)
 require 'rails_helper'
 
 RSpec.describe AttemptedQuestion, type: :model do
