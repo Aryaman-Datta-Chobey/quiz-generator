@@ -3,7 +3,7 @@ module QuizzesHelper
   def generate_questions_with_openai(quiz, user)
     remaining_questions = quiz.number_of_questions
     questions_per_call = determine_batch_size(quiz.difficulty, quiz.detail_level,quiz.number_of_questions)
-    openai_service = OpenaiService.new #new instance created
+    openai_service = OpenaiService.new 
     all_questions = []
     total_input_tokens = 0
     total_output_tokens = 0
@@ -44,7 +44,7 @@ module QuizzesHelper
     results = {
       success: all_questions.present?,
       generated_questions: all_questions,
-      msg: quiz.questions.count == quiz.number_of_questions ? "Quiz was successfully generated." : "Quiz has #{quiz.questions.count} questions instead of #{quiz.number_of_questions}"
+      msg:  all_questions.count == quiz.number_of_questions ? "Quiz was successfully generated." : "Quiz has #{quiz.questions.count} questions instead of #{quiz.number_of_questions}"
     }
   end
 
