@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "quizzes/index.html.erb", type: :view do
   include Devise::Test::ControllerHelpers
-  #After updating user assc need a user to run view test
-  let(:user) { User.create!(email: 'user@example.com', password: 'password') } 
+  # After updating user assc need a user to run view test
+  let(:user) { User.create!(email: 'user@example.com', password: 'password') }
   let(:user1) { User.create!(email: 'user1@example.com', password: 'password') }
   before(:each) do
       user.quizzes.create!(topic: "Rspec Testing",
@@ -23,7 +23,7 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
                study_duration: 10,
                detail_level: "high",
                number_of_questions: 100,
-               score: 0)   
+               score: 0)
   end
   context "when user is logged in" do
     before do
@@ -31,7 +31,7 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
       assign(:quizzes, user.quizzes)
       render
     end
-##NOTE: Devise provides the login button so redundant to test for it
+    # #NOTE: Devise provides the login button so redundant to test for it
     it "displays the search bar" do
       expect(rendered).to have_selector("input[type=text]")
     end
@@ -46,7 +46,7 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
     end
 
     it "displays a button to create a new quiz" do
-      expect(rendered).to have_link("Generate New Quiz", href: new_quiz_path)
+      expect(rendered).to have_link("Let Quizzo Fetch Your Quiz", href: new_quiz_path)
     end
   end
 
@@ -55,9 +55,9 @@ RSpec.describe "quizzes/index.html.erb", type: :view do
       assign(:quizzes, [])
       render
     end
-##NOTE: Devise provides the logout button so redundant to test for it
+    # #NOTE: Devise provides the logout button so redundant to test for it
     it "displays a 'Login to get started' message" do
-      expect(rendered).to match(/Login to get started/)
+      expect(rendered).to match(/Log in to start exploring or creating amazing quizzes!/)
     end
 
     it "does not display the search bar" do
