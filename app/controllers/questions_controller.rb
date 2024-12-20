@@ -33,9 +33,7 @@ class QuestionsController < ApplicationController
 
   def update
     @question = @quiz.questions.find(params[:id])
-    logger.debug "Question Content before: #{@question.content}"
     if @question.update(question_params)
-      logger.debug "Question Content after: #{@question.content}"
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(

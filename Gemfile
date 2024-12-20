@@ -61,6 +61,7 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "ruby-openai"
 gem "dockerfile-rails", ">= 1.6", :group => :development
 
+
 gem "langchainrb", "~> 0.19.2"
 
 #for rendering and santizing markdown
@@ -68,4 +69,5 @@ gem 'redcarpet'
 gem 'sanitize'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
-#Dummy comment
+
+

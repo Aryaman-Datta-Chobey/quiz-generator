@@ -9,7 +9,7 @@
     
     <div class="d-flex justify-content-between align-items-center">
       <!-- Text field with right margin to create space before the delete button -->
-      <%= text_area_tag "new_options[]", CGI.unescapeHTML(option), 
+      <%= text_field_tag "new_options[]", option, 
         class: 'form-control new-options', 
         placeholder: "Enter answer option...", 
         data: { action: "change->quiz-editor#handleAnswerCardChange" },
