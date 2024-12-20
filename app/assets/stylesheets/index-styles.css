@@ -10,6 +10,28 @@
     --color-heading-accent: #f3a5c0; 
 }
 
+.custom-gap {
+    column-gap: 4rem; /* Adjust the value as needed */
+  }
+
+.gradient-background {
+    background: linear-gradient(300deg, #c0dbfb, #7f77c6, #fa9c86);
+    background-size: 180% 180%;
+    animation: gradient-animation 15s ease infinite;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
 body {
     font-family: "Arial", sans-serif;
     background: white;
