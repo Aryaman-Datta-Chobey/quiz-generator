@@ -1,0 +1,178 @@
+
+:root {
+    --color-primary: #5465FF;
+    --color-secondary: #788BFF;
+    --color-accent: #9BB1FF;
+    --color-light: #BFD7FF;
+    --color-highlight: #29274c;
+    --color-heading-primary: #12664F; 
+    --color-heading-secondary: #307473; 
+    --color-heading-accent: #f3a5c0; 
+    --color-good-purple: #7f77c6;
+    --color-good-purple-dark: #695ec6;
+}
+
+.custom-gap {
+    column-gap: 4rem; /* Adjust the value as needed */
+  }
+
+.gradient-background {
+    background: linear-gradient(300deg, #c0dbfb, #7f77c6, #fa9c86);
+    background-size: 180% 180%;
+    animation: gradient-animation 15s ease infinite;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+body {
+    font-family: "Arial", sans-serif;
+    background: #f9f0ed;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Text Gradients */
+.text-gradient {
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-heading-gradient {
+    background: linear-gradient(to right, #e15a42, #f6a641, #f9dc71 );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn-gradient {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-special {
+    background: var(--color-good-purple);
+    color: white;
+    border: none;
+    /* transition: background 0.3s ease, transform 0.2s ease; */
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-special:hover {
+    transform: scale(1.05);
+    background: var(--color-good-purple-dark);
+    color: white;
+}
+
+.btn-find-gradient {
+    background: #7cc6c3;
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-gradient:hover {
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.3);
+}
+
+
+.btn-no-transform {
+  /* background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); */
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.btn-no-transform:hover {
+  box-shadow: 0px 4px 10px rgba(84, 255, 144, 0.432), 0px 0px 15px rgba(127, 205, 209, 0.5);
+  background: #7caec6;
+  color: white;
+  transition: background 0.3s ease; 
+
+}
+
+
+/* Card Styling */
+.quiz-card {
+    border: 1px solid var(--color-light);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.quiz-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(84, 101, 255, 0.1);
+    border-color: #f6a641;
+}
+
+.quiz-card h5 a {
+    color: var(--color-highlight);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.quiz-card h5 a:hover,
+.quiz-card h5 a:focus,
+.quiz-card h5 a:active {
+    color: #fa9c86;
+}
+
+/* Search Bar
+.search-bar input {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border: 1px solid var(--color-light);
+    padding: 10px 15px;
+} */
+
+.search-bar button {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    padding: 10px 15px;
+}
+
+/* Spacing and Shadows */
+.container {
+    max-width: 1200px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* Typography Adjustments */
+.display-3 {
+    font-size: 2.5rem;
+}
+
+.text-muted {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2rem;
+    }
+
+    .text-muted {
+        font-size: 0.9rem;
+    }
+}

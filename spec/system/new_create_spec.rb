@@ -36,6 +36,7 @@ RSpec.describe "QuizCreation", type: :system do
       input_tokens: 50,
       output_tokens: 150
     }
+
   end
 
   let(:openai_service) { instance_double(OpenaiService) }
@@ -46,6 +47,7 @@ RSpec.describe "QuizCreation", type: :system do
       visit new_quiz_path
       fill_in 'Topic', with: 'Science Quiz'
       select 'Easy', from: 'Difficulty'
+
       fill_in 'Study duration', with: 60
       select 'High', from: 'Detail level'
       fill_in 'Number of questions', with: 2
@@ -71,8 +73,6 @@ RSpec.describe "QuizCreation", type: :system do
         msg:  "Quiz was successfully generated." 
       })
 
-      # Expectations
-      #debugger
       expect(page).to have_content('Quiz was successfully generated')
       expect(page.current_path).to eq(quiz_path(Quiz.last))
       expect(page).to have_content('Science Quiz')
@@ -83,13 +83,13 @@ RSpec.describe "QuizCreation", type: :system do
       visit new_quiz_path
       fill_in 'Topic', with: 'Science Quiz'
       select 'Hard', from: 'Difficulty'
-      fill_in 'Study duration', with: 60
-      select 'Low', from: 'Detail level'
-      fill_in 'Number of questions', with: 10
+      fill_in 'Study Duration (mins)', with: 60
+      select 'Low', from: 'Detail Level'
+      fill_in 'Number of Questions', with: 10
       allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(mock_response)
       
       allow_any_instance_of(Quiz).to receive(:save).and_return(false)
-      click_on 'Create Quiz'
+      click_on 'Fetch Quiz'
       expect(page).to have_content('Quiz cannot be saved. Please try again.')
       expect(page.current_path).to eq(quizzes_path)
     end
@@ -98,6 +98,7 @@ RSpec.describe "QuizCreation", type: :system do
       visit new_quiz_path
       fill_in 'Topic', with: 'Science Quiz'
       select 'Easy', from: 'Difficulty'
+
       fill_in 'Study duration', with: 60
       select 'High', from: 'Detail level'
       fill_in 'Number of questions', with: 10

@@ -25,13 +25,15 @@
       </div>
     <% end %>
     <%unless attempted_question_changes.options.nil? %>
+    <br>
     <div class="accordion-item">
               <h2 class="accordion-header" id="headingOptions<%= question_index %>">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOptions<%= question_index %>" aria-expanded="false" aria-controls="collapseOptions<%= question_index %>">
                   Attempted Options
                 </button>
               </h2>
-              <div id="collapseOptions<%= question_index %>" class="accordion-collapse collapse" aria-labelledby="headingOptions<%= question_index %>" data-bs-parent="#modifiedAttributesAccordion<%= question_index %>">
+              <div id="collapseOptions<%= question_index %>" class="accordion-collapse collapse" aria-labelledby="headingOptions<%= question_index %>" 
+                                                             data-bs-parent="#modifiedAttributesAccordion<%= question_index %>">
                 <div class="accordion-body">
                 <% JSON.parse(attempted_question_changes.options).each_with_index do |option, j| %>
                   <div class="form-check">
@@ -72,20 +74,3 @@
   }
 </style>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const accordions = document.querySelectorAll(".accordion-button");
-    accordions.forEach(button => {
-      button.addEventListener("click", () => {
-        const target = document.getElementById(button.getAttribute("aria-controls"));
-        if (target.classList.contains("show")) {
-          button.classList.add("collapsed");
-          target.classList.remove("show");
-        } else {
-          button.classList.remove("collapsed");
-          target.classList.add("show");
-        }
-      });
-    });
-  });
-</script>
