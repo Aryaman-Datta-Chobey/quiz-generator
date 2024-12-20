@@ -1,0 +1,51 @@
+# app/helpers/quizzes_helper.rb
+module QuizzesHelper
+    def generate_questions_with_openai(quiz, user)
+      remaining_questions = quiz.number_of_questions
+      questions_per_call = determine_batch_size(quiz.difficulty, quiz.detail_level)
+      openai_service = OpenaiService.new
+      all_questions = []
+  
+      while remaining_questions > 0
+        batch_size = [questions_per_call, remaining_questions].min
+        prompt = quiz.build_prompt(batch_size) # Pass batch size to dynamic prompt generation
+        begin
+          response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")
+          parsed_response = JSON.parse(response)
+  
+          parsed_response["questions"].each do |question|
+            all_questions << {
+              content: question["content"],
+              options: question["options"],
+              correct_answer: question["correct_answer"]
+            }
+          end
+  
+          remaining_questions -= batch_size
+        rescue StandardError => e
+          Rails.logger.error("Question generation failed for batch size #{batch_size}: #{e.message}")
+          break # Stop generating further questions on failure
+        end
+      end
+  
+      # Attach questions to the quiz
+      all_questions.each do |question_data|
+        quiz.questions.build(question_data)
+      end
+  
+      { success: all_questions.present?, error: all_questions.empty? ? "No questions generated." : nil }
+    end
+  
+    private
+  
+    def determine_batch_size(difficulty, detail_level)
+      if difficulty == "easy" && detail_level != "high" || difficulty == "intermediate" && detail_level == "low"
+        5
+      elsif difficulty == "intermediate" && detail_level != "low" || difficulty == "hard"
+        3
+      else
+        quiz.number_of_questions
+      end
+    end
+  end
+  
