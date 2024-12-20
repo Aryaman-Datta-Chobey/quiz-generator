@@ -29,12 +29,12 @@ class Quiz < ApplicationRecord
     }
   }
 
-   def build_prompt
+   def build_prompt(topic=self.topic,batch_size=self.number_of_questions,difficulty=self.difficulty,detail_level=self.detail_level)
       <<~PROMPT
         You are a crucial component of a quiz app that  receives Quiz attributes as input and outputs JSON containing a list of a list of multiple-choice questions (MCQs) based on some instructions:
         Input (Quiz attributes):
         Topic (of the quiz): #{topic}.
-        Number of Questions (in the quiz): #{number_of_questions}.
+        Number of Questions (in the quiz): #{batch_size}.
         Difficulty (of the quiz): #{difficulty}.
         Detail Level (depth of the questions): #{detail_level}.
         Instructions:

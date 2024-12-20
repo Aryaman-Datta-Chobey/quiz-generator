@@ -1,4 +1,5 @@
 class QuizzesController < ApplicationController
+  include QuizzesHelper
   before_action :authenticate_user!, only: %i[new show create edit update destroy]
   before_action :set_quiz, only: [ :show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id
@@ -28,24 +29,21 @@ class QuizzesController < ApplicationController
 
   # POST /quizzes
   def create
-    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-    prompt = @quiz.build_prompt
-
-    begin
-      openai_service = OpenaiService.new
-      # Parse the JSON string into a Ruby hash
-      generate_and_parse_string_response(openai_service, prompt)
-      
-      # Iterate thru the JSON to populate the quiz questions
+    @quiz = current_user.quizzes.build(quiz_params) # Associate the quiz with the current_user
+    result = generate_questions_with_openai(@quiz, current_user)
+    if result[:success]
+      result[:generated_questions].each do |question_data| #empty if no quizzes were generated
+        @quiz.questions.build(question_data)
+      end
       if @quiz.save
-        redirect_to quiz_path(@quiz), notice: "Quiz was successfully generated."
+        redirect_to quiz_path(@quiz), notice: result[:msg]
       else
         flash.now[:alert] = "Quiz cannot be saved. Please try again."
         render :new, status: :unprocessable_entity
       end
-    rescue StandardError => e
-      flash.now[:alert] = "Quiz generation failed. Please reduce the number of questions and try again.  #{e.message}"
-      Rails.logger.error("StandardError: #{e.message}")
+    else # failed generaion
+      flash.now[:alert] = "Quiz generation failed. Please reduce the number of questions  or modify your topic and try again."
+      Rails.logger.error("Quiz generation error: #{result[:error]}")
       render :new, status: :unprocessable_entity
     end
   end
@@ -75,23 +73,6 @@ class QuizzesController < ApplicationController
   end
 
   private
-
-  def generate_and_parse_string_response(openai_service, prompt)
-    response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768")#openai_service.generate_response(prompt, 10000, "mixtral-8x7b-32768")
-    Rails.logger.info("keys and values of response: #{response }")
-    Rails.logger.info("response LAST 3 CHAR: #{response[-3,3] }")
-    # Parse the JSON string into a Ruby hash
-    parsed_response = JSON.parse(response) rescue { error: "Invalid JSON response. Try again." }
-    #Rails.logger.info("keys and values of parsed response: #{parsed_response }")
-    @quiz = current_user.quizzes.build(quiz_params)  # Associate the quiz with the current_user
-    parsed_response["questions"].each do |question| "questions"
-      @quiz.questions.build(
-        content: question["content"],
-        options: question["options"],
-        correct_answer: question["correct_answer"]
-      )
-    end
-  end
   
   # Find quiz by ID for show, edit, update, destroy actions
   def set_quiz
