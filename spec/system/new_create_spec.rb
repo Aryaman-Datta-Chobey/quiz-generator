@@ -48,7 +48,7 @@ RSpec.describe "QuizCreation", type: :system do
       select 'Easy', from: 'Difficulty'
       fill_in 'Study duration', with: 60
       select 'High', from: 'Detail level'
-      fill_in 'Number of questions', with: 1
+      fill_in 'Number of questions', with: 2
       click_on 'Create Quiz'
 
       
