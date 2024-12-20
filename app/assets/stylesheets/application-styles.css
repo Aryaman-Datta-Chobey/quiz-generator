@@ -4,8 +4,6 @@
     --color-secondary: #788BFF;
     --color-accent: #9BB1FF;
     --color-light: #BFD7FF;
-    --color-good-purple: #7f77c6
-
 }
 
 body {
@@ -22,8 +20,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 15px;
-    /* background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); */
-    background-color: var(--color-good-purple);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(84, 101, 255, 0.2);

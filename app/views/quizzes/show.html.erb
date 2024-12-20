@@ -6,7 +6,7 @@
 <div class="row mb-4 justify-content-center">
   <div class="col-md-8">
     <div class="quiz-details-card border rounded p-4">
-      <h1 class="display-4 text-primary text-center mb-3 text-heading"><%= @quiz.topic %> Quiz</h1>
+      <h1 class="display-4 text-primary text-center mb-3"><%= @quiz.topic %> Quiz</h1>
       <p class="lead text-muted text-center mb-2">Difficulty: <%= @quiz.difficulty_text %></p>
       <p class="lead text-muted text-center mb-2">Study Duration: <%= @quiz.study_duration %> minutes</p>
       <p class="lead text-muted text-center mb-2">Detail Level: <%= @quiz.detail_level_text %></p>
@@ -18,7 +18,7 @@
   <!-- Button Row -->
   <div class="row mb-4 justify-content-center">
     <div class="col-auto">
-      <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-special" %>
+      <%= link_to "Attempt Quiz", new_quiz_attempt_path(@quiz), class: "btn btn-lg btn-gradient" %>
     </div>
     <div class="col-auto">
       <%= form_with model: @quiz, method: :delete, local: true do %>
