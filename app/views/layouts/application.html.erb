@@ -15,7 +15,7 @@
 
   </head>
 
-  <body>
+  <body class="gradient-background">
     <div class="container my-4">
       <div class="row">
         <% if flash[:notice] %>
@@ -40,7 +40,7 @@
           </div>
         <% else %>
           <div class="text-end mb-3">
-            <%= button_to "Log in", new_user_session_path, class: "btn btn-outline-primary" %>
+            <%= button_to "Log in", new_user_session_path, class: "btn btn-primary" %>
           </div>
         <% end %>
       <% end %>
