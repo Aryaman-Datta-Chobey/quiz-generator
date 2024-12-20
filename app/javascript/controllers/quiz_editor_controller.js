@@ -102,12 +102,9 @@ export default class extends Controller {
     newCard.innerHTML = `
       <div class="card p-3 shadow-sm answer-card" data-answer="" style="position: relative;">
         <div class="d-flex justify-content-between align-items-center">
-          <!-- Multi-line Text Input Field -->
-          <textarea class="form-control new-options" 
-            placeholder="Enter answer option..." 
-            data-action="change->quiz-editor#handleAnswerCardChange" 
-            style="flex-grow: 1; margin-right: 60px;" 
-            rows="3"></textarea>
+          <!-- Text input field -->
+          <input type="text" class="form-control new-options" placeholder="Enter answer option..." 
+            data-action="change->quiz-editor#handleAnswerCardChange" style="flex-grow: 1; margin-right: 60px;">
           
           <!-- Remove Option Button with the same box styling -->
           <button type="button" class="btn text-danger mt-2 rounded-circle" 
@@ -116,8 +113,8 @@ export default class extends Controller {
           </button>
         </div>
       </div>
-          `;
-
+    `;
+    
     // Append the new card to the container
     answerCardsContainer.appendChild(newCard);
 
