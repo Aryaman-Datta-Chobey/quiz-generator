@@ -10,47 +10,31 @@ class Quiz < ApplicationRecord
    after_update :notify_attempts
    accepts_nested_attributes_for :questions, allow_destroy: true
 
-   validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
-   @@options_example={
-    low: {
-      easy: '["Option 1 (the distractor, (each option is also formatted using github flavoured markdown))", "Option 2"]',
-      intermediate: '["Option 1 (note if question has 2 distractors this array would also have an Option 3)", "Option 2"]',
-      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3"]'
-    },
-    medium: {
-      easy: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3"]',
-      intermediate: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3 (note if question has 3 distractors it would also have an Option 4)"]',
-      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4"]'
-    },
-    high: {
-      easy: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4"]',
-      intermediate: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4 (note if question has 4 distractors it would also have an Option 5)"]',
-      hard: '["Option 1 (each option is also formatted using github flavoured markdown)", "Option 2", "Option 3", "Option 4", "Option 5"]'
-    }
-  }
 
-   def build_prompt(topic=self.topic,batch_size=self.number_of_questions,difficulty=self.difficulty,detail_level=self.detail_level)
+   validates :topic, :difficulty, :study_duration, :detail_level, :number_of_questions, presence: true
+
+   def build_prompt
       <<~PROMPT
-        You are a crucial component of a quiz app that  receives Quiz attributes as input and outputs JSON containing a list of a list of multiple-choice questions (MCQs) based on some instructions:
-        Input (Quiz attributes):
+        Generate a multiple-choice questions (MCQs) based quiz using the following inputs:
         Topic (of the quiz): #{topic}.
-        Number of Questions (in the quiz): #{batch_size}.
+        Number of Questions (in the quiz): #{number_of_questions}.
         Difficulty (of the quiz): #{difficulty}.
         Detail Level (depth of the questions): #{detail_level}.
         Instructions:
-        #{Question.build_prompt(difficulty, detail_level)}
-        3. The Quiz app needs you to format your output as valid JSON with this structure (invalid JSON, along with excess text before and/or after valid JSON will cause the app to crash):
+        For each question, generate a question and its correct answer (appropriate to the input difficulty and detail level).
+        2. Create three plausible but incorrect options (distractors) for each question.
+        3. Format the output as valid JSON with this structure:
         {
           "questions": [
             {
-              "content": "Question text here (with any tables, lists, code chunks etc formatted using github flavoured markdown).",
-              "options": #{ @@options_example[detail_level.to_sym][difficulty.to_sym]},
+              "content": "Question text here",
+              "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
               "correct_answer": "Option 2"
             },
             ...
           ]
         }
-        Ensure that your  JSON is valid and all questions are included.
+        Ensure the JSON includes all questions.
       PROMPT
     end
 

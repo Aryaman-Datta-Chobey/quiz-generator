@@ -24,13 +24,13 @@ RSpec.describe "OpenaiService Integration Test" do
     it "generates a response from OpenAI" do
       allow(@service.instance_variable_get(:@client)).to receive(:chat).and_return(response_hash)
       result = @service.generate_response(prompt, max_tokens, model)
-      expect(result[:content]).to eq("Paris.")
+      expect(result).to eq("Paris.")
     end
 
     it "handles errors gracefully" do
       allow(@service.instance_variable_get(:@client)).to receive(:chat).and_raise(StandardError.new("Some error"))
       result = @service.generate_response(prompt, max_tokens, model)
-      expect(result[:content]).to eq("OpenAI API Error: Some error")
+      expect(result).to eq("OpenAI API Error: Some error")
     end
   end
 end

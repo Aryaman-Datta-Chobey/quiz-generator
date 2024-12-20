@@ -1,7 +1,7 @@
 <!-- _modified_question_card.html.erb -->
 <div class="card mb-3">
   <div id="modifiedAttributesAccordion<%= question_index %>" class="card-body accordion">
-    <p class="font-weight-bold">Modified Q <%= question_index %>) <%= render_markdown(latest_question.content) %></p>
+    <p class="font-weight-bold">Modified Q <%= question_index %>) <%= latest_question.content %></p>
     <%unless attempted_question_changes.content.nil? %>
       <div class="accordion-item">
           <h2 class="accordion-header" id="headingAttempted_question_changes<%= question_index %>">
@@ -11,7 +11,7 @@
               </h2>
               <div id="collapseAttempted_question_changes<%=question_index %>" class="accordion-collapse collapse" aria-labelledby="headingAttempted_question_changes<%= question_index %>" data-bs-parent="#modifiedAttributesAccordion<%= question_index %>">
                 <div class="accordion-body">
-                  <%=render_markdown(attempted_question_changes.content)%>
+                  <p><%=attempted_question_changes.content%></p>
                 </div>
       </div>
     <%end%>
@@ -20,7 +20,7 @@
     <% JSON.parse(latest_question.options).each_with_index do |option, j| %>
       <div class="form-check">
         <label class="form-check-label">
-          <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
+          <%= ('a'.ord + j).chr %>) <%= option %>
         </label>
       </div>
     <% end %>
@@ -39,10 +39,10 @@
                   <div class="form-check">
                     <label class="form-check-label">
                     <%if attempted_question_changes.user_answer.nil?%>
-                        <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
+                        <%= ('a'.ord + j).chr %>) <%= option %>
                     <%else%>
                       <span class="<%= attempted_question_changes.user_answer == option ? 'selected-option' : '' %>">
-                      <%= ('a'.ord + j).chr %>) <%= render_markdown(option) %>
+                      <%= ('a'.ord + j).chr %>) <%= option %>
                       <% if attempted_question_changes.user_answer == option %>
                         <% if attempted_question_changes.correct %>
                           <span class="text-success">&#10003;</span> <!-- Green check for correct -->

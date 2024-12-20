@@ -1,14 +1,14 @@
 <!-- Used in  Section 2 of  app/views/quizzes/edit.html.erb to show a question currently belong to Quiz -->
 <%= turbo_frame_tag dom_id(question) do %>
 <div class="question-fields mb-4">
-       <%= render_markdown(question.content)%>
+<p><%= question.content%></p>
 <!-- Render each option as an Answer card -->
     <div class="row gx-3 gy-3">
         <% JSON.parse(question.options || @missing_options).each_with_index do |option, index| %>
           <%correct_answer= question.correct_answer.nil? ? @missing_correct_answer : question.correct_answer%>
         <div class="col-md-6">
             <div class="card p-3 shadow-sm answer-card <%= 'selected' if option == correct_answer %>">
-              <%= render_markdown(option) %>
+                <%=option%>
             </div>
         </div>
         <% end %>

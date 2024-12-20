@@ -1,13 +1,11 @@
 <!-- app/views/attempts/new.html.erb -->
-<% content_for :mathjax %>
 <h1 class="text-center my-4">Attempt Quiz: <%= @quiz.topic %></h1>
 
 <%= form_with model: [@quiz, @attempt], url: quiz_attempts_path(@quiz), method: :post, class: 'needs-validation' do |f| %>
-
   <div class="quiz-container mx-auto" style="max-width: 800px;">
     <% @quiz.questions.each_with_index do |question, i| %>
       <div class="question-card p-4 mb-4 border rounded shadow-sm bg-white">
-        <p class="font-weight-bold h5 mb-3">Q<%= i + 1 %>) <%= render_markdown(question.content)%></p>
+        <p class="font-weight-bold h5 mb-3">Q<%= i + 1 %>) <%= question.content %></p>
         <p class="text-muted mb-3">Select ONE option:</p>
 
         <!-- Build the fields for each question -->
@@ -24,7 +22,7 @@
                   <label for="option-<%= i %>-<%= j %>" class="form-check-label d-block">
                     <div class="d-flex align-items-center">
                       <span class="minimal-choice me-3"></span>
-                      <span class="option-text"><%= render_markdown(option) %></span>
+                      <span class="option-text"><%= option %></span>
                     </div>
                   </label>
                 </div>
