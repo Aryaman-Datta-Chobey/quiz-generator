@@ -21,7 +21,7 @@
                          id="option-<%= i %>-<%= j %>" required>
                   <label for="option-<%= i %>-<%= j %>" class="form-check-label d-block">
                     <div class="d-flex align-items-center">
-                      <span class="minimal-choice me-3"><%= ('a'.ord + j).chr %></span>
+                      <span class="minimal-choice me-3"></span>
                       <span class="option-text"><%= option %></span>
                     </div>
                   </label>
@@ -43,6 +43,15 @@
 
 
 <style>
+
+  body {
+    background-color: #f9f0ed;
+  }
+
+  .form-check.card {
+      background-color:rgb(249, 241, 222); 
+  }
+
   /* Minimalist letter style */
   .minimal-choice {
     display: inline-block;
@@ -75,7 +84,7 @@
   /* Hover effect for card */
   .form-check.card:hover {
     background-color: #f7f9fc; /* Slight hover effect */
-    border-color: #ddeeff; /* Lighter hover border */
+    border-color: #ddeeff; /*Lighter hover border */
   }
 
 

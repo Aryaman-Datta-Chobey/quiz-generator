@@ -1,3 +1,8 @@
+body {
+    background: #f9f0ed;
+}
+
+
 /* General Form Controls */
 .form-control {
 font-size: 1rem;
@@ -27,6 +32,14 @@ box-shadow: 0px 6px 12px rgba(84, 101, 255, 0.3);
 /* .btn-info i {
 font-size: 1.4rem; 
 } */
+
+
+.btn-primary.btn-save {
+    background-color: #8fba94;
+    --bs-btn-border-color: #698c6d;
+    --bs-btn-hover-bg: #e8c578;
+    --bs-btn-hover-border-color: #698c6d;
+}
 
 .btn-info:focus {
 outline: none;
