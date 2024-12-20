@@ -48,10 +48,10 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Topic', with: 'Science Quiz'
       select 'Easy', from: 'Difficulty'
 
-      fill_in 'Study duration', with: 60
-      select 'High', from: 'Detail level'
-      fill_in 'Number of questions', with: 2
-      click_on 'Create Quiz'
+      fill_in 'Study Duration (mins)', with: 60
+      select 'High', from: 'Detail Level'
+      fill_in 'Number of Questions', with: 2
+      click_on 'Fetch Quiz'
 
       
       allow(OpenaiService).to receive(:new).and_return(openai_service)
@@ -99,13 +99,13 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Topic', with: 'Science Quiz'
       select 'Easy', from: 'Difficulty'
 
-      fill_in 'Study duration', with: 60
-      select 'High', from: 'Detail level'
-      fill_in 'Number of questions', with: 10
+      fill_in 'Study Duration (mins)', with: 60
+      select 'High', from: 'Detail Level'
+      fill_in 'Number of Questions', with: 10
       #allow_any_instance_of(OpenaiService).to receive(:generate_response).and_raise(JSON::ParserError)
       allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(:invalid_json)
       #allow_any_instance_of(QuizzesController).to recieve(:generate_questions_with_openai).and_raise(JSON::ParserError)
-      click_on 'Create Quiz'
+      click_on 'Fetch Quiz'
       expect(page.current_path).to eq(quizzes_path)
       #expect(page).to have_content("Quiz generation failed. Please reduce the number of questions  or modify your topic and try again.")
     end
