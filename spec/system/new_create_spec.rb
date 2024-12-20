@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "QuizCreation", type: :system do
   include Devise::Test::IntegrationHelpers
-  include QuizzesHelper
+  include QuizzesHelper #Dummy comment
   before do
     driven_by(:rack_test)
   end

@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: %i[create edit update destroy]
   before_action :set_quiz, only: %i[create edit update destroy]
   before_action :set_question, only: %i[edit update destroy]
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_bad_id #Dunny comment
 
   # POST /quizzes/:quiz_id/questions
   def create

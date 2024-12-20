@@ -1,6 +1,6 @@
 require 'kramdown'
 require 'kramdown-parser-gfm'
-
+#Dummy comment 
 module ApplicationHelper
   def render_markdown(text)
     # Configure Kramdown to use GFM and MathJax for LaTeX math rendering

@@ -1,5 +1,5 @@
 require 'rails_helper'
-
+#Dummy comment
 RSpec.describe "OpenaiService Integration Test" do
   before(:each) do
     @service = OpenaiService.new

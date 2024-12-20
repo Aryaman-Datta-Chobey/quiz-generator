@@ -1,6 +1,6 @@
 # app/services/openai_service.rb
 require "openai"
-
+#Dummy comment
 class OpenaiService
   REQUESTS_PER_MINUTE = 29 #1 less than official limit of 30 for rate limit error preventative pausing
   TOKENS_PER_MINUTE = 4600 # 400 tokens less than official limit of 5000 for rate limit error prevention by pausing

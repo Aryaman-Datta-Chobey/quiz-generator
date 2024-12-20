@@ -1,5 +1,5 @@
 module QuizzesHelper
-  
+  #Dummy comment
   def generate_questions_with_openai(quiz, user)
     remaining_questions = quiz.number_of_questions
     questions_per_call = determine_batch_size(quiz.difficulty, quiz.detail_level,quiz.number_of_questions)

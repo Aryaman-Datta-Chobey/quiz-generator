@@ -51,7 +51,7 @@ class Question < ApplicationRecord
     INSTRUCTIONS
   end
   private
-
+#Dummy comment
   def validate_and_correct_attributes
     #Step 1. Helpful str vals in case LLM forgot to generate one or more atrr
     #Rails.logger.info("BEFORE: content: #{self.content}, correct_answer: #{self.correct_answer}")
