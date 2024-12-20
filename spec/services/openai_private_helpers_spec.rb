@@ -1,6 +1,6 @@
 require 'rails_helper'
 require 'active_support/testing/time_helpers'
-
+#Dummy comment
 RSpec.describe OpenaiService do
   include ActiveSupport::Testing::TimeHelpers
   let(:service) { OpenaiService.new }
