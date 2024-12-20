@@ -43,7 +43,7 @@ RSpec.describe "QuizCreation", type: :system do
   describe 'create a new quiz' do
     it 'successful create' do
       # Mock OpenaiService instance and response
-    
+
       visit new_quiz_path
       fill_in 'Topic', with: 'Science Quiz'
       select 'Easy', from: 'Difficulty'
@@ -53,7 +53,7 @@ RSpec.describe "QuizCreation", type: :system do
       fill_in 'Number of Questions', with: 2
       click_on 'Fetch Quiz'
 
-      
+
       allow(OpenaiService).to receive(:new).and_return(openai_service)
       allow(openai_service).to receive(:generate_response).and_return(mock_response)
       allow_any_instance_of(QuizzesHelper).to receive(:generate_questions_with_openai).and_return({
@@ -77,7 +77,7 @@ RSpec.describe "QuizCreation", type: :system do
       expect(page.current_path).to eq(quiz_path(Quiz.last))
       expect(page).to have_content('Science Quiz')
     end
-    
+
 
     it 'should flash error on failure' do
       visit new_quiz_path
@@ -87,7 +87,7 @@ RSpec.describe "QuizCreation", type: :system do
       select 'Low', from: 'Detail Level'
       fill_in 'Number of Questions', with: 10
       allow_any_instance_of(OpenaiService).to receive(:generate_response).and_return(mock_response)
-      
+
       allow_any_instance_of(Quiz).to receive(:save).and_return(false)
       click_on 'Fetch Quiz'
       expect(page).to have_content('Quiz cannot be saved. Please try again.')

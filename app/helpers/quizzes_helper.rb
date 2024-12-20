@@ -1,4 +1,5 @@
 module QuizzesHelper
+  #Dummy comment
   def generate_questions_with_openai(quiz, user)
     remaining_questions = quiz.number_of_questions
     questions_per_call = determine_batch_size(quiz.difficulty, quiz.detail_level,quiz.number_of_questions)
@@ -8,7 +9,7 @@ module QuizzesHelper
     total_output_tokens = 0
     while remaining_questions > 0
       batch_size = [questions_per_call, remaining_questions].min
-      
+
       prompt = quiz.build_prompt(topic=quiz.topic,batch_size,difficulty=quiz.difficulty,detail_level=quiz.detail_level)
       begin
         response = openai_service.generate_response(prompt, 5000, "mixtral-8x7b-32768") #response returned , this is what is being allowed to raise the JSON.Parse error
@@ -38,7 +39,7 @@ module QuizzesHelper
           break
       end
     end
-  
+
     # return hash
     results = {
       success: all_questions.present?,
@@ -56,5 +57,4 @@ module QuizzesHelper
       number_of_questions
     end
   end
-
 end
