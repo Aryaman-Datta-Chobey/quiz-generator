@@ -7,11 +7,15 @@
     --color-muted: #E2FDFF;
     --color-gunmetal: #012A36;
     --color-dark_cyan: #119DA4;
+    --color-good-purple: #7f77c6;
+    --color-good-purple-dark: #695ec6;
+    --bs-btn-active-border-color: pink;
 }
 
 body {
-    font-family: "Arial", sans-serif;
+    font-family: "Helvetica", sans-serif;
     color: #333;  /* Dark text for readability */
+    background-color: #f9f0ed;
 }
 
 /* General Button Styles */
@@ -49,27 +53,82 @@ body {
 }
 
 /* Quiz Details */
+.text-heading{
+    background: #e15a42;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 .text-muted {
     color: var(--color-muted);
 }
 
+.list-group-item:first-child {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
 /* Attempt List Item Styling */
 .list-group-item {
-    background-color: var(--color-light);
+    background-color: #ebbfb6;
     border: none;
-    border-radius: 10px;
+    border-radius: 25px;
     padding: 15px;
     font-size: 1rem;
     margin-bottom: 1rem;  
 }
 
 .list-group-item-light {
-    background-color: var(--color-muted);
+    background-color: #ebbfb6;
 }
 
 .btn-link {
     font-size: 0.9rem;
     color: var(--color-primary);
+}
+
+.btn-special {
+    background: var(--color-good-purple);
+    color: white;
+    border: none;
+    /* transition: background 0.3s ease, transform 0.2s ease; */
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.btn-special:hover {
+    background: var(--color-good-purple-dark);
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0px 4px 10px rgba(84, 101, 255, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+
+}
+
+.btn-primary{
+    background-color: #809fc4;
+    --bs-btn-border-color: #6a97cd;
+}
+
+.btn-success{
+    background-color: #f9dc71;
+    --bs-btn-border-color: #cdae6a;
+    --bs-btn-hover-bg: #e8c578;
+    --bs-btn-border-color: #deba6e;
+    --bs-btn-hover-border-color: #deba6e;
+
+}
+
+
+
+.btn-danger{
+    background-color: #e15a42;
 }
 
 /* Button Hover Effects */
@@ -92,9 +151,10 @@ body {
 }
 
 .quiz-details-card {
-    border: 2px solid #007bff; /* Blue border matching primary color */
-    background-color: #f8f9fa; /* Light background for a subtle card effect */
-  }
+    border: 2px solid #007bff; 
+    background-color: #f8f9fa; 
+    border-radius: 25px;
+}
 
   .quiz-details-card h1 {
     font-size: 2.5rem; /* Make the topic title prominent */
